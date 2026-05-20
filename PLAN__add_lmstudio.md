@@ -83,8 +83,9 @@ Notes:
 
 - Keep `OPENROUTER_API_KEY` and `OPENROUTER_MODEL_ORDER` so existing `.env` files continue to work.
 - Add `OPENROUTER_BASE_URL` for symmetry and testability, defaulting to `https://openrouter.ai/api/v1`.
-- Use `LMSTUDIO_API_KEY` even if LM Studio does not require a real key, because OpenAI-compatible client/server patterns often expect an Authorization header. Default can be `lm-studio` or blank depending on observed LM Studio behavior.
+- Use `LMSTUDIO_API_KEY="lm-studio"` by default, because OpenAI-compatible client/server patterns often expect an Authorization header.
 - Use provider-specific model order settings rather than one global model list, because OpenRouter model IDs and local LM Studio model IDs will differ.
+- Support a model order list for LM Studio for now, matching the OpenRouter fallback structure.
 
 ## Proposed File-Level Changes
 
@@ -119,10 +120,8 @@ During cleanup, replace internal usage with the provider-neutral timeout names.
 
 Rename:
 
-- `OpenRouterAltText` -> `GeneratedAltText` or `ModelAltText`
+- `OpenRouterAltText` -> `GeneratedAltText`
 - `related_name='openrouter_alt_text'` -> `related_name='generated_alt_text'`
-
-Recommended model name: `GeneratedAltText`.
 
 Rename fields:
 
@@ -132,9 +131,7 @@ Rename fields:
 Add fields:
 
 - `model_server = models.CharField(max_length=32, blank=True)`
-- optionally `base_url = models.CharField(max_length=255, blank=True)` if it is useful for debugging local vs remote calls
-
-FEEDBACK: yes, add that `base_url` field.
+- `base_url = models.CharField(max_length=255, blank=True)`
 
 Keep fields:
 
@@ -151,6 +148,7 @@ Migration approach:
 - Use `migrations.RenameField` for provider-specific fields.
 - Use `migrations.AlterField` to change `related_name`.
 - Use `migrations.AddField` for `model_server`.
+- Use `migrations.AddField` for `base_url`.
 - Update verbose names to provider-neutral labels.
 
 ### 3. Replace `openrouter_helpers.py` With Provider-Neutral Client Module
@@ -188,7 +186,7 @@ OpenRouter config should add:
 
 LM Studio config should probably only include:
 
-- `Authorization: Bearer {api_key}` if `LMSTUDIO_API_KEY` is set
+- `Authorization: Bearer {api_key}` using `LMSTUDIO_API_KEY`
 - `Content-Type: application/json`
 
 The final URL should be:
@@ -230,9 +228,7 @@ Update behavior:
 - Use `MODEL_CRON_TIMEOUT_SECONDS`.
 - Log the selected model server and model order.
 
-Compatibility option:
-
-- Leave a thin wrapper script at `scripts/process_openrouter_summaries.py` that imports and calls the new script's `main()` so existing cron entries do not break immediately.
+Do not leave `scripts/process_openrouter_summaries.py` as a wrapper. Rename the script and update any references directly.
 
 ### 6. Update Views, Templates, Admin, and Docs
 
@@ -301,7 +297,7 @@ OPENROUTER_MODEL_ORDER="..."
 3. Generate and inspect the Django migration.
 4. Add `model_server_helpers.py` with provider config, request building, response parsing, and persistence.
 5. Update sync processing to use `GeneratedAltText` and `model_server_helpers`.
-6. Rename/update the background script and optionally keep the old script as a wrapper.
+6. Rename/update the background script and remove the old OpenRouter-specific script path.
 7. Update views, templates, admin, and docs.
 8. Update tests and patch import paths.
 9. Run:
@@ -322,78 +318,44 @@ and:
 MODEL_SERVER="lmstudio"
 ```
 
-## Open Decision Points
+## Resolved Decisions
 
 ### Decision 1: Model Class Name
 
-Recommendation: `GeneratedAltText`.
-
-FEEDBACK: GeneratedAltText is fine.
-
-Alternatives:
-
-- `ModelAltText`
-- `LLMAltText`
-- `AltTextGeneration`
-
-`GeneratedAltText` reads clearly in admin and does not expose implementation jargon.
+Use `GeneratedAltText`.
 
 ### Decision 2: Script Rename Compatibility
 
-Recommendation: create `scripts/process_alt_text_generation.py` and leave `scripts/process_openrouter_summaries.py` as a wrapper for one release/deployment cycle.
-
-FEEDBACK: No, don't leave the old script as a wrapper. Just rename it.
-
-Open question: are there existing cron entries or deployment docs that directly call `process_openrouter_summaries.py`?
-
-FEEDBACK: No
+Rename `scripts/process_openrouter_summaries.py` to `scripts/process_alt_text_generation.py`. Do not leave the old script as a compatibility wrapper.
 
 ### Decision 3: LM Studio Authorization Header
 
-Recommendation: support `LMSTUDIO_API_KEY`, but omit the Authorization header if it is blank.
-
-Open question: should the default `.env` example set `LMSTUDIO_API_KEY="lm-studio"` or leave it blank?
-
-FEEDBACK: use `LMSTUDIO_API_KEY="lm-studio"`
+Use `LMSTUDIO_API_KEY="lm-studio"` in the `.env` example and send it as the bearer token for LM Studio requests.
 
 ### Decision 4: Provider-Specific Model Order vs Shared Model Setting
 
-Recommendation: use provider-specific model order settings:
+Use provider-specific model order settings:
 
 - `OPENROUTER_MODEL_ORDER`
 - `LMSTUDIO_MODEL_ORDER`
 
-Open question: should LM Studio support a model order list, or just a single `LMSTUDIO_MODEL`? A list keeps the implementation symmetrical, but local fallback may be less useful.
-
-FEEDBACK: have it support a model order list for now. Add a TO-DO-IN-FUTURE section add a note to review the whole order concept.
+Support a model order list for LM Studio for now.
 
 ### Decision 5: Storing `base_url`
 
-Recommendation: store `model_server` on each generated alt-text row, but do not store `base_url` unless debugging requires it.
-
-FEEDBACK: store the `base_url` too.
-
-Open question: would recording local endpoint details in the database be helpful for experiment reproducibility, or undesirable because local URLs are environment-specific?
+Store both `model_server` and `base_url` on each generated alt-text row.
 
 ### Decision 6: OpenRouter Legacy Setting Names
 
-Recommendation: keep current OpenRouter setting names in `.env` and code settings. Generalize internal helper names, not every provider-specific env var.
-
-Open question: should there also be fully generic aliases like `MODEL_API_KEY` and `MODEL_MODEL_ORDER`, or is explicit provider config clearer?
-
-FEEDBACK: you already suggested specific separate model-specific settings, which i like, so keep that approach.
+Keep explicit provider-specific settings rather than adding generic aliases like `MODEL_API_KEY` or `MODEL_MODEL_ORDER`.
 
 ### Decision 7: Prompt Differences by Provider
 
-Recommendation: use the current shared `prompt.md` for both providers at first.
-
-FEEDBACK: keep the current shared `prompt.md` for now.
-
-Open question: should LM Studio get its own prompt file if local model behavior differs significantly?
+Use the current shared `prompt.md` for both providers for now.
 
 ### Decision 8: LM Studio Vision Payload Compatibility
 
-Recommendation: start with the same OpenAI-compatible `image_url` data URL payload:
+Start with the same OpenAI-compatible `image_url` data URL payload:
 
 ```json
 {
@@ -404,9 +366,13 @@ Recommendation: start with the same OpenAI-compatible `image_url` data URL paylo
 }
 ```
 
-FEEDBACK: yes, start with the same OpenAI-compatible `image_url` data URL payload.
+## Open Decision Points
 
-Open question: confirm that the target LM Studio version and loaded model support this exact multimodal payload. If not, add a provider-specific payload builder while keeping the higher-level interface shared.
+- Confirm that the target LM Studio version and loaded model support the OpenAI-compatible multimodal `image_url` data URL payload. If not, add a provider-specific payload builder while keeping the higher-level interface shared.
+
+## TO-DO-IN-FUTURE
+
+- Review whether the whole model-order concept still makes sense after using both providers. OpenRouter fallback across multiple hosted models is useful; LM Studio usually has one actively loaded local model, so a single-model setting may eventually be clearer.
 
 ## Original Prompt
 
