@@ -3,7 +3,7 @@ import base64
 from django.contrib import admin
 from django.utils.html import format_html
 
-from alt_text_app.models import ImageDocument, OpenRouterAltText
+from alt_text_app.models import GeneratedAltText, ImageDocument
 
 
 @admin.register(ImageDocument)
@@ -73,15 +73,16 @@ class ImageDocumentAdmin(admin.ModelAdmin):
     ]
 
 
-@admin.register(OpenRouterAltText)
-class OpenRouterAltTextAdmin(admin.ModelAdmin):
+@admin.register(GeneratedAltText)
+class GeneratedAltTextAdmin(admin.ModelAdmin):
     """
-    Admin interface for OpenRouterAltText model.
+    Admin interface for GeneratedAltText model.
     """
 
     list_display = [
         'image_document',
         'status',
+        'model_server',
         'model',
         'provider',
         'total_tokens',
@@ -90,6 +91,7 @@ class OpenRouterAltTextAdmin(admin.ModelAdmin):
     ]
     list_filter = [
         'status',
+        'model_server',
         'provider',
         'model',
         'finish_reason',
@@ -97,18 +99,21 @@ class OpenRouterAltTextAdmin(admin.ModelAdmin):
     ]
     search_fields = [
         'image_document__original_filename',
-        'openrouter_response_id',
+        'response_id',
+        'model_server',
         'provider',
         'model',
         'alt_text',
     ]
     readonly_fields = [
         'image_document',
-        'openrouter_response_id',
+        'response_id',
         'raw_response_json',
         'requested_at',
         'completed_at',
-        'openrouter_created_at',
+        'response_created_at',
+        'model_server',
+        'base_url',
         'prompt_tokens',
         'completion_tokens',
         'total_tokens',
@@ -118,10 +123,12 @@ class OpenRouterAltTextAdmin(admin.ModelAdmin):
         ('Document', {'fields': ['image_document']}),
         ('Alt Text', {'fields': ['alt_text', 'prompt', 'status', 'error']}),
         (
-            'OpenRouter Metadata',
+            'Model Server Metadata',
             {
                 'fields': [
-                    'openrouter_response_id',
+                    'response_id',
+                    'model_server',
+                    'base_url',
                     'provider',
                     'model',
                     'finish_reason',
@@ -139,7 +146,7 @@ class OpenRouterAltTextAdmin(admin.ModelAdmin):
                 ]
             },
         ),
-        ('Timestamps', {'fields': ['requested_at', 'completed_at', 'openrouter_created_at']}),
+        ('Timestamps', {'fields': ['requested_at', 'completed_at', 'response_created_at']}),
         (
             'Raw Data',
             {

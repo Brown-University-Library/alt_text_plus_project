@@ -42,9 +42,23 @@ EMAIL_PORT="1026"  # will be converted to int in settings.py
 LOG_PATH="../logs/project.log"
 LOG_LEVEL="DEBUG"
 
+## Model server. Supported values: "openrouter" or "lmstudio"
+MODEL_SERVER="openrouter"
+
 ## OpenRouter (comma-delimited model order)
 OPENROUTER_API_KEY=""
 OPENROUTER_MODEL_ORDER="openrouter/model-one,openrouter/model-two"
+OPENROUTER_BASE_URL="https://openrouter.ai/api/v1"
+
+## LM Studio local OpenAI-compatible server (comma-delimited model order)
+LMSTUDIO_BASE_URL="http://127.0.0.1:1234/v1"
+LMSTUDIO_API_KEY="lm-studio"
+LMSTUDIO_MODEL_ORDER="local-model-name"
+
+## Model-server timeouts
+MODEL_SYNC_TIMEOUT_SECONDS="30"
+MODEL_CRON_TIMEOUT_SECONDS="60"
+
 SYSTEM_CA_BUNDLE=""  # optional: path to non-default CA bundle
 
 

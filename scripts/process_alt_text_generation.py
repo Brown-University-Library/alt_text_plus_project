@@ -1,16 +1,16 @@
 #!/usr/bin/env python
 """
-Cron-driven script to generate OpenRouter alt text for pending images.
+Cron-driven script to generate alt text for pending images.
 
 Finds ImageDocument rows with pending/failed alt-text generation,
-calls OpenRouter API, and persists the results.
+calls the selected model server, and persists the results.
 
 Usage:
-    uv run ./scripts/process_openrouter_summaries.py [--batch-size N] [--dry-run]
+    uv run ./scripts/process_alt_text_generation.py [--batch-size N] [--dry-run]
 
 Requires:
-    OPENROUTER_API_KEY environment variable to be set.
-    OPENROUTER_MODEL_ORDER environment variable to be set.
+    MODEL_SERVER environment variable to be set to "openrouter" or "lmstudio".
+    The selected provider's API key, base URL, and model order to be set.
 """
 
 import argparse
@@ -37,15 +37,16 @@ from django.conf import settings as project_settings  # noqa: E402
 from django.db.models import Q  # noqa: E402
 from django.utils import timezone as django_timezone  # noqa: E402
 
-from alt_text_app.lib import image_helpers, openrouter_helpers  # noqa: E402
-from alt_text_app.models import ImageDocument, OpenRouterAltText  # noqa: E402
+from alt_text_app.lib import image_helpers, model_server_helpers  # noqa: E402
+from alt_text_app.models import GeneratedAltText, ImageDocument  # noqa: E402
 
 
-def get_api_key() -> str:
+def get_model_server_config() -> model_server_helpers.ModelServerConfig:
     """
-    Retrieves the OpenRouter API key from environment.
+    Retrieves the selected model-server configuration.
     """
-    return openrouter_helpers.get_api_key()
+    config = model_server_helpers.get_model_server_config()
+    return config
 
 
 def find_pending_alt_text(batch_size: int) -> list[ImageDocument]:
@@ -53,17 +54,17 @@ def find_pending_alt_text(batch_size: int) -> list[ImageDocument]:
     Finds ImageDocument rows that need alt-text generation.
     Criteria:
     - processing_status in ('pending', 'processing')
-    - does NOT have an OpenRouterAltText OR has one with status 'pending'/'failed'
+    - does NOT have a GeneratedAltText OR has one with status 'pending'/'failed'
     """
     docs_without_alt_text = (
         ImageDocument.objects.filter(processing_status__in=['pending', 'processing'])
-        .exclude(openrouter_alt_text__isnull=False)
+        .exclude(generated_alt_text__isnull=False)
         .order_by('uploaded_at')[:batch_size]
     )
 
     docs_with_pending_alt_text = (
         ImageDocument.objects.filter(processing_status__in=['pending', 'processing'])
-        .filter(Q(openrouter_alt_text__status='pending') | Q(openrouter_alt_text__status='failed'))
+        .filter(Q(generated_alt_text__status='pending') | Q(generated_alt_text__status='failed'))
         .order_by('uploaded_at')[:batch_size]
     )
 
@@ -77,28 +78,31 @@ def find_pending_alt_text(batch_size: int) -> list[ImageDocument]:
     return result
 
 
-def get_model_order() -> list[str]:
+def process_single_alt_text(doc: ImageDocument, config: model_server_helpers.ModelServerConfig) -> bool:
     """
-    Retrieves the OpenRouter model order from environment.
-    """
-    return openrouter_helpers.get_model_order()
-
-
-def process_single_alt_text(doc: ImageDocument, api_key: str, model_order: list[str]) -> bool:
-    """
-    Generates and saves OpenRouter alt text for a single image.
+    Generates and saves alt text for a single image.
     Returns True on success, False on failure.
     Called by process_alt_texts()
     """
-    log.info('Processing alt text for document %s (%s)', doc.pk, doc.original_filename)
+    log.info(
+        'Processing alt text for document %s (%s) with server=%s',
+        doc.pk,
+        doc.original_filename,
+        config.server,
+    )
 
-    alt_text_record: OpenRouterAltText
+    alt_text_record: GeneratedAltText
     created: bool
     utc_now = datetime.now(tz=timezone.utc)
     naive_now = django_timezone.make_naive(utc_now)
-    alt_text_record, created = OpenRouterAltText.objects.get_or_create(
+    alt_text_record, created = GeneratedAltText.objects.get_or_create(
         image_document=doc,
-        defaults={'status': 'processing', 'requested_at': naive_now},
+        defaults={
+            'status': 'processing',
+            'requested_at': naive_now,
+            'model_server': config.server,
+            'base_url': config.base_url,
+        },
     )
 
     if not created:
@@ -107,7 +111,9 @@ def process_single_alt_text(doc: ImageDocument, api_key: str, model_order: list[
         alt_text_record.status = 'processing'
         alt_text_record.requested_at = naive_now
         alt_text_record.error = None
-        alt_text_record.save(update_fields=['status', 'requested_at', 'error'])
+        alt_text_record.model_server = config.server
+        alt_text_record.base_url = config.base_url
+        alt_text_record.save(update_fields=['status', 'requested_at', 'error', 'model_server', 'base_url'])
 
     success = False
     try:
@@ -115,25 +121,24 @@ def process_single_alt_text(doc: ImageDocument, api_key: str, model_order: list[
         if not image_path.exists():
             raise FileNotFoundError(f'Image file not found: {image_path}')
 
-        prompt = openrouter_helpers.build_prompt()
-        log.debug('Calling OpenRouter for document %s', doc.pk)
+        prompt = model_server_helpers.build_prompt()
+        log.debug('Calling model server for document %s', doc.pk)
 
         alt_text_record.prompt = prompt
         alt_text_record.save(update_fields=['prompt'])
 
         image_data_url = image_helpers.build_image_data_url(image_path, doc.mime_type)
 
-        timeout_seconds = project_settings.OPENROUTER_CRON_TIMEOUT_SECONDS
-        response_json = openrouter_helpers.call_openrouter_with_model_order(
+        timeout_seconds = project_settings.MODEL_CRON_TIMEOUT_SECONDS
+        response_json = model_server_helpers.call_model_server_with_model_order(
             prompt,
-            api_key,
-            model_order,
+            config,
             timeout_seconds,
             image_data_url,
         )
 
-        parsed = openrouter_helpers.parse_openrouter_response(response_json)
-        openrouter_helpers.persist_openrouter_alt_text(alt_text_record, response_json, parsed)
+        parsed = model_server_helpers.parse_model_server_response(response_json, config)
+        model_server_helpers.persist_generated_alt_text(alt_text_record, response_json, parsed)
 
         doc.processing_status = 'completed'
         doc.processing_error = None
@@ -156,21 +161,23 @@ def process_single_alt_text(doc: ImageDocument, api_key: str, model_order: list[
 
 def process_alt_texts(batch_size: int, dry_run: bool) -> tuple[int, int]:
     """
-    Finds and processes pending OpenRouter alt-text jobs.
+    Finds and processes pending alt-text jobs.
     Returns (success_count, failure_count).
     """
-    api_key = get_api_key()
-    if not api_key:
-        log.error('OPENROUTER_API_KEY environment variable not set')
-        return (0, 0)
-
-    model_order = get_model_order()
-    if not model_order:
-        log.error('OPENROUTER_MODEL_ORDER environment variable not set')
+    config = get_model_server_config()
+    try:
+        model_server_helpers.validate_model_server_config(config)
+    except ValueError as exc:
+        log.error('Model-server configuration error: %s', exc)
         return (0, 0)
 
     docs = find_pending_alt_text(batch_size)
-    log.info('Found %s documents needing alt text', len(docs))
+    log.info(
+        'Found %s documents needing alt text with server=%s, model_order=%s',
+        len(docs),
+        config.server,
+        config.model_order,
+    )
 
     if dry_run:
         for doc in docs:
@@ -181,7 +188,7 @@ def process_alt_texts(batch_size: int, dry_run: bool) -> tuple[int, int]:
     failure_count = 0
 
     for doc in docs:
-        if process_single_alt_text(doc, api_key, model_order):
+        if process_single_alt_text(doc, config):
             success_count += 1
         else:
             failure_count += 1
@@ -193,7 +200,7 @@ def main() -> None:
     """
     Entry point for the cron script.
     """
-    parser = argparse.ArgumentParser(description='Generate OpenRouter alt text for pending images')
+    parser = argparse.ArgumentParser(description='Generate alt text for pending images')
     parser.add_argument(
         '--batch-size',
         type=int,
@@ -221,7 +228,7 @@ def main() -> None:
         datefmt='%d/%b/%Y %H:%M:%S',
     )
 
-    log.info('Starting OpenRouter alt-text processor')
+    log.info('Starting alt-text processor')
     success_count, failure_count = process_alt_texts(args.batch_size, args.dry_run)
     log.info(f'Finished: {success_count} succeeded, {failure_count} failed')
 

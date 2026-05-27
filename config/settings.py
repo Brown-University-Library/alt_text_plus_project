@@ -201,10 +201,19 @@ LOGGING: dict[str, object] = {
 ## Pattern header configuration
 PATTERN_HEADER_URL: str = os.environ.get('PATTERN_HEADER_URL', '')
 
-## OpenRouter configuration
+## Model-server configuration
+MODEL_SERVER: str = os.environ.get('MODEL_SERVER', 'openrouter').strip().lower()
+
 OPENROUTER_API_KEY: str = os.environ.get('OPENROUTER_API_KEY', '')
 OPENROUTER_MODEL_ORDER_RAW: str = os.environ.get('OPENROUTER_MODEL_ORDER', '')
 OPENROUTER_MODEL_ORDER: list[str] = [model.strip() for model in OPENROUTER_MODEL_ORDER_RAW.split(',') if model.strip()]
+OPENROUTER_BASE_URL: str = os.environ.get('OPENROUTER_BASE_URL', 'https://openrouter.ai/api/v1')
+
+LMSTUDIO_BASE_URL: str = os.environ.get('LMSTUDIO_BASE_URL', 'http://127.0.0.1:1234/v1')
+LMSTUDIO_API_KEY: str = os.environ.get('LMSTUDIO_API_KEY', 'lm-studio')
+LMSTUDIO_MODEL_ORDER_RAW: str = os.environ.get('LMSTUDIO_MODEL_ORDER', '')
+LMSTUDIO_MODEL_ORDER: list[str] = [model.strip() for model in LMSTUDIO_MODEL_ORDER_RAW.split(',') if model.strip()]
+
 SYSTEM_CA_BUNDLE: str = os.environ.get('SYSTEM_CA_BUNDLE', '')
 
 ## File Upload Settings
@@ -216,9 +225,11 @@ IMAGE_UPLOAD_PATH: str = os.environ['IMAGE_UPLOAD_PATH']
 
 ## Synchronous processing timeouts (web requests)
 OPENROUTER_SYNC_TIMEOUT_SECONDS: float = 30.0
+MODEL_SYNC_TIMEOUT_SECONDS: float = float(os.environ.get('MODEL_SYNC_TIMEOUT_SECONDS', OPENROUTER_SYNC_TIMEOUT_SECONDS))
 
 ## Cron job timeouts (background processing - more patient)
 OPENROUTER_CRON_TIMEOUT_SECONDS: float = 60.0
+MODEL_CRON_TIMEOUT_SECONDS: float = float(os.environ.get('MODEL_CRON_TIMEOUT_SECONDS', OPENROUTER_CRON_TIMEOUT_SECONDS))
 
 ## Stuck processing recovery threshold (10 minutes)
 RECOVER_STUCK_PROCESSING_AFTER_SECONDS: int = 600

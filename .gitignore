@@ -6,3 +6,6 @@
 *pycache*
 env
 migrations
+!alt_text_app/migrations/
+alt_text_app/migrations/*
+!alt_text_app/migrations/0003_generalize_generated_alt_text.py

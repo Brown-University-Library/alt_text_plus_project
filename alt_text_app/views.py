@@ -14,7 +14,7 @@ from django.urls import reverse
 from alt_text_app.forms import ImageUploadForm
 from alt_text_app.lib import image_helpers, markdown_helpers, sync_processing_helpers, thumbnail_helpers, version_helper
 from alt_text_app.lib.version_helper import GatherCommitAndBranchData
-from alt_text_app.models import ImageDocument, OpenRouterAltText
+from alt_text_app.models import GeneratedAltText, ImageDocument
 
 log = logging.getLogger(__name__)
 
@@ -57,7 +57,7 @@ def upload_image(request: HttpRequest) -> HttpResponse:
     """
     Handles image upload with synchronous processing attempt.
 
-    Attempts to call OpenRouter synchronously with timeout.
+    Attempts to call the selected model server synchronously with timeout.
     Falls back to polling + cron if timeouts are hit.
     """
     log.debug('\n\nstarting upload_image()\n\n')
@@ -161,11 +161,11 @@ def view_report(request, pk: uuid.UUID):
     log.debug(f'starting view_report() for pk={pk}')
     doc = get_object_or_404(ImageDocument, pk=pk)
 
-    ## Get OpenRouter alt text if it exists
-    suggestions: OpenRouterAltText | None = None
+    ## Get generated alt text if it exists
+    suggestions: GeneratedAltText | None = None
     try:
-        suggestions = doc.openrouter_alt_text
-    except OpenRouterAltText.DoesNotExist:
+        suggestions = doc.generated_alt_text
+    except GeneratedAltText.DoesNotExist:
         pass
 
     context = {
@@ -215,16 +215,16 @@ def status_fragment(request, pk: uuid.UUID):
 
 def alt_text_fragment(request, pk: uuid.UUID):
     """
-    Returns an HTML fragment for the OpenRouter alt-text section.
+    Returns an HTML fragment for the generated alt-text section.
     Can be polled or loaded once depending on UX preference.
     """
     log.debug(f'starting alt_text_fragment() for pk={pk}')
     doc = get_object_or_404(ImageDocument, pk=pk)
 
-    suggestions: OpenRouterAltText | None = None
+    suggestions: GeneratedAltText | None = None
     try:
-        suggestions = doc.openrouter_alt_text
-    except OpenRouterAltText.DoesNotExist:
+        suggestions = doc.generated_alt_text
+    except GeneratedAltText.DoesNotExist:
         pass
 
     response = render(

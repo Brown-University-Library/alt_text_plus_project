@@ -8,7 +8,7 @@ import uuid
 from django.test import TestCase
 from django.urls import reverse
 
-from alt_text_app.models import ImageDocument, OpenRouterAltText
+from alt_text_app.models import GeneratedAltText, ImageDocument
 
 log = logging.getLogger(__name__)
 TestCase.maxDiff = 1000
@@ -132,7 +132,7 @@ class AltTextFragmentTest(TestCase):
         """
         Checks that alt-text fragment shows pending state with polling.
         """
-        OpenRouterAltText.objects.create(
+        GeneratedAltText.objects.create(
             image_document=self.document,
             status='pending',
         )
@@ -146,7 +146,7 @@ class AltTextFragmentTest(TestCase):
         """
         Checks that alt-text fragment shows processing state with polling.
         """
-        OpenRouterAltText.objects.create(
+        GeneratedAltText.objects.create(
             image_document=self.document,
             status='processing',
         )
@@ -160,7 +160,7 @@ class AltTextFragmentTest(TestCase):
         """
         Checks that alt-text fragment shows completed alt text.
         """
-        OpenRouterAltText.objects.create(
+        GeneratedAltText.objects.create(
             image_document=self.document,
             status='completed',
             alt_text='This is a test alt text.',
@@ -177,7 +177,7 @@ class AltTextFragmentTest(TestCase):
         """
         Checks that alt-text fragment shows failed state.
         """
-        OpenRouterAltText.objects.create(
+        GeneratedAltText.objects.create(
             image_document=self.document,
             status='failed',
             error='API error',

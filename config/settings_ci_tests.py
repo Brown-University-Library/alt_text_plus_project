@@ -211,10 +211,19 @@ TEST_RUNNER: str = 'django.test.runner.DiscoverRunner'
 ## Pattern header configuration
 PATTERN_HEADER_URL: str = ''
 
-## OpenRouter configuration
+## Model-server configuration
+MODEL_SERVER: str = 'openrouter'
+
 OPENROUTER_API_KEY: str = ''
 OPENROUTER_MODEL_ORDER_RAW: str = ''
 OPENROUTER_MODEL_ORDER: list[str] = []
+OPENROUTER_BASE_URL: str = 'https://openrouter.ai/api/v1'
+
+LMSTUDIO_BASE_URL: str = 'http://127.0.0.1:1234/v1'
+LMSTUDIO_API_KEY: str = 'lm-studio'
+LMSTUDIO_MODEL_ORDER_RAW: str = ''
+LMSTUDIO_MODEL_ORDER: list[str] = []
+
 SYSTEM_CA_BUNDLE: str = ''
 
 ## File Upload Settings
@@ -226,9 +235,11 @@ IMAGE_UPLOAD_PATH: str = '/baz'
 
 ## Synchronous processing timeouts (web requests)
 OPENROUTER_SYNC_TIMEOUT_SECONDS: float = 30.0
+MODEL_SYNC_TIMEOUT_SECONDS: float = 30.0
 
 ## Cron job timeouts (background processing - more patient)
 OPENROUTER_CRON_TIMEOUT_SECONDS: float = 60.0
+MODEL_CRON_TIMEOUT_SECONDS: float = 60.0
 
 ## Stuck processing recovery threshold (10 minutes)
 RECOVER_STUCK_PROCESSING_AFTER_SECONDS: int = 600

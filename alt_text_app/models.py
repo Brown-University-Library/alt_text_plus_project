@@ -56,9 +56,9 @@ class ImageDocument(models.Model):
         ]
 
 
-class OpenRouterAltText(models.Model):
+class GeneratedAltText(models.Model):
     """
-    Stores OpenRouter alt-text results for an image.
+    Stores generated alt-text results for an image.
     """
 
     ## Primary key
@@ -68,7 +68,7 @@ class OpenRouterAltText(models.Model):
     image_document = models.OneToOneField(
         ImageDocument,
         on_delete=models.CASCADE,
-        related_name='openrouter_alt_text',
+        related_name='generated_alt_text',
     )
 
     ## Persistence fields
@@ -76,8 +76,10 @@ class OpenRouterAltText(models.Model):
     alt_text = models.TextField(blank=True)
     prompt = models.TextField(blank=True)
 
-    ## Identity/metadata fields (from OpenRouter response)
-    openrouter_response_id = models.CharField(max_length=128, blank=True)
+    ## Identity/metadata fields from the model-server response
+    response_id = models.CharField(max_length=128, blank=True)
+    model_server = models.CharField(max_length=32, blank=True)
+    base_url = models.CharField(max_length=255, blank=True)
     provider = models.CharField(max_length=64, blank=True)
     model = models.CharField(max_length=128, blank=True)
     finish_reason = models.CharField(max_length=32, blank=True)
@@ -98,7 +100,7 @@ class OpenRouterAltText(models.Model):
     ## Datetime fields
     requested_at = models.DateTimeField(null=True, blank=True)
     completed_at = models.DateTimeField(null=True, blank=True)
-    openrouter_created_at = models.DateTimeField(null=True, blank=True)
+    response_created_at = models.DateTimeField(null=True, blank=True)
 
     ## Usage/cost fields
     prompt_tokens = models.IntegerField(null=True, blank=True)
@@ -107,5 +109,5 @@ class OpenRouterAltText(models.Model):
     cost = models.DecimalField(max_digits=10, decimal_places=6, null=True, blank=True)
 
     class Meta:
-        verbose_name = 'OpenRouter Alt Text'
-        verbose_name_plural = 'OpenRouter Alt Text'
+        verbose_name = 'Generated Alt Text'
+        verbose_name_plural = 'Generated Alt Text'

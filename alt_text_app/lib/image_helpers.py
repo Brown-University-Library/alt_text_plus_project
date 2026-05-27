@@ -3,7 +3,7 @@ Helper functions for image processing.
 
 Called by:
     - alt_text_app.views.upload_image() (file operations, checksum generation)
-    - alt_text_app.lib.sync_processing_helpers (synchronous OpenRouter attempts)
+    - alt_text_app.lib.sync_processing_helpers (synchronous model-server attempts)
 """
 
 import base64

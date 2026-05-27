@@ -28,13 +28,13 @@ This is an _experimental_ webapp. It serves the following purposes:
 
 **Don't submit anything you want to keep private.**
 
-We send image data to third-party models via OpenRouter. If privacy is a concern, avoid uploading sensitive images.
+When configured for OpenRouter, we send image data to third-party models. If privacy is a concern, avoid uploading sensitive images. When configured for local LM Studio experimentation, image data is sent to the local LM Studio server instead.
 
 Official Brown models offer privacy guarantees that this webapp doesn't.
 
 ### Capability
 
-Currently, we're using one of the developer's personal [OpenRouter][or] account, in order to use a multi-modal model. We're using one of the least expensive for this experiment, so the output quality may be limited.
+Currently, the production-oriented configuration uses one of the developer's personal [OpenRouter][or] accounts to access a multi-modal model. Local LM Studio can also be used for experimentation with locally loaded vision-capable models. Output quality may vary by selected model.
 
 ### Scalability
 
@@ -56,7 +56,7 @@ Alt text is a concise written description of an image for people who use screen 
 
 ## this webapp's output
 
-This webapp sends the uploaded image to a multimodal OpenRouter model with a prompt that asks for concise, accessibility-focused alt text.
+This webapp sends the uploaded image to the configured multimodal model server with a prompt that asks for concise, accessibility-focused alt text.
 
 Here's the [current prompt][prompt]. It will likely change over time as we experiment.
 
