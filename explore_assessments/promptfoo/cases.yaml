@@ -1,0 +1,20 @@
+- vars:
+    case_id: synthetic-book-cover
+    image_path: images/synthetic_book_cover.png
+    mime_type: image/png
+  metadata:
+    review_focus: Concise description of a simple object with central text.
+
+- vars:
+    case_id: synthetic-bar-chart
+    image_path: images/synthetic_bar_chart.png
+    mime_type: image/png
+  metadata:
+    review_focus: Mention the chart subject and dominant trend without over-explaining.
+
+- vars:
+    case_id: synthetic-decorative-pattern
+    image_path: images/synthetic_decorative_pattern.png
+    mime_type: image/png
+  metadata:
+    review_focus: Identify whether the image has meaningful content or should be treated as decorative.

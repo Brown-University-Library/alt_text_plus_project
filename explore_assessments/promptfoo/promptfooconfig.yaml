@@ -1,0 +1,34 @@
+# yaml-language-server: $schema=https://promptfoo.dev/config-schema.json
+description: Alt-text model and parameter comparison scaffold
+
+prompts:
+  - file://../../alt_text_app/lib/prompt.md
+
+providers:
+  - id: file://provider.py
+    label: app-default-temperature-0
+    config:
+      model_params:
+        temperature: 0
+      timeout_seconds: 60
+
+  - id: file://provider.py
+    label: eval-model-a-temperature-0
+    config:
+      model_env_var: ALT_TEXT_EVAL_MODEL_A
+      allow_app_model_fallback: true
+      model_params:
+        temperature: 0
+      timeout_seconds: 60
+
+  - id: file://provider.py
+    label: eval-model-a-temperature-0.3
+    config:
+      model_env_var: ALT_TEXT_EVAL_MODEL_A
+      allow_app_model_fallback: true
+      model_params:
+        temperature: 0.3
+      timeout_seconds: 60
+
+tests:
+  - file://cases.yaml
