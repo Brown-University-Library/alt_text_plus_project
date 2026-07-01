@@ -1,5 +1,17 @@
 # AI Assessment Framework Recommendation
 
+## Table of Contents
+
+- [Context](#context)
+- [Recommendation](#recommendation)
+- [Evaluated Options](#evaluated-options)
+- [Why Promptfoo First](#why-promptfoo-first)
+- [Suggested First Implementation Shape](#suggested-first-implementation-shape)
+- [When To Add DeepEval](#when-to-add-deepeval)
+- [Why Not Weights & Biases First](#why-not-weights--biases-first)
+- [Sources](#sources)
+- [Original Prompt](#original-prompt)
+
 ## Context
 
 This project has a working Django webapp that generates alt text for uploaded images through OpenRouter or a local LM Studio OpenAI-compatible server. The next step is not to define quality criteria yet, but to choose a lightweight open-source framework for comparing models, prompts, and parameters outside the normal webapp request flow.
@@ -79,3 +91,27 @@ Weights & Biases/Weave is relevant and has open-source pieces, but it is heavier
 - Ragas docs: <https://docs.ragas.io/en/latest/>
 - Ragas GitHub: <https://github.com/vibrantlabsai/ragas>
 - Weave GitHub: <https://github.com/wandb/weave>
+
+## Original Prompt
+
+```text
+Goal: Pick an assessment framework.
+
+Context:
+
+- We have a working webapp that can generate alt-text.
+
+- We want to figure out how to assess different models/parameters.
+
+- We know there are "frameworks" for ai-assessment (we've heard of weights-and-biases, for example).
+
+- We want to work with an open-source _lightweight_ framework, easy for a small team to implement and work with.
+
+- Actually assessing quality is outside of the scope of this step -- this step is about picking a framework.
+
+- We assume working with the assessment framework will be "outside" of the operation of this webapp -- but we'll keep any code in the repo-project.
+
+Tasks:
+
+- research and evaluate the top two or three lightweight open-source assessment frameworks that we can implement for this project and begin exploring.
+```
