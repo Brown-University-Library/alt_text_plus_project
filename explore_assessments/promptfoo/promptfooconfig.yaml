@@ -10,7 +10,7 @@ providers:
     config:
       model_params:
         temperature: 0
-      timeout_seconds: 60
+      timeout_seconds: 90
 
   - id: file://provider.py
     label: eval-model-a-temperature-0
@@ -19,7 +19,7 @@ providers:
       allow_app_model_fallback: true
       model_params:
         temperature: 0
-      timeout_seconds: 60
+      timeout_seconds: 90
 
   - id: file://provider.py
     label: eval-model-a-temperature-0.3
@@ -28,7 +28,7 @@ providers:
       allow_app_model_fallback: true
       model_params:
         temperature: 0.3
-      timeout_seconds: 60
+      timeout_seconds: 90
 
 tests:
   - file://cases.yaml
