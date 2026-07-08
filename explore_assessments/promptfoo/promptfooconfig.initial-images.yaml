@@ -1,0 +1,15 @@
+# yaml-language-server: $schema=https://promptfoo.dev/config-schema.json
+description: Initial image alt-text deterministic checks
+
+prompts:
+  - file://../../alt_text_app/lib/prompt.md
+
+providers:
+  - id: file://provider.py
+    label: results-11-fixture
+    config:
+      output_var: baseline_alt_text
+      require_image_path_exists: true
+
+tests:
+  - file://initial_images_cases.yaml

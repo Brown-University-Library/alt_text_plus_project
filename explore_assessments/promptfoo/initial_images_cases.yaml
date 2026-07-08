@@ -1,0 +1,175 @@
+- vars:
+    case_id: bdr148605
+    image_filename: bdr148605.jpg
+    image_path: ../initial_test_images/bdr148605.jpg
+    mime_type: image/jpeg
+    baseline_alt_text: "Brown felt fedora with a black band, shown against a saturated yellow background."
+    reference_alt_text: "Brown felt fedora with a black band, shown against a saturated yellow background."
+  assert:
+    - type: word-count
+      value:
+        min: 10
+        max: 200
+    - type: gleu
+      threshold: 0.6
+      value: "{{reference_alt_text}}"
+
+- vars:
+    case_id: bdr149082
+    image_filename: bdr149082.jpg
+    image_path: ../initial_test_images/bdr149082.jpg
+    mime_type: image/jpeg
+    baseline_alt_text: "Brown tabby cat sitting upright against vivid red and magenta draped fabric."
+    reference_alt_text: "Brown tabby cat sitting upright against vivid red and magenta draped fabric."
+  assert:
+    - type: word-count
+      value:
+        min: 10
+        max: 200
+    - type: gleu
+      threshold: 0.6
+      value: "{{reference_alt_text}}"
+
+- vars:
+    case_id: bdr216457
+    image_filename: bdr216457.jpg
+    image_path: ../initial_test_images/bdr216457.jpg
+    mime_type: image/jpeg
+    baseline_alt_text: "Natural history illustration of two colorful birds on branches, with green backs, gray chests, red bellies, and barred wings; caption reads \"T. ROSEIGASTER.\""
+    reference_alt_text: "Natural history illustration of two colorful birds on branches, with green backs, gray chests, red bellies, and barred wings; caption reads \"T. ROSEIGASTER.\""
+  assert:
+    - type: word-count
+      value:
+        min: 10
+        max: 200
+    - type: gleu
+      threshold: 0.6
+      value: "{{reference_alt_text}}"
+
+- vars:
+    case_id: bdr250913
+    image_filename: bdr250913.jpg
+    image_path: ../initial_test_images/bdr250913.jpg
+    mime_type: image/jpeg
+    baseline_alt_text: "Illustration of a uniformed soldier standing with one hand on his hip, wearing a tall black plume hat, white jacket, blue trousers, black boots, and a sword."
+    reference_alt_text: "Illustration of a uniformed soldier standing with one hand on his hip, wearing a tall black plume hat, white jacket, blue trousers, black boots, and a sword."
+  assert:
+    - type: word-count
+      value:
+        min: 10
+        max: 200
+    - type: gleu
+      threshold: 0.6
+      value: "{{reference_alt_text}}"
+
+- vars:
+    case_id: bdr298709
+    image_filename: bdr298709.jpg
+    image_path: ../initial_test_images/bdr298709.jpg
+    mime_type: image/jpeg
+    baseline_alt_text: "Abstract watercolor grid of soft-edged rectangles in muted red, pink, brown, teal, black, and white."
+    reference_alt_text: "Abstract watercolor grid of soft-edged rectangles in muted red, pink, brown, teal, black, and white."
+  assert:
+    - type: word-count
+      value:
+        min: 10
+        max: 200
+    - type: gleu
+      threshold: 0.6
+      value: "{{reference_alt_text}}"
+
+- vars:
+    case_id: bdr300204
+    image_filename: bdr300204.jpg
+    image_path: ../initial_test_images/bdr300204.jpg
+    mime_type: image/jpeg
+    baseline_alt_text: "Etching of a walled city crowded with towers and buildings across a river or lake, framed by trees and hills with small figures in the foreground."
+    reference_alt_text: "Etching of a walled city crowded with towers and buildings across a river or lake, framed by trees and hills with small figures in the foreground."
+  assert:
+    - type: word-count
+      value:
+        min: 10
+        max: 200
+    - type: gleu
+      threshold: 0.6
+      value: "{{reference_alt_text}}"
+
+- vars:
+    case_id: bdr300315
+    image_filename: bdr300315.jpg
+    image_path: ../initial_test_images/bdr300315.jpg
+    mime_type: image/jpeg
+    baseline_alt_text: "Black ink drawing of overlapping human and animal figures, including a catlike head and seated people, arranged around sharp geometric shapes."
+    reference_alt_text: "Black ink drawing of overlapping human and animal figures, including a catlike head and seated people, arranged around sharp geometric shapes."
+  assert:
+    - type: word-count
+      value:
+        min: 10
+        max: 200
+    - type: gleu
+      threshold: 0.6
+      value: "{{reference_alt_text}}"
+
+- vars:
+    case_id: bdr301742
+    image_filename: bdr301742.jpg
+    image_path: ../initial_test_images/bdr301742.jpg
+    mime_type: image/jpeg
+    baseline_alt_text: "Lightly colored drawing of a dog lying down with its front paws stretched forward, looking directly outward."
+    reference_alt_text: "Lightly colored drawing of a dog lying down with its front paws stretched forward, looking directly outward."
+  assert:
+    - type: word-count
+      value:
+        min: 10
+        max: 200
+    - type: gleu
+      threshold: 0.6
+      value: "{{reference_alt_text}}"
+
+- vars:
+    case_id: bdr64120
+    image_filename: bdr64120.jpg
+    image_path: ../initial_test_images/bdr64120.jpg
+    mime_type: image/jpeg
+    baseline_alt_text: "Black-and-white stage photograph of five people in formal clothing gathered closely, appearing to speak and gesture during a theatrical scene."
+    reference_alt_text: "Black-and-white stage photograph of five people in formal clothing gathered closely, appearing to speak and gesture during a theatrical scene."
+  assert:
+    - type: word-count
+      value:
+        min: 10
+        max: 200
+    - type: gleu
+      threshold: 0.6
+      value: "{{reference_alt_text}}"
+
+- vars:
+    case_id: bdr_149082
+    image_filename: bdr_149082.jpg
+    image_path: ../initial_test_images/bdr_149082.jpg
+    mime_type: image/jpeg
+    baseline_alt_text: "Brown tabby cat sitting upright against vivid red and magenta draped fabric."
+    reference_alt_text: "Brown tabby cat sitting upright against vivid red and magenta draped fabric."
+  assert:
+    - type: word-count
+      value:
+        min: 10
+        max: 200
+    - type: gleu
+      threshold: 0.6
+      value: "{{reference_alt_text}}"
+
+- vars:
+    case_id: bdrnz9qn2kb
+    image_filename: bdrnz9qn2kb.png
+    image_path: ../initial_test_images/bdrnz9qn2kb.png
+    mime_type: image/png
+    baseline_alt_text: "Abstract black-and-white graphic with white botanical forms on a black field and large blocky white and black rectangular areas."
+    reference_alt_text: "Abstract black-and-white graphic with white botanical forms on a black field and large blocky white and black rectangular areas."
+  assert:
+    - type: word-count
+      value:
+        min: 10
+        max: 200
+    - type: gleu
+      threshold: 0.6
+      value: "{{reference_alt_text}}"

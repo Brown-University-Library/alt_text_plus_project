@@ -15,8 +15,6 @@ from dataclasses import replace
 from pathlib import Path
 from typing import Any
 
-import httpx
-
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 if str(PROJECT_ROOT) not in sys.path:
@@ -35,6 +33,10 @@ def call_api(prompt: str, options: dict[str, Any], context: dict[str, Any]) -> d
         mime_type: optional MIME type; guessed from image_path if omitted
 
     Useful provider config:
+        output_var: return the value of a test var instead of calling a model;
+            useful for offline fixture and assertion smoke tests
+        require_image_path_exists: when used with output_var, fail if the
+            test's image_path does not resolve to a local file
         model: explicit model id
         model_env_var: environment variable containing a model id
         allow_app_model_fallback: use the app's first configured model if no
@@ -44,6 +46,43 @@ def call_api(prompt: str, options: dict[str, Any], context: dict[str, Any]) -> d
         mock_response: optional local response for provider smoke tests
     """
     provider_config = options.get('config') or {}
+    vars_map = context.get('vars') or {}
+
+    output_var = provider_config.get('output_var')
+    if output_var is not None:
+        output_var_name = str(output_var)
+        if output_var_name not in vars_map:
+            return {
+                'output': '',
+                'error': f'Test vars do not include output_var={output_var_name!r}',
+            }
+
+        resolved_image_path = ''
+        if provider_config.get('require_image_path_exists'):
+            image_path_value = vars_map.get('image_path')
+            if not image_path_value:
+                return {
+                    'output': '',
+                    'error': 'Test vars must include image_path when require_image_path_exists is enabled',
+                }
+            base_path = provider_config.get('basePath') or Path(__file__).resolve().parent
+            image_path = _resolve_path(str(image_path_value), Path(base_path))
+            if not image_path.exists():
+                return {
+                    'output': '',
+                    'error': f'Image file not found: {image_path}',
+                }
+            resolved_image_path = str(image_path)
+
+        return {
+            'output': str(vars_map[output_var_name]),
+            'cached': False,
+            'metadata': {
+                'case_id': vars_map.get('case_id', ''),
+                'image_path': resolved_image_path or vars_map.get('image_path', ''),
+                'fixture_output_var': output_var_name,
+            },
+        }
 
     mock_response = provider_config.get('mock_response')
     if mock_response is not None:
@@ -65,6 +104,8 @@ def call_api(prompt: str, options: dict[str, Any], context: dict[str, Any]) -> d
 
 
 def _call_model_server(prompt: str, provider_config: dict[str, Any], context: dict[str, Any]) -> dict[str, Any]:
+    import httpx
+
     _setup_django()
 
     from django.conf import settings as project_settings
