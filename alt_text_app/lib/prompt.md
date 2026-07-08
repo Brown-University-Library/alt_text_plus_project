@@ -12,3 +12,4 @@
 - Do not mention UI elements or file metadata.
 - If text appears in the image, include it only if it is central to the meaning.
 - If the image is purely decorative or lacks meaningful content, return: "Decorative image."
+- Max number of characters: 249.
