@@ -1,0 +1,39 @@
+prompt: |
+  # Context
+  - A user has uploaded an image to an alt-text generator.
+
+  # Task
+  - Write concise, accessibility-focused alt text for the image.
+  - Keep it factual and neutral.
+  - Aim for one or two sentences.
+
+  ## Guidelines
+  - Prioritize the most important visual information.
+  - Avoid phrases like "image of" or "picture of".
+  - Do not mention UI elements or file metadata.
+  - If text appears in the image, include it only if it is central to the meaning.
+  - If the image is purely decorative or lacks meaningful content, return: "Decorative image."
+  - Max number of characters: 249.
+images:
+  - image_filename: bdr148605.jpg
+    alt_text: "Brown felt fedora with a black band, shown against a saturated yellow background."
+  - image_filename: bdr149082.jpg
+    alt_text: "Brown tabby cat sitting upright against vivid red and magenta draped fabric."
+  - image_filename: bdr216457.jpg
+    alt_text: "Natural history illustration of two colorful birds on branches, with green backs, gray chests, red bellies, and barred wings; caption reads \"T. ROSEIGASTER.\""
+  - image_filename: bdr250913.jpg
+    alt_text: "Illustration of a uniformed soldier standing with one hand on his hip, wearing a tall black plume hat, white jacket, blue trousers, black boots, and a sword."
+  - image_filename: bdr298709.jpg
+    alt_text: "Abstract watercolor grid of soft-edged rectangles in muted red, pink, brown, teal, black, and white."
+  - image_filename: bdr300204.jpg
+    alt_text: "Etching of a walled city crowded with towers and buildings across a river or lake, framed by trees and hills with small figures in the foreground."
+  - image_filename: bdr300315.jpg
+    alt_text: "Black ink drawing of overlapping human and animal figures, including a catlike head and seated people, arranged around sharp geometric shapes."
+  - image_filename: bdr301742.jpg
+    alt_text: "Lightly colored drawing of a dog lying down with its front paws stretched forward, looking directly outward."
+  - image_filename: bdr64120.jpg
+    alt_text: "Black-and-white stage photograph of five people in formal clothing gathered closely, appearing to speak and gesture during a theatrical scene."
+  - image_filename: bdr_149082.jpg
+    alt_text: "Brown tabby cat sitting upright against vivid red and magenta draped fabric."
+  - image_filename: bdrnz9qn2kb.png
+    alt_text: "Abstract black-and-white graphic with white botanical forms on a black field and large blocky white and black rectangular areas."
