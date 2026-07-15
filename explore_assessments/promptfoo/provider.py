@@ -21,6 +21,10 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 DEFAULT_TIMEOUT_SECONDS = 60.0
+DEFAULT_CONNECT_TIMEOUT_SECONDS = 5.0
+DEFAULT_MAX_ATTEMPTS = 1
+DEFAULT_RETRY_DELAY_SECONDS = 5.0
+RETRYABLE_STATUS_CODES = frozenset({408, 425, 429, 500, 502, 503, 504})
 _DJANGO_IS_READY = False
 
 
@@ -43,7 +47,10 @@ def call_api(prompt: str, options: dict[str, Any], context: dict[str, Any]) -> d
             explicit/env model is supplied
         model_params: extra OpenAI-compatible chat-completion parameters
         timeout_seconds: per-request timeout
-        mock_response: optional local response for provider smoke tests
+        connect_timeout_seconds: per-attempt connection timeout
+        max_attempts: total attempts for temporary connection/server failures
+        retry_delay_seconds: wait between retry attempts
+        mock_response: optional local response for basic provider checks
     """
     provider_config = options.get('config') or {}
     vars_map = context.get('vars') or {}
@@ -136,25 +143,27 @@ def _call_model_server(prompt: str, provider_config: dict[str, Any], context: di
             payload[key] = value
 
     timeout_seconds = float(provider_config.get('timeout_seconds', DEFAULT_TIMEOUT_SECONDS))
-    client_kwargs: dict[str, Any] = {'timeout': timeout_seconds}
+    connect_timeout_seconds = float(
+        provider_config.get('connect_timeout_seconds', DEFAULT_CONNECT_TIMEOUT_SECONDS)
+    )
+    max_attempts = int(provider_config.get('max_attempts', DEFAULT_MAX_ATTEMPTS))
+    retry_delay_seconds = float(provider_config.get('retry_delay_seconds', DEFAULT_RETRY_DELAY_SECONDS))
+    request_timeout = httpx.Timeout(timeout_seconds, connect=connect_timeout_seconds)
+    client_kwargs: dict[str, Any] = {'timeout': request_timeout}
     system_ca_bundle = getattr(project_settings, 'SYSTEM_CA_BUNDLE', '')
     if system_ca_bundle:
         client_kwargs['verify'] = system_ca_bundle
 
     started = time.monotonic()
     with httpx.Client(**client_kwargs) as client:
-        response = client.post(
+        response_json, request_attempts = _post_chat_completion_with_retries(
+            client,
             model_server_helpers.get_chat_completions_url(request_config),
-            headers=model_server_helpers.get_headers(request_config),
-            json=payload,
+            model_server_helpers.get_headers(request_config),
+            payload,
+            max_attempts,
+            retry_delay_seconds,
         )
-        if response.is_error:
-            raise httpx.HTTPStatusError(
-                f'Model-server request failed with status={response.status_code}: {response.text}',
-                request=response.request,
-                response=response,
-            )
-        response_json = response.json()
     latency_ms = int((time.monotonic() - started) * 1000)
 
     parsed = model_server_helpers.parse_model_server_response(response_json, request_config)
@@ -163,7 +172,7 @@ def _call_model_server(prompt: str, provider_config: dict[str, Any], context: di
         'total': usage.get('total_tokens') or 0,
         'prompt': usage.get('prompt_tokens') or 0,
         'completion': usage.get('completion_tokens') or 0,
-        'numRequests': 1,
+        'numRequests': request_attempts,
     }
 
     result: dict[str, Any] = {
@@ -181,6 +190,7 @@ def _call_model_server(prompt: str, provider_config: dict[str, Any], context: di
             'response_id': parsed['response_id'],
             'base_url': parsed['base_url'],
             'model_params': provider_config.get('model_params') or {},
+            'request_attempts': request_attempts,
         },
     }
 
@@ -189,6 +199,58 @@ def _call_model_server(prompt: str, provider_config: dict[str, Any], context: di
         result['cost'] = cost
 
     return result
+
+
+def _post_chat_completion_with_retries(
+    client: Any,
+    url: str,
+    headers: dict[str, str],
+    payload: dict[str, object],
+    max_attempts: int,
+    retry_delay_seconds: float,
+) -> tuple[dict[str, Any], int]:
+    """
+    Posts a chat-completion request and retries temporary connection or server failures.
+    """
+    import httpx
+
+    if max_attempts < 1:
+        raise ValueError('max_attempts must be at least 1')
+    if retry_delay_seconds < 0:
+        raise ValueError('retry_delay_seconds cannot be negative')
+
+    attempt = 0
+    response_json: dict[str, Any] | None = None
+    while response_json is None and attempt < max_attempts:
+        attempt += 1
+        try:
+            response = client.post(url, headers=headers, json=payload)
+            should_retry_status = response.status_code in RETRYABLE_STATUS_CODES and attempt < max_attempts
+            if should_retry_status:
+                time.sleep(retry_delay_seconds)
+                continue
+            if response.is_error:
+                raise httpx.HTTPStatusError(
+                    f'Model-server request failed after {attempt} attempt(s) '
+                    f'with status={response.status_code}: {response.text}',
+                    request=response.request,
+                    response=response,
+                )
+            decoded_response: Any = response.json()
+            if not isinstance(decoded_response, dict):
+                raise ValueError('Model-server response must be a JSON object')
+            response_json = decoded_response
+        except (httpx.ConnectError, httpx.ConnectTimeout, httpx.ReadError, httpx.RemoteProtocolError) as exc:
+            if attempt >= max_attempts:
+                raise RuntimeError(
+                    f'Model-server connection failed after {attempt} attempt(s): {exc}'
+                ) from exc
+            time.sleep(retry_delay_seconds)
+
+    if response_json is None:
+        raise RuntimeError(f'Model-server request failed after {attempt} attempt(s)')
+
+    return response_json, attempt
 
 
 def _setup_django() -> None:

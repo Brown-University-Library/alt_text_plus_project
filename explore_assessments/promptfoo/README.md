@@ -8,7 +8,7 @@ This directory contains a first Promptfoo harness for comparing alt-text model o
 - `promptfooconfig.initial-images.yaml` compares two LM Studio models against the first BDR image set.
 - `provider.py` wraps the app's existing OpenAI-compatible model-server helper path without writing Django database records.
 - `cases.yaml` defines the first synthetic image cases.
-- `initial_images_cases.yaml` defines the initial image paths sent to both models.
+- `initial_images_cases.yaml` defines the initial image paths, reference alt text, and assertions applied to both models.
 - `images/` contains small generated images for basic framework checks.
 
 ## Run
@@ -32,6 +32,13 @@ npx promptfoo@latest view
 ```
 
 Both providers use temperature `0`. The primary provider uses the first model in the app's configured model order. The comparison provider requires `ALT_TEXT_EVAL_MODEL_A`; it does not fall back to the primary model when that variable is absent.
+
+The initial-image comparison runs one request at a time, with a one-second delay between requests. A provider call retries connection failures and temporary HTTP responses up to 10 total attempts, waiting 10 seconds between attempts. The 120-second request timeout applies separately to each attempt; a refused connection can still fail immediately and move to the next retry.
+
+Each model response is checked with:
+
+- `word-count`, requiring 10 to 200 words.
+- `gleu`, comparing the response to the reference alt text with a `0.6` threshold.
 
 ## Model-Server Comparison
 
@@ -59,4 +66,4 @@ If `ALT_TEXT_EVAL_MODEL_A` is not set, the scaffold falls back to the app's firs
 
 ## Current Scope
 
-This scaffold intentionally does not grade output quality. The first pass is for side-by-side review of model and parameter behavior. Add assertions only after the team defines quality criteria for useful alt text.
+The initial-image assertions provide basic automated signals, while the Promptfoo response matrix supports side-by-side review. GLEU measures text overlap with the saved reference and should not be treated as a complete assessment of alt-text quality.

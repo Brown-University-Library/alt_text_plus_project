@@ -35,3 +35,15 @@ MAIN RESPONSE:
 Updated the initial-image Promptfoo scenario to call two LM Studio models at temperature 0: the app's first configured model and the model named by `ALT_TEXT_EVAL_MODEL_A`. Removed the fixture output and hardcoded reference alt text from all 11 image cases, and updated the Promptfoo README with the setup and no-cache run command. Verified both YAML files, all image paths, the two-provider/11-case structure, and all 37 project tests. The Promptfoo CLI itself was not installed locally, so no live model calls were made.
 
 ---
+
+USER PROMPT:
+
+- Previously the `initial_images_cases.yaml` used two tests; word count and gleu. Could you restore those with the same settings as before?
+
+- We got a lot of connection errors. It seems like it's trying to get an answer from LM Studio before it's ready and is failing - doesn't seem to be exceeding the 90 sec timeout before failing
+
+MAIN RESPONSE:
+
+Restored the word-count assertion (10 to 200 words) and GLEU assertion (0.6 threshold) for all 11 live model responses, using the original reference alt text. Changed the comparison to run one request at a time and added bounded retries for connection failures, abrupt disconnects, and temporary server responses. Each provider now makes up to 10 attempts, 10 seconds apart, with a five-second connection timeout and the existing 120-second response timeout per attempt. Added three retry tests, updated the Promptfoo README, and verified all reference values, image paths, YAML structure, all 40 project tests, and Ruff checks.
+
+---
