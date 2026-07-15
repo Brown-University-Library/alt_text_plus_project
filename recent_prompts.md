@@ -47,3 +47,13 @@ MAIN RESPONSE:
 Restored the word-count assertion (10 to 200 words) and GLEU assertion (0.6 threshold) for all 11 live model responses, using the original reference alt text. Changed the comparison to run one request at a time and added bounded retries for connection failures, abrupt disconnects, and temporary server responses. Each provider now makes up to 10 attempts, 10 seconds apart, with a five-second connection timeout and the existing 120-second response timeout per attempt. Added three retry tests, updated the Promptfoo README, and verified all reference values, image paths, YAML structure, all 40 project tests, and Ruff checks.
 
 ---
+
+USER PROMPT:
+
+- when i run: `PROMPTFOO_PYTHON="$PWD/.venv/bin/python" npx promptfoo@latest eval --no-cache -c explore_assessments/promptfoo/promptfooconfig.initial-images.yaml` -- where does the output go that drives the terminal display or the web-display?
+
+MAIN RESPONSE:
+
+The terminal display is generated live by the Promptfoo process and written to stdout/stderr; it is not driven by a project output file. The persisted evaluation that drives `promptfoo view` is stored in `~/.promptfoo/promptfoo.db`. On this machine, the latest matching evaluation is `eval-jtO-2026-07-15T14:51:05`. Promptfoo also writes `~/.promptfoo/evalLastWritten` as a refresh signal, while the `-wal` and `-shm` files are SQLite working files. `--no-cache` disables the response cache but does not prevent evaluation database writes. Use `--no-write` to avoid persistence or `-o PATH.json` to create an explicit result file.
+
+---
