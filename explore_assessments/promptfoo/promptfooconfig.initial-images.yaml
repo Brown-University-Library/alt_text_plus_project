@@ -10,7 +10,7 @@ providers:
     config:
       model_params:
         temperature: 0
-      timeout_seconds: 90
+      timeout_seconds: 120
 
   - id: file://provider.py
     label: comparison-lm-studio-model-temperature-0
@@ -19,7 +19,7 @@ providers:
       allow_app_model_fallback: false
       model_params:
         temperature: 0
-      timeout_seconds: 90
+      timeout_seconds: 120
 
 tests:
   - file://initial_images_cases.yaml
