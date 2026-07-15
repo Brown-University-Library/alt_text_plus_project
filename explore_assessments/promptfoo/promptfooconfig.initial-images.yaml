@@ -1,15 +1,25 @@
 # yaml-language-server: $schema=https://promptfoo.dev/config-schema.json
-description: Initial image alt-text deterministic checks
+description: Initial image alt-text comparison across two LM Studio models
 
 prompts:
   - file://../../alt_text_app/lib/prompt.md
 
 providers:
   - id: file://provider.py
-    label: results-11-fixture
+    label: primary-lm-studio-model-temperature-0
     config:
-      output_var: baseline_alt_text
-      require_image_path_exists: true
+      model_params:
+        temperature: 0
+      timeout_seconds: 90
+
+  - id: file://provider.py
+    label: comparison-lm-studio-model-temperature-0
+    config:
+      model_env_var: ALT_TEXT_EVAL_MODEL_A
+      allow_app_model_fallback: false
+      model_params:
+        temperature: 0
+      timeout_seconds: 90
 
 tests:
   - file://initial_images_cases.yaml

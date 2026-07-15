@@ -5,30 +5,33 @@ This directory contains a first Promptfoo harness for comparing alt-text model o
 ## Files
 
 - `promptfooconfig.yaml` defines the prompt, provider combinations, and test file.
-- `promptfooconfig.initial-images.yaml` defines a runnable deterministic scenario for the first BDR image set.
+- `promptfooconfig.initial-images.yaml` compares two LM Studio models against the first BDR image set.
 - `provider.py` wraps the app's existing OpenAI-compatible model-server helper path without writing Django database records.
 - `cases.yaml` defines the first synthetic image cases.
-- `initial_images_cases.yaml` defines assertions for the initial images and the baseline alt text in `../initial_test_images/results_11.yaml`.
-- `images/` contains small generated images for initial smoke testing.
+- `initial_images_cases.yaml` defines the initial image paths sent to both models.
+- `images/` contains small generated images for basic framework checks.
 
 ## Run
 
-Run the initial-image deterministic scenario from this directory:
+Configure LM Studio in the project `.env` with the first model as the first entry in `LMSTUDIO_MODEL_ORDER`. Load that model and the comparison model in LM Studio, then set the comparison model's exact LM Studio identifier in the shell:
 
 ```bash
-npx promptfoo@latest eval -c promptfooconfig.initial-images.yaml
+export ALT_TEXT_EVAL_MODEL_A="comparison-model-id"
 ```
 
-Then view results:
+Run the comparison from the project root. `--no-cache` ensures that every image is sent to both models instead of reusing earlier Promptfoo results:
+
+```bash
+PROMPTFOO_PYTHON="$PWD/.venv/bin/python" npx promptfoo@latest eval --no-cache -c explore_assessments/promptfoo/promptfooconfig.initial-images.yaml
+```
+
+Then view the two model-response columns side by side:
 
 ```bash
 npx promptfoo@latest view
 ```
 
-The initial-image scenario uses the baseline alt text as a local fixture so it can exercise Promptfoo assertions without calling an external model. Each case includes:
-
-- `word-count`, requiring 10 to 200 words.
-- `gleu`, comparing the output to the baseline reference text with a `0.6` threshold.
+Both providers use temperature `0`. The primary provider uses the first model in the app's configured model order. The comparison provider requires `ALT_TEXT_EVAL_MODEL_A`; it does not fall back to the primary model when that variable is absent.
 
 ## Model-Server Comparison
 
