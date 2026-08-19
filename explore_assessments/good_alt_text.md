@@ -48,11 +48,11 @@ This does not mean that every reader will prefer every wording. It means there i
 
 ## License and reuse
 
-Every direct image link below is from the museum's Open Access image service, and every corresponding record reports `share_license_status: "CC0"`. The museum says its CC0 images may be downloaded, shared, changed, and reused without asking permission. Attribution is not legally required for CC0 material, but retaining the museum record link is useful for provenance.
+Every source image link below is from the museum's Open Access image service, and every corresponding record reports `share_license_status: "CC0"`. The museum says its CC0 images may be downloaded, shared, changed, and reused without asking permission. Attribution is not legally required for CC0 material, but retaining the museum record link is useful for provenance.
 
 CC0 addresses copyright. A user should still consider non-copyright issues that may apply to a particular use, such as privacy, publicity, cultural sensitivity, or trademarks.
 
-All direct image and museum-record links were checked on 2026-08-12 and returned successfully.
+All source image and museum-record links were checked on 2026-08-12 and returned successfully.
 
 ## Coverage
 
@@ -67,7 +67,7 @@ It spans 15 museum areas: American Painting and Sculpture; Art of the Americas; 
 - Type: Silver — Chinese Art
 - Creator/date: Zhu Bishan (Chinese, c. 1300–after 1362); 1300s–1400s
 - License: CC0
-- Links: [direct image](https://openaccess-cdn.clevelandart.org/1977.7/1977.7_web.jpg) · [museum record](https://www.clevelandart.org/art/1977.7)
+- Links: [local image](curated_images/1977.7_web.jpg) · [source image](https://openaccess-cdn.clevelandart.org/1977.7/1977.7_web.jpg) · [museum record](https://www.clevelandart.org/art/1977.7)
 - Character count: 195
 - Published alt text:
 
@@ -78,7 +78,7 @@ It spans 15 museum areas: American Painting and Sculpture; Art of the Americas; 
 - Type: Jewelry — Art of the Americas
 - Creator/date: Unknown; c. 500–200 BCE
 - License: CC0
-- Links: [direct image](https://openaccess-cdn.clevelandart.org/1938.431/1938.431_web.jpg) · [museum record](https://www.clevelandart.org/art/1938.431)
+- Links: [local image](curated_images/1938.431_web.jpg) · [source image](https://openaccess-cdn.clevelandart.org/1938.431/1938.431_web.jpg) · [museum record](https://www.clevelandart.org/art/1938.431)
 - Character count: 116
 - Published alt text:
 
@@ -89,7 +89,7 @@ It spans 15 museum areas: American Painting and Sculpture; Art of the Americas; 
 - Type: Print — Prints
 - Creator/date: Antonio del Pollaiuolo (Italian, 1431/32–1498); 1470s–80s
 - License: CC0
-- Links: [direct image](https://openaccess-cdn.clevelandart.org/1967.127/1967.127_web.jpg) · [museum record](https://www.clevelandart.org/art/1967.127)
+- Links: [local image](curated_images/1967.127_web.jpg) · [source image](https://openaccess-cdn.clevelandart.org/1967.127/1967.127_web.jpg) · [museum record](https://www.clevelandart.org/art/1967.127)
 - Character count: 175
 - Published alt text:
 
@@ -100,7 +100,7 @@ It spans 15 museum areas: American Painting and Sculpture; Art of the Americas; 
 - Type: Carpet — Textiles
 - Creator/date: Unknown; 1600–1625
 - License: CC0
-- Links: [direct image](https://openaccess-cdn.clevelandart.org/1926.533/1926.533_web.jpg) · [museum record](https://www.clevelandart.org/art/1926.533)
+- Links: [local image](curated_images/1926.533_web.jpg) · [source image](https://openaccess-cdn.clevelandart.org/1926.533/1926.533_web.jpg) · [museum record](https://www.clevelandart.org/art/1926.533)
 - Character count: 164
 - Published alt text:
 
@@ -111,7 +111,7 @@ It spans 15 museum areas: American Painting and Sculpture; Art of the Americas; 
 - Type: Wood — Art of the Americas
 - Creator/date: Unknown; 770–890 (radiocarbon date, 95% probability)
 - License: CC0
-- Links: [direct image](https://openaccess-cdn.clevelandart.org/2007.193/2007.193_web.jpg) · [museum record](https://www.clevelandart.org/art/2007.193)
+- Links: [local image](curated_images/2007.193_web.jpg) · [source image](https://openaccess-cdn.clevelandart.org/2007.193/2007.193_web.jpg) · [museum record](https://www.clevelandart.org/art/2007.193)
 - Character count: 194
 - Published alt text:
 
@@ -122,7 +122,7 @@ It spans 15 museum areas: American Painting and Sculpture; Art of the Americas; 
 - Type: Ivory — Medieval Art
 - Creator/date: Unknown; 950–1025
 - License: CC0
-- Links: [direct image](https://openaccess-cdn.clevelandart.org/1925.1293/1925.1293_web.jpg) · [museum record](https://www.clevelandart.org/art/1925.1293)
+- Links: [local image](curated_images/1925.1293_web.jpg) · [source image](https://openaccess-cdn.clevelandart.org/1925.1293/1925.1293_web.jpg) · [museum record](https://www.clevelandart.org/art/1925.1293)
 - Character count: 190
 - Published alt text:
 
@@ -133,7 +133,7 @@ It spans 15 museum areas: American Painting and Sculpture; Art of the Americas; 
 - Type: Furniture and woodwork — Decorative Art and Design
 - Creator/date: John Townsend (American, 1732–1809); c. 1780–95
 - License: CC0
-- Links: [direct image](https://openaccess-cdn.clevelandart.org/2012.43/2012.43_web.jpg) · [museum record](https://www.clevelandart.org/art/2012.43)
+- Links: [local image](curated_images/2012.43_web.jpg) · [source image](https://openaccess-cdn.clevelandart.org/2012.43/2012.43_web.jpg) · [museum record](https://www.clevelandart.org/art/2012.43)
 - Character count: 154
 - Published alt text:
 
@@ -144,7 +144,7 @@ It spans 15 museum areas: American Painting and Sculpture; Art of the Americas; 
 - Type: Sculpture — American Painting and Sculpture
 - Creator/date: Augusta Savage (American, 1892–1962); c. 1929
 - License: CC0
-- Links: [direct image](https://openaccess-cdn.clevelandart.org/2003.40/2003.40_web.jpg) · [museum record](https://www.clevelandart.org/art/2003.40)
+- Links: [local image](curated_images/2003.40_web.jpg) · [source image](https://openaccess-cdn.clevelandart.org/2003.40/2003.40_web.jpg) · [museum record](https://www.clevelandart.org/art/2003.40)
 - Character count: 194
 - Published alt text:
 
@@ -155,7 +155,7 @@ It spans 15 museum areas: American Painting and Sculpture; Art of the Americas; 
 - Type: Miscellaneous — Art of the Americas
 - Creator/date: Unknown; late 1800s–early 1900s
 - License: CC0
-- Links: [direct image](https://openaccess-cdn.clevelandart.org/1953.386/1953.386_web.jpg) · [museum record](https://www.clevelandart.org/art/1953.386)
+- Links: [local image](curated_images/1953.386_web.jpg) · [source image](https://openaccess-cdn.clevelandart.org/1953.386/1953.386_web.jpg) · [museum record](https://www.clevelandart.org/art/1953.386)
 - Character count: 187
 - Published alt text:
 
@@ -166,7 +166,7 @@ It spans 15 museum areas: American Painting and Sculpture; Art of the Americas; 
 - Type: Jade — Art of the Americas
 - Creator/date: Unknown; c. 900–300 BCE
 - License: CC0
-- Links: [direct image](https://openaccess-cdn.clevelandart.org/1961.31/1961.31_web.jpg) · [museum record](https://www.clevelandart.org/art/1961.31)
+- Links: [local image](curated_images/1961.31_web.jpg) · [source image](https://openaccess-cdn.clevelandart.org/1961.31/1961.31_web.jpg) · [museum record](https://www.clevelandart.org/art/1961.31)
 - Character count: 184
 - Published alt text:
 
@@ -177,7 +177,7 @@ It spans 15 museum areas: American Painting and Sculpture; Art of the Americas; 
 - Type: Metalwork — Chinese Art
 - Creator/date: Unknown; c. 800–700 BCE
 - License: CC0
-- Links: [direct image](https://openaccess-cdn.clevelandart.org/1989.3/1989.3_web.jpg) · [museum record](https://www.clevelandart.org/art/1989.3)
+- Links: [local image](curated_images/1989.3_web.jpg) · [source image](https://openaccess-cdn.clevelandart.org/1989.3/1989.3_web.jpg) · [museum record](https://www.clevelandart.org/art/1989.3)
 - Character count: 146
 - Published alt text:
 
@@ -188,7 +188,7 @@ It spans 15 museum areas: American Painting and Sculpture; Art of the Americas; 
 - Type: Drawing — Drawings
 - Creator/date: Albrecht Dürer (German, 1471–1528); 1507
 - License: CC0
-- Links: [direct image](https://openaccess-cdn.clevelandart.org/1965.470/1965.470_web.jpg) · [museum record](https://www.clevelandart.org/art/1965.470)
+- Links: [local image](curated_images/1965.470_web.jpg) · [source image](https://openaccess-cdn.clevelandart.org/1965.470/1965.470_web.jpg) · [museum record](https://www.clevelandart.org/art/1965.470)
 - Character count: 104
 - Published alt text:
 
@@ -199,7 +199,7 @@ It spans 15 museum areas: American Painting and Sculpture; Art of the Americas; 
 - Type: Photograph — Photography
 - Creator/date: Timothy H. O'Sullivan (American, 1840–1882); 1867
 - License: CC0
-- Links: [direct image](https://openaccess-cdn.clevelandart.org/2002.45/2002.45_web.jpg) · [museum record](https://www.clevelandart.org/art/2002.45)
+- Links: [local image](curated_images/2002.45_web.jpg) · [source image](https://openaccess-cdn.clevelandart.org/2002.45/2002.45_web.jpg) · [museum record](https://www.clevelandart.org/art/2002.45)
 - Character count: 148
 - Published alt text:
 
@@ -210,7 +210,7 @@ It spans 15 museum areas: American Painting and Sculpture; Art of the Americas; 
 - Type: Lacquer — Japanese Art
 - Creator/date: Unknown; early 1300s
 - License: CC0
-- Links: [direct image](https://openaccess-cdn.clevelandart.org/1963.513/1963.513_web.jpg) · [museum record](https://www.clevelandart.org/art/1963.513)
+- Links: [local image](curated_images/1963.513_web.jpg) · [source image](https://openaccess-cdn.clevelandart.org/1963.513/1963.513_web.jpg) · [museum record](https://www.clevelandart.org/art/1963.513)
 - Character count: 140
 - Published alt text:
 
@@ -221,7 +221,7 @@ It spans 15 museum areas: American Painting and Sculpture; Art of the Americas; 
 - Type: Painting — Modern European Painting and Sculpture
 - Creator/date: Paul Cezanne (French, 1839–1906); c. 1904
 - License: CC0
-- Links: [direct image](https://openaccess-cdn.clevelandart.org/1958.21/1958.21_web.jpg) · [museum record](https://www.clevelandart.org/art/1958.21)
+- Links: [local image](curated_images/1958.21_web.jpg) · [source image](https://openaccess-cdn.clevelandart.org/1958.21/1958.21_web.jpg) · [museum record](https://www.clevelandart.org/art/1958.21)
 - Character count: 98
 - Published alt text:
 
@@ -232,7 +232,7 @@ It spans 15 museum areas: American Painting and Sculpture; Art of the Americas; 
 - Type: Ceramic — Greek and Roman Art
 - Creator/date: Policoro Painter (South Italian, Lucanian, active c. 400 BCE); c. 400 BCE
 - License: CC0
-- Links: [direct image](https://openaccess-cdn.clevelandart.org/1991.1/1991.1_web.jpg) · [museum record](https://www.clevelandart.org/art/1991.1)
+- Links: [local image](curated_images/1991.1_web.jpg) · [source image](https://openaccess-cdn.clevelandart.org/1991.1/1991.1_web.jpg) · [museum record](https://www.clevelandart.org/art/1991.1)
 - Character count: 146
 - Published alt text:
 
@@ -243,7 +243,7 @@ It spans 15 museum areas: American Painting and Sculpture; Art of the Americas; 
 - Type: Calligraphy — Japanese Art
 - Creator/date: Hon'ami Kōetsu (Japanese, 1558–1637); early 1600s
 - License: CC0
-- Links: [direct image](https://openaccess-cdn.clevelandart.org/1966.118/1966.118_web.jpg) · [museum record](https://www.clevelandart.org/art/1966.118)
+- Links: [local image](curated_images/1966.118_web.jpg) · [source image](https://openaccess-cdn.clevelandart.org/1966.118/1966.118_web.jpg) · [museum record](https://www.clevelandart.org/art/1966.118)
 - Character count: 108
 - Published alt text:
 
@@ -254,7 +254,7 @@ It spans 15 museum areas: American Painting and Sculpture; Art of the Americas; 
 - Type: Sculpture — European Painting and Sculpture
 - Creator/date: Mino da Fiesole (Italian, c. 1430–1484); c. 1455–60
 - License: CC0
-- Links: [direct image](https://openaccess-cdn.clevelandart.org/2009.271/2009.271_web.jpg) · [museum record](https://www.clevelandart.org/art/2009.271)
+- Links: [local image](curated_images/2009.271_web.jpg) · [source image](https://openaccess-cdn.clevelandart.org/2009.271/2009.271_web.jpg) · [museum record](https://www.clevelandart.org/art/2009.271)
 - Character count: 109
 - Published alt text:
 
@@ -265,7 +265,7 @@ It spans 15 museum areas: American Painting and Sculpture; Art of the Americas; 
 - Type: Metalwork — Korean Art
 - Creator/date: Unknown; 1100s–1200s
 - License: CC0
-- Links: [direct image](https://openaccess-cdn.clevelandart.org/1985.112/1985.112_web.jpg) · [museum record](https://www.clevelandart.org/art/1985.112)
+- Links: [local image](curated_images/1985.112_web.jpg) · [source image](https://openaccess-cdn.clevelandart.org/1985.112/1985.112_web.jpg) · [museum record](https://www.clevelandart.org/art/1985.112)
 - Character count: 135
 - Published alt text:
 
@@ -276,7 +276,7 @@ It spans 15 museum areas: American Painting and Sculpture; Art of the Americas; 
 - Type: Sculpture — Egyptian and Ancient Near Eastern Art
 - Creator/date: Unknown; c. 1391–1353 BCE
 - License: CC0
-- Links: [direct image](https://openaccess-cdn.clevelandart.org/1961.205/1961.205_web.jpg) · [museum record](https://www.clevelandart.org/art/1961.205)
+- Links: [local image](curated_images/1961.205_web.jpg) · [source image](https://openaccess-cdn.clevelandart.org/1961.205/1961.205_web.jpg) · [museum record](https://www.clevelandart.org/art/1961.205)
 - Character count: 200
 - Published alt text:
 
@@ -287,7 +287,7 @@ It spans 15 museum areas: American Painting and Sculpture; Art of the Americas; 
 - Type: Print — Prints
 - Creator/date: Edgar Degas (French, 1834–1917); 1857
 - License: CC0
-- Links: [direct image](https://openaccess-cdn.clevelandart.org/2004.87/2004.87_web.jpg) · [museum record](https://www.clevelandart.org/art/2004.87)
+- Links: [local image](curated_images/2004.87_web.jpg) · [source image](https://openaccess-cdn.clevelandart.org/2004.87/2004.87_web.jpg) · [museum record](https://www.clevelandart.org/art/2004.87)
 - Character count: 185
 - Published alt text:
 
@@ -298,7 +298,7 @@ It spans 15 museum areas: American Painting and Sculpture; Art of the Americas; 
 - Type: Furniture and woodwork — Decorative Art and Design
 - Creator/date: Royal Savonnerie Manufactory, Chaillot Workshops (French, est. 1627); c. 1715
 - License: CC0
-- Links: [direct image](https://openaccess-cdn.clevelandart.org/1947.183/1947.183_web.jpg) · [museum record](https://www.clevelandart.org/art/1947.183)
+- Links: [local image](curated_images/1947.183_web.jpg) · [source image](https://openaccess-cdn.clevelandart.org/1947.183/1947.183_web.jpg) · [museum record](https://www.clevelandart.org/art/1947.183)
 - Character count: 164
 - Published alt text:
 
@@ -309,7 +309,7 @@ It spans 15 museum areas: American Painting and Sculpture; Art of the Americas; 
 - Type: Painting — American Painting and Sculpture
 - Creator/date: Georgia O'Keeffe (American, 1887–1986); 1926
 - License: CC0
-- Links: [direct image](https://openaccess-cdn.clevelandart.org/1958.42/1958.42_web.jpg) · [museum record](https://www.clevelandart.org/art/1958.42)
+- Links: [local image](curated_images/1958.42_web.jpg) · [source image](https://openaccess-cdn.clevelandart.org/1958.42/1958.42_web.jpg) · [museum record](https://www.clevelandart.org/art/1958.42)
 - Character count: 177
 - Published alt text:
 
@@ -320,7 +320,7 @@ It spans 15 museum areas: American Painting and Sculpture; Art of the Americas; 
 - Type: Drawing — Drawings
 - Creator/date: Édouard Manet (French, 1832–1883); 1876
 - License: CC0
-- Links: [direct image](https://openaccess-cdn.clevelandart.org/1956.718/1956.718_web.jpg) · [museum record](https://www.clevelandart.org/art/1956.718)
+- Links: [local image](curated_images/1956.718_web.jpg) · [source image](https://openaccess-cdn.clevelandart.org/1956.718/1956.718_web.jpg) · [museum record](https://www.clevelandart.org/art/1956.718)
 - Character count: 138
 - Published alt text:
 
@@ -331,7 +331,7 @@ It spans 15 museum areas: American Painting and Sculpture; Art of the Americas; 
 - Type: Ceramic — Korean Art
 - Creator/date: Unknown; 1700s
 - License: CC0
-- Links: [direct image](https://openaccess-cdn.clevelandart.org/1983.28/1983.28_web.jpg) · [museum record](https://www.clevelandart.org/art/1983.28)
+- Links: [local image](curated_images/1983.28_web.jpg) · [source image](https://openaccess-cdn.clevelandart.org/1983.28/1983.28_web.jpg) · [museum record](https://www.clevelandart.org/art/1983.28)
 - Character count: 175
 - Published alt text:
 
@@ -342,7 +342,7 @@ It spans 15 museum areas: American Painting and Sculpture; Art of the Americas; 
 - Type: Metalwork — Medieval Art
 - Creator/date: Unknown; c. 1320–40
 - License: CC0
-- Links: [direct image](https://openaccess-cdn.clevelandart.org/1924.859/1924.859_web.jpg) · [museum record](https://www.clevelandart.org/art/1924.859)
+- Links: [local image](curated_images/1924.859_web.jpg) · [source image](https://openaccess-cdn.clevelandart.org/1924.859/1924.859_web.jpg) · [museum record](https://www.clevelandart.org/art/1924.859)
 - Character count: 178
 - Published alt text:
 
@@ -353,7 +353,7 @@ It spans 15 museum areas: American Painting and Sculpture; Art of the Americas; 
 - Type: Painting — Modern European Painting and Sculpture
 - Creator/date: Claude Monet (French, 1840–1926); c. 1868–73
 - License: CC0
-- Links: [direct image](https://openaccess-cdn.clevelandart.org/1958.39/1958.39_web.jpg) · [museum record](https://www.clevelandart.org/art/1958.39)
+- Links: [local image](curated_images/1958.39_web.jpg) · [source image](https://openaccess-cdn.clevelandart.org/1958.39/1958.39_web.jpg) · [museum record](https://www.clevelandart.org/art/1958.39)
 - Character count: 135
 - Published alt text:
 
@@ -364,7 +364,7 @@ It spans 15 museum areas: American Painting and Sculpture; Art of the Americas; 
 - Type: Sculpture — European Painting and Sculpture
 - Creator/date: Filippo Parodi (Italian, 1630–1702); c. 1675
 - License: CC0
-- Links: [direct image](https://openaccess-cdn.clevelandart.org/2018.257/2018.257_web.jpg) · [museum record](https://www.clevelandart.org/art/2018.257)
+- Links: [local image](curated_images/2018.257_web.jpg) · [source image](https://openaccess-cdn.clevelandart.org/2018.257/2018.257_web.jpg) · [museum record](https://www.clevelandart.org/art/2018.257)
 - Character count: 156
 - Published alt text:
 
@@ -375,7 +375,7 @@ It spans 15 museum areas: American Painting and Sculpture; Art of the Americas; 
 - Type: Sculpture — Egyptian and Ancient Near Eastern Art
 - Creator/date: Unknown; probably 200–100 BCE
 - License: CC0
-- Links: [direct image](https://openaccess-cdn.clevelandart.org/1948.141/1948.141_web.jpg) · [museum record](https://www.clevelandart.org/art/1948.141)
+- Links: [local image](curated_images/1948.141_web.jpg) · [source image](https://openaccess-cdn.clevelandart.org/1948.141/1948.141_web.jpg) · [museum record](https://www.clevelandart.org/art/1948.141)
 - Character count: 186
 - Published alt text:
 
@@ -386,7 +386,7 @@ It spans 15 museum areas: American Painting and Sculpture; Art of the Americas; 
 - Type: Ceramic — Chinese Art
 - Creator/date: Unknown; late 1000s–1127
 - License: CC0
-- Links: [direct image](https://openaccess-cdn.clevelandart.org/1957.40/1957.40_web.jpg) · [museum record](https://www.clevelandart.org/art/1957.40)
+- Links: [local image](curated_images/1957.40_web.jpg) · [source image](https://openaccess-cdn.clevelandart.org/1957.40/1957.40_web.jpg) · [museum record](https://www.clevelandart.org/art/1957.40)
 - Character count: 99
 - Published alt text:
 
@@ -397,7 +397,7 @@ It spans 15 museum areas: American Painting and Sculpture; Art of the Americas; 
 - Type: Drawing — Drawings
 - Creator/date: Edgar Degas (French, 1834–1917); c. 1896
 - License: CC0
-- Links: [direct image](https://openaccess-cdn.clevelandart.org/1916.1043/1916.1043_web.jpg) · [museum record](https://www.clevelandart.org/art/1916.1043)
+- Links: [local image](curated_images/1916.1043_web.jpg) · [source image](https://openaccess-cdn.clevelandart.org/1916.1043/1916.1043_web.jpg) · [museum record](https://www.clevelandart.org/art/1916.1043)
 - Character count: 168
 - Published alt text:
 
@@ -408,7 +408,7 @@ It spans 15 museum areas: American Painting and Sculpture; Art of the Americas; 
 - Type: Sculpture — Greek and Roman Art
 - Creator/date: Unknown; c. 100–125 CE
 - License: CC0
-- Links: [direct image](https://openaccess-cdn.clevelandart.org/1928.856/1928.856_web.jpg) · [museum record](https://www.clevelandart.org/art/1928.856)
+- Links: [local image](curated_images/1928.856_web.jpg) · [source image](https://openaccess-cdn.clevelandart.org/1928.856/1928.856_web.jpg) · [museum record](https://www.clevelandart.org/art/1928.856)
 - Character count: 178
 - Published alt text:
 
@@ -419,7 +419,7 @@ It spans 15 museum areas: American Painting and Sculpture; Art of the Americas; 
 - Type: Ceramic — Japanese Art
 - Creator/date: Unknown; late 1300s–1400s
 - License: CC0
-- Links: [direct image](https://openaccess-cdn.clevelandart.org/1973.18/1973.18_web.jpg) · [museum record](https://www.clevelandart.org/art/1973.18)
+- Links: [local image](curated_images/1973.18_web.jpg) · [source image](https://openaccess-cdn.clevelandart.org/1973.18/1973.18_web.jpg) · [museum record](https://www.clevelandart.org/art/1973.18)
 - Character count: 188
 - Published alt text:
 
@@ -430,7 +430,7 @@ It spans 15 museum areas: American Painting and Sculpture; Art of the Americas; 
 - Type: Painting — Korean Art
 - Creator/date: Choe Seok-hwan (Korean, active first half of 19th century); early 1800s
 - License: CC0
-- Links: [direct image](https://openaccess-cdn.clevelandart.org/2015.510/2015.510_web.jpg) · [museum record](https://www.clevelandart.org/art/2015.510)
+- Links: [local image](curated_images/2015.510_web.jpg) · [source image](https://openaccess-cdn.clevelandart.org/2015.510/2015.510_web.jpg) · [museum record](https://www.clevelandart.org/art/2015.510)
 - Character count: 176
 - Published alt text:
 
@@ -441,7 +441,7 @@ It spans 15 museum areas: American Painting and Sculpture; Art of the Americas; 
 - Type: Drawing — Drawings
 - Creator/date: Hans Hoffmann (German, 1545/50–1591/92); 1583
 - License: CC0
-- Links: [direct image](https://openaccess-cdn.clevelandart.org/1946.217/1946.217_web.jpg) · [museum record](https://www.clevelandart.org/art/1946.217)
+- Links: [local image](curated_images/1946.217_web.jpg) · [source image](https://openaccess-cdn.clevelandart.org/1946.217/1946.217_web.jpg) · [museum record](https://www.clevelandart.org/art/1946.217)
 - Character count: 130
 - Published alt text:
 
@@ -452,7 +452,7 @@ It spans 15 museum areas: American Painting and Sculpture; Art of the Americas; 
 - Type: Metalwork — Art of the Americas
 - Creator/date: Unknown; after 1325 (thermoluminescence date of casting core, 1345–1575)
 - License: CC0
-- Links: [direct image](https://openaccess-cdn.clevelandart.org/1984.37/1984.37_web.jpg) · [museum record](https://www.clevelandart.org/art/1984.37)
+- Links: [local image](curated_images/1984.37_web.jpg) · [source image](https://openaccess-cdn.clevelandart.org/1984.37/1984.37_web.jpg) · [museum record](https://www.clevelandart.org/art/1984.37)
 - Character count: 188
 - Published alt text:
 
@@ -463,7 +463,7 @@ It spans 15 museum areas: American Painting and Sculpture; Art of the Americas; 
 - Type: Sculpture — Modern European Painting and Sculpture
 - Creator/date: Clodion (French, 1738–1814); 1803
 - License: CC0
-- Links: [direct image](https://openaccess-cdn.clevelandart.org/1963.251/1963.251_web.jpg) · [museum record](https://www.clevelandart.org/art/1963.251)
+- Links: [local image](curated_images/1963.251_web.jpg) · [source image](https://openaccess-cdn.clevelandart.org/1963.251/1963.251_web.jpg) · [museum record](https://www.clevelandart.org/art/1963.251)
 - Character count: 187
 - Published alt text:
 
@@ -474,7 +474,7 @@ It spans 15 museum areas: American Painting and Sculpture; Art of the Americas; 
 - Type: Ceramic — Chinese Art
 - Creator/date: Unknown; 1465–87
 - License: CC0
-- Links: [direct image](https://openaccess-cdn.clevelandart.org/1957.61/1957.61_web.jpg) · [museum record](https://www.clevelandart.org/art/1957.61)
+- Links: [local image](curated_images/1957.61_web.jpg) · [source image](https://openaccess-cdn.clevelandart.org/1957.61/1957.61_web.jpg) · [museum record](https://www.clevelandart.org/art/1957.61)
 - Character count: 96
 - Published alt text:
 
@@ -485,7 +485,7 @@ It spans 15 museum areas: American Painting and Sculpture; Art of the Americas; 
 - Type: Painting — Japanese Art
 - Creator/date: Unknown; 1300s
 - License: CC0
-- Links: [direct image](https://openaccess-cdn.clevelandart.org/1953.16/1953.16_web.jpg) · [museum record](https://www.clevelandart.org/art/1953.16)
+- Links: [local image](curated_images/1953.16_web.jpg) · [source image](https://openaccess-cdn.clevelandart.org/1953.16/1953.16_web.jpg) · [museum record](https://www.clevelandart.org/art/1953.16)
 - Character count: 195
 - Published alt text:
 
@@ -496,7 +496,7 @@ It spans 15 museum areas: American Painting and Sculpture; Art of the Americas; 
 - Type: Sculpture — Greek and Roman Art
 - Creator/date: Unknown; 400–375 BCE
 - License: CC0
-- Links: [direct image](https://openaccess-cdn.clevelandart.org/1945.13/1945.13_web.jpg) · [museum record](https://www.clevelandart.org/art/1945.13)
+- Links: [local image](curated_images/1945.13_web.jpg) · [source image](https://openaccess-cdn.clevelandart.org/1945.13/1945.13_web.jpg) · [museum record](https://www.clevelandart.org/art/1945.13)
 - Character count: 127
 - Published alt text:
 
@@ -507,7 +507,7 @@ It spans 15 museum areas: American Painting and Sculpture; Art of the Americas; 
 - Type: Sculpture — Medieval Art
 - Creator/date: Unknown; 280–90 CE
 - License: CC0
-- Links: [direct image](https://openaccess-cdn.clevelandart.org/1965.237/1965.237_web.jpg) · [museum record](https://www.clevelandart.org/art/1965.237)
+- Links: [local image](curated_images/1965.237_web.jpg) · [source image](https://openaccess-cdn.clevelandart.org/1965.237/1965.237_web.jpg) · [museum record](https://www.clevelandart.org/art/1965.237)
 - Character count: 182
 - Published alt text:
 
@@ -518,7 +518,7 @@ It spans 15 museum areas: American Painting and Sculpture; Art of the Americas; 
 - Type: Ceramic — Korean Art
 - Creator/date: Unknown; late 1600s
 - License: CC0
-- Links: [direct image](https://openaccess-cdn.clevelandart.org/1986.69/1986.69_web.jpg) · [museum record](https://www.clevelandart.org/art/1986.69)
+- Links: [local image](curated_images/1986.69_web.jpg) · [source image](https://openaccess-cdn.clevelandart.org/1986.69/1986.69_web.jpg) · [museum record](https://www.clevelandart.org/art/1986.69)
 - Character count: 149
 - Published alt text:
 
@@ -529,7 +529,7 @@ It spans 15 museum areas: American Painting and Sculpture; Art of the Americas; 
 - Type: Drawing — Drawings
 - Creator/date: Charles-Nicolas Cochin (French, 1715–1790); c. 1746
 - License: CC0
-- Links: [direct image](https://openaccess-cdn.clevelandart.org/2000.2/2000.2_web.jpg) · [museum record](https://www.clevelandart.org/art/2000.2)
+- Links: [local image](curated_images/2000.2_web.jpg) · [source image](https://openaccess-cdn.clevelandart.org/2000.2/2000.2_web.jpg) · [museum record](https://www.clevelandart.org/art/2000.2)
 - Character count: 174
 - Published alt text:
 
@@ -540,7 +540,7 @@ It spans 15 museum areas: American Painting and Sculpture; Art of the Americas; 
 - Type: Painting — Japanese Art
 - Creator/date: Unknown; late 1200s–early 1300s
 - License: CC0
-- Links: [direct image](https://openaccess-cdn.clevelandart.org/1952.286/1952.286_web.jpg) · [museum record](https://www.clevelandart.org/art/1952.286)
+- Links: [local image](curated_images/1952.286_web.jpg) · [source image](https://openaccess-cdn.clevelandart.org/1952.286/1952.286_web.jpg) · [museum record](https://www.clevelandart.org/art/1952.286)
 - Character count: 154
 - Published alt text:
 
@@ -551,7 +551,7 @@ It spans 15 museum areas: American Painting and Sculpture; Art of the Americas; 
 - Type: Drawing — Drawings
 - Creator/date: Paul Gauguin (French, 1848–1903); 1891
 - License: CC0
-- Links: [direct image](https://openaccess-cdn.clevelandart.org/1949.439/1949.439_web.jpg) · [museum record](https://www.clevelandart.org/art/1949.439)
+- Links: [local image](curated_images/1949.439_web.jpg) · [source image](https://openaccess-cdn.clevelandart.org/1949.439/1949.439_web.jpg) · [museum record](https://www.clevelandart.org/art/1949.439)
 - Character count: 144
 - Published alt text:
 
@@ -562,7 +562,7 @@ It spans 15 museum areas: American Painting and Sculpture; Art of the Americas; 
 - Type: Ceramic — Korean Art
 - Creator/date: Unknown; 1100s
 - License: CC0
-- Links: [direct image](https://openaccess-cdn.clevelandart.org/1921.631/1921.631_web.jpg) · [museum record](https://www.clevelandart.org/art/1921.631)
+- Links: [local image](curated_images/1921.631_web.jpg) · [source image](https://openaccess-cdn.clevelandart.org/1921.631/1921.631_web.jpg) · [museum record](https://www.clevelandart.org/art/1921.631)
 - Character count: 141
 - Published alt text:
 
@@ -573,7 +573,7 @@ It spans 15 museum areas: American Painting and Sculpture; Art of the Americas; 
 - Type: Sculpture — Greek and Roman Art
 - Creator/date: Unknown; c. 550 BCE
 - License: CC0
-- Links: [direct image](https://openaccess-cdn.clevelandart.org/1953.125/1953.125_web.jpg) · [museum record](https://www.clevelandart.org/art/1953.125)
+- Links: [local image](curated_images/1953.125_web.jpg) · [source image](https://openaccess-cdn.clevelandart.org/1953.125/1953.125_web.jpg) · [museum record](https://www.clevelandart.org/art/1953.125)
 - Character count: 164
 - Published alt text:
 
@@ -584,7 +584,7 @@ It spans 15 museum areas: American Painting and Sculpture; Art of the Americas; 
 - Type: Sculpture — Medieval Art
 - Creator/date: Jean de la Huerta (Spanish, active Burgundy, 1431–62); 1443–45
 - License: CC0
-- Links: [direct image](https://openaccess-cdn.clevelandart.org/1940.129/1940.129_web.jpg) · [museum record](https://www.clevelandart.org/art/1940.129)
+- Links: [local image](curated_images/1940.129_web.jpg) · [source image](https://openaccess-cdn.clevelandart.org/1940.129/1940.129_web.jpg) · [museum record](https://www.clevelandart.org/art/1940.129)
 - Character count: 160
 - Published alt text:
 
@@ -595,7 +595,7 @@ It spans 15 museum areas: American Painting and Sculpture; Art of the Americas; 
 - Type: Painting — Japanese Art
 - Creator/date: Unknown; early 1300s
 - License: CC0
-- Links: [direct image](https://openaccess-cdn.clevelandart.org/1956.87/1956.87_web.jpg) · [museum record](https://www.clevelandart.org/art/1956.87)
+- Links: [local image](curated_images/1956.87_web.jpg) · [source image](https://openaccess-cdn.clevelandart.org/1956.87/1956.87_web.jpg) · [museum record](https://www.clevelandart.org/art/1956.87)
 - Character count: 120
 - Published alt text:
 
@@ -606,7 +606,7 @@ It spans 15 museum areas: American Painting and Sculpture; Art of the Americas; 
 - Type: Drawing — Drawings
 - Creator/date: Vincent van Gogh (Dutch, 1853–1890); 1883
 - License: CC0
-- Links: [direct image](https://openaccess-cdn.clevelandart.org/1958.30/1958.30_web.jpg) · [museum record](https://www.clevelandart.org/art/1958.30)
+- Links: [local image](curated_images/1958.30_web.jpg) · [source image](https://openaccess-cdn.clevelandart.org/1958.30/1958.30_web.jpg) · [museum record](https://www.clevelandart.org/art/1958.30)
 - Character count: 112
 - Published alt text:
 
