@@ -6,10 +6,49 @@ This directory contains a first Promptfoo harness for comparing alt-text model o
 
 - `promptfooconfig.yaml` defines the prompt, provider combinations, and test file.
 - `promptfooconfig.initial-images.yaml` compares two LM Studio models against the first BDR image set.
+- `promptfooconfig.curated-calibration.yaml` checks the curated assertions against the human-reviewed descriptions without calling a model server.
+- `promptfooconfig.curated-models.yaml` compares the primary configured model with a model named by `ALT_TEXT_EVAL_MODEL_A` across all 50 curated images.
 - `provider.py` wraps the app's existing OpenAI-compatible model-server helper path without writing Django database records.
 - `cases.yaml` defines the first synthetic image cases.
 - `initial_images_cases.yaml` defines the initial image paths, reference alt text, and assertions applied to both models.
+- `curated_cases.yaml` keeps each curated image, human-reviewed description, and seeded required-content assertions together.
 - `images/` contains small generated images for basic framework checks.
+
+## Curated 50-Image Evaluation
+
+Run these commands from the project root.
+
+First, validate both configurations and their external test file:
+
+```bash
+npx promptfoo@latest validate -c explore_assessments/promptfoo/promptfooconfig.curated-calibration.yaml
+npx promptfoo@latest validate -c explore_assessments/promptfoo/promptfooconfig.curated-models.yaml
+```
+
+Calibrate the deterministic assertions against the saved human-reviewed descriptions. This run reads the local images to verify every path but does not call a model server:
+
+```bash
+PROMPTFOO_PYTHON="$PWD/.venv/bin/python" npx promptfoo@latest eval --no-cache -c explore_assessments/promptfoo/promptfooconfig.curated-calibration.yaml
+```
+
+All 50 cases should pass calibration. Each case requires a few central, visible details and limits trimmed output to 200 Unicode characters. The `icontains-all` checks are deliberately readable starting points. They use case-insensitive substring matching, so review failures manually and revise a required phrase when a visually correct description uses a reasonable synonym.
+
+To compare two models, configure the app's primary model as usual and set the exact provider/model identifier for the second model:
+
+```bash
+export ALT_TEXT_EVAL_MODEL_A="provider/model-name"
+PROMPTFOO_PYTHON="$PWD/.venv/bin/python" npx promptfoo@latest eval --no-cache -c explore_assessments/promptfoo/promptfooconfig.curated-models.yaml
+npx promptfoo@latest view
+```
+
+To compare more models in one result table, copy the comparison-provider block in `promptfooconfig.curated-models.yaml`, give it a distinct label and `model_env_var`, and export that environment variable before the run. Keep temperature at `0` for the first comparison pass; vary one setting at a time in later runs.
+
+Recommended next steps after the first model run:
+
+1. Inspect required-content failures for correct synonym use before treating them as model failures.
+2. Add image-specific terms only when they are both visually important and reliably identifiable from the image alone.
+3. Review responses that pass the deterministic checks for hallucinated details, reading order, and unnecessary wording; these qualities need human judgment or a separately calibrated rubric.
+4. Save stable model and parameter combinations as additional provider blocks so later runs remain comparable.
 
 ## Run
 

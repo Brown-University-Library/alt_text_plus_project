@@ -57,3 +57,41 @@ MAIN RESPONSE:
 The terminal display is generated live by the Promptfoo process and written to stdout/stderr; it is not driven by a project output file. The persisted evaluation that drives `promptfoo view` is stored in `~/.promptfoo/promptfoo.db`. On this machine, the latest matching evaluation is `eval-jtO-2026-07-15T14:51:05`. Promptfoo also writes `~/.promptfoo/evalLastWritten` as a refresh signal, while the `-wal` and `-shm` files are SQLite working files. `--no-cache` disables the response cache but does not prevent evaluation database writes. Use `--no-write` to avoid persistence or `-o PATH.json` to create an explicit result file.
 
 ---
+
+USER PROMPT:
+
+Goal: implement a promptfoo test based on the `alt_text_plus_project/explore_assessments/recommended_structure.md` -- option-1.
+
+Context:
+
+- We're going to run various models against this.
+
+Tasks:
+
+- Go ahead and create the structured yaml test-case file with one entry for each of the 50 items.
+
+- For each entry, do seed the assert section with values that seem like they should be mandatory.
+
+- Set up anything else that's required.
+
+- Create a usage-doc or suggest next steps.
+
+MAIN RESPONSE:
+
+Implemented Promptfoo option 1.
+
+- `curated_cases.yaml`: all 50 images, exact human-reviewed alt text, required-content terms, and 200-character checks.
+- `promptfooconfig.curated-calibration.yaml`: evaluates saved human descriptions without calling a model.
+- `promptfooconfig.curated-models.yaml`: compares the primary configured model with `ALT_TEXT_EVAL_MODEL_A`.
+- `README.md`: validation, calibration, multi-model usage, and suggested review steps.
+
+Verification completed:
+
+- Both configurations pass Promptfoo 0.122.0 validation.
+- Offline calibration: 50 passed, 0 failed, 0 errors.
+- Repository tests: 40 passed.
+- All 50 image paths exist and all saved descriptions meet the 200-character limit.
+
+The required phrases are intentionally initial deterministic checks; valid synonym-based failures should be reviewed and adjusted after the first model run. This follows Promptfoo's current external test-case and deterministic assertion formats.
+
+---

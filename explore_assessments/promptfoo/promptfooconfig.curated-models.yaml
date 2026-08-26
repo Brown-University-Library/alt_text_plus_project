@@ -1,0 +1,35 @@
+# yaml-language-server: $schema=https://promptfoo.dev/config-schema.json
+description: Curated image alt-text comparison across two configured models
+
+evaluateOptions:
+  maxConcurrency: 1
+  delay: 1000
+
+prompts:
+  - file://../../alt_text_app/lib/prompt.md
+
+providers:
+  - id: file://provider.py
+    label: primary-configured-model-temperature-0
+    config:
+      model_params:
+        temperature: 0
+      timeout_seconds: 120
+      connect_timeout_seconds: 5
+      max_attempts: 10
+      retry_delay_seconds: 10
+
+  - id: file://provider.py
+    label: comparison-model-temperature-0
+    config:
+      model_env_var: ALT_TEXT_EVAL_MODEL_A
+      allow_app_model_fallback: false
+      model_params:
+        temperature: 0
+      timeout_seconds: 120
+      connect_timeout_seconds: 5
+      max_attempts: 10
+      retry_delay_seconds: 10
+
+tests:
+  - file://curated_cases.yaml

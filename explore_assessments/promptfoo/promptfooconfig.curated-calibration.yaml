@@ -1,0 +1,15 @@
+# yaml-language-server: $schema=https://promptfoo.dev/config-schema.json
+description: Curated alt-text assertion calibration against human-reviewed descriptions
+
+prompts:
+  - file://../../alt_text_app/lib/prompt.md
+
+providers:
+  - id: file://provider.py
+    label: human-reviewed-calibration-output
+    config:
+      output_var: ideal_alt_text
+      require_image_path_exists: true
+
+tests:
+  - file://curated_cases.yaml
