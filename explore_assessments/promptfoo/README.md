@@ -2,6 +2,14 @@
 
 This directory contains a first Promptfoo harness for comparing alt-text model outputs outside the Django webapp runtime.
 
+**Contents**
+
+- [Files](#files)
+- [Curated 50-Image Evaluation](#curated-50-image-evaluation)
+- [Run](#run)
+- [Model-Server Comparison](#model-server-comparison)
+- [Current Scope](#current-scope)
+
 ## Files
 
 - `promptfooconfig.yaml` defines the prompt, provider combinations, and test file.
