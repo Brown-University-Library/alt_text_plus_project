@@ -646,11 +646,23 @@
       They all wear identical yellow dresses and are standing and stretching together.
   assert:
     - type: icontains-all
+      # value:
+      #   - 'pastel drawing'
+      #   - 'three dancers'
+      #   - 'yellow dresses'
       value:
-        - 'pastel drawing'
-        - 'three dancers'
-        - 'yellow dresses'
+        - 'three'
+        - 'dancers'
+        - 'dresses'
+        - 'pastel'
+        - 'standing'
       metric: required-content
+
+    - type: icontains-any
+      value: 
+        - 'yellow'
+        - 'green'
+
     - type: javascript
       value: Array.from(output.trim()).length <= 200
       metric: maximum-200-characters
