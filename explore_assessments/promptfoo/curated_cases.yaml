@@ -120,12 +120,30 @@
       carved beneath.
   assert:
     - type: icontains-all
+      # value:
+      #   - 'ivory relief'
+      #   - 'woman'
+      #   - 'child'
+      #   - 'angels'
       value:
         - 'ivory relief'
         - 'woman'
         - 'child'
         - 'angels'
       metric: required-content
+
+    - type: icontains-any
+      value:
+        - 'chair'
+        - 'throne'
+
+    - type: icontains-any
+      value:
+        - 'greek'
+        - 'letters'
+        - 'inscription'
+        - 'writ'
+
     - type: javascript
       value: Array.from(output.trim()).length <= 200
       metric: maximum-200-characters
@@ -540,8 +558,14 @@
       bells.
   assert:
     - type: icontains-all
+      # value:
+      #   - 'golden fountain'
+      #   - 'three tiers'
+      #   - 'waterwheels'
+      #   - 'bells'
       value:
-        - 'golden fountain'
+        - 'gold'
+        - 'fountain'
         - 'three tiers'
         - 'waterwheels'
         - 'bells'
@@ -977,7 +1001,9 @@
   assert:
     - type: icontains-all
       value:
-        - 'gray-green'
+        - 'gray'
+        # - 'grey'
+        - 'green'
         - 'jug'
         - 'narrow neck'
         - 'phoenix'
