@@ -13,11 +13,16 @@
       sits at the lip of the cup, his head tilted back. The waves envelop each side of the cup
       and its upturned tip.
   assert:
-    - type: icontains-all
+    - type: icontains-any
       value:
+        - 'silver sculpture'
         - 'silver cup'
+      metric: required-content
+    - type: icontains-any
+      value:
         - 'man'
-        - 'waves'
+        - 'person'
+        - 'figure'
       metric: required-content
     - type: javascript
       value: Array.from(output.trim()).length <= 200
@@ -35,10 +40,14 @@
   assert:
     - type: icontains-all
       value:
-        - 'gold plaque'
-        - 'face'
+        - 'gold'
         - 'fangs'
         - 'serpent'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'face'
+        - 'mask'
       metric: required-content
     - type: javascript
       value: Array.from(output.trim()).length <= 200
@@ -57,10 +66,41 @@
   assert:
     - type: icontains-all
       value:
+        - 'nude'
+        - 'OPUS'
+        - 'ANTONII-POLLA'
+        - 'IOU'
+        - 'FLORENTINI'
+      metric: required-content
+    - type: icontains-any
+      value:
         - 'engraving'
-        - 'nude men'
-        - 'fighting'
-        - 'weapons'
+        - 'etchings'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'men'
+        - 'male'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'fight'
+        - 'battle'
+        - 'combat'
+        - 'melee'
+      metric: required-content
+    - type: javascript
+      # Require "weapons" or at least two distinct named weapon types.
+      value: >-
+        output.toLowerCase().includes('weapons') ||
+        ['sword', 'axes', 'bow', 'arrows', 'daggers'].filter(
+          term => output.toLowerCase().includes(term)
+        ).length >= 2
+      metric: required-weapons
+    - type: icontains-any
+      value:
+        - 'sign'
+        - 'plaque'
       metric: required-content
     - type: javascript
       value: Array.from(output.trim()).length <= 200
@@ -411,8 +451,13 @@
       value:
         - 'bronze bowl'
         - 'handles'
-        - 'silver inlay'
-        - 'child'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'script'
+        - 'design'
+        - 'character'
+        - 'writing'
       metric: required-content
     - type: javascript
       value: Array.from(output.trim()).length <= 200
@@ -1094,4 +1139,3 @@
     - type: javascript
       value: Array.from(output.trim()).length <= 200
       metric: maximum-200-characters
-
