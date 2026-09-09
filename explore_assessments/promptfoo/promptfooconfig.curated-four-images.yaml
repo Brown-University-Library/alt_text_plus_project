@@ -1,0 +1,40 @@
+# yaml-language-server: $schema=https://promptfoo.dev/config-schema.json
+description: Four revised curated image cases across two configured models
+
+evaluateOptions:
+  maxConcurrency: 1
+  delay: 1000
+
+prompts:
+  - file://../../alt_text_app/lib/prompt.md
+
+providers:
+  - id: file://provider.py
+    label: primary-configured-model-temperature-0
+    config:
+      model_params:
+        temperature: 0
+      timeout_seconds: 120
+      connect_timeout_seconds: 5
+      max_attempts: 10
+      retry_delay_seconds: 10
+
+  - id: file://provider.py
+    label: comparison-model-temperature-0
+    config:
+      model_env_var: ALT_TEXT_EVAL_MODEL_A
+      allow_app_model_fallback: false
+      model_params:
+        temperature: 0
+      timeout_seconds: 120
+      connect_timeout_seconds: 5
+      max_attempts: 10
+      retry_delay_seconds: 10
+
+tests:
+  # JSON references resolve from the working directory: run from the project root.
+  # Indexes are zero-based positions in curated_cases.yaml; update if cases are reordered.
+  - $ref: './explore_assessments/promptfoo/curated_cases.yaml#/0' # 1977.7
+  - $ref: './explore_assessments/promptfoo/curated_cases.yaml#/1' # 1938.431
+  - $ref: './explore_assessments/promptfoo/curated_cases.yaml#/2' # 1967.127
+  - $ref: './explore_assessments/promptfoo/curated_cases.yaml#/18' # 1985.112

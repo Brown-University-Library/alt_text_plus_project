@@ -6,6 +6,7 @@ This directory contains a first Promptfoo harness for comparing alt-text model o
 
 - [Files](#files)
 - [Curated 50-Image Evaluation](#curated-50-image-evaluation)
+- [Four Revised Images](#four-revised-images)
 - [Run](#run)
 - [Model-Server Comparison](#model-server-comparison)
 - [Current Scope](#current-scope)
@@ -16,6 +17,7 @@ This directory contains a first Promptfoo harness for comparing alt-text model o
 - `promptfooconfig.initial-images.yaml` compares two LM Studio models against the first BDR image set.
 - `promptfooconfig.curated-calibration.yaml` checks the curated assertions against the human-reviewed descriptions without calling a model server.
 - `promptfooconfig.curated-models.yaml` compares the primary configured model with a model named by `ALT_TEXT_EVAL_MODEL_A` across all 50 curated images.
+- `promptfooconfig.curated-four-images.yaml` compares the same two models using only the four revised image cases.
 - `provider.py` wraps the app's existing OpenAI-compatible model-server helper path without writing Django database records.
 - `cases.yaml` defines the first synthetic image cases.
 - `initial_images_cases.yaml` defines the initial image paths, reference alt text, and assertions applied to both models.
@@ -39,7 +41,7 @@ Calibrate the deterministic assertions against the saved human-reviewed descript
 PROMPTFOO_PYTHON="$PWD/.venv/bin/python" npx promptfoo@latest eval --no-cache -c explore_assessments/promptfoo/promptfooconfig.curated-calibration.yaml
 ```
 
-All 50 cases should pass calibration. Each case requires a few central, visible details and limits trimmed output to 200 Unicode characters. The `icontains-all` checks are deliberately readable starting points. They use case-insensitive substring matching, so review failures manually and revise a required phrase when a visually correct description uses a reasonable synonym.
+Calibration can fail when revised requirements go beyond the saved human-reviewed descriptions. In particular, the saved description for `1967.127` does not include the newly required inscription or sign/plaque. Each case requires a few central, visible details and limits trimmed output to 200 Unicode characters. The `icontains-all` and `icontains-any` checks use case-insensitive substring matching, so review failures manually and revise a required phrase when a visually correct description uses a reasonable synonym.
 
 To compare two models, configure the app's primary model as usual and set the exact provider/model identifier for the second model:
 
@@ -57,6 +59,30 @@ Recommended next steps after the first model run:
 2. Add image-specific terms only when they are both visually important and reliably identifiable from the image alone.
 3. Review responses that pass the deterministic checks for hallucinated details, reading order, and unnecessary wording; these qualities need human judgment or a separately calibrated rubric.
 4. Save stable model and parameter combinations as additional provider blocks so later runs remain comparable.
+
+## Four Revised Images
+
+The four-image configuration selects `1977.7_web.jpg`, `1938.431_web.jpg`,
+`1967.127_web.jpg`, and `1985.112_web.jpg` using
+[Promptfoo's YAML references](https://www.promptfoo.dev/docs/configuration/guide/#yaml-references).
+It reads the assertions directly from `curated_cases.yaml`, so there is no separate
+copy of the requirements to maintain. The references use zero-based case positions;
+update them if `curated_cases.yaml` is reordered. Reference paths resolve from the
+working directory, so run the commands from the project root.
+
+Run from the project root with the same model settings described above:
+
+```bash
+npx promptfoo@latest validate -c explore_assessments/promptfoo/promptfooconfig.curated-four-images.yaml
+PROMPTFOO_PYTHON="$PWD/.venv/bin/python" npx promptfoo@latest eval --no-cache -c explore_assessments/promptfoo/promptfooconfig.curated-four-images.yaml
+```
+
+This runs eight model calls: four images for each of the two configured models.
+Removed requirements remain allowed in the output. For `1967.127`, the weapons
+assertion accepts either `weapons` or at least two distinct terms from `sword`,
+`axes`, `bow`, `arrows`, and `daggers`, with case-insensitive substring matching.
+Repeating one weapon term does not count as two. The existing 200-character limit
+still applies, including the required inscription.
 
 ## Run
 
