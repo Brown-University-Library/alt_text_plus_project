@@ -1,0 +1,539 @@
+{
+  "format": "promptfoo-assert-edits",
+  "format_version": 1,
+  "source_file": "curated_cases.yaml",
+  "saved_at": "2026-09-16T15:59:33.459Z",
+  "how_to_apply": [
+    "Each entry in `cases` refers to one test case in `source_file`, matched by `vars.case_id`. Check that `description` matches too; if it does not, stop and report it.",
+    "If `assert_changed` is true, replace that case's entire `assert:` list with the `assert` list in this file, keeping the order. Do not merge with the old list.",
+    "If `assert_changed` is false, there is no `assert` key; leave that case's asserts unchanged.",
+    "Use the YAML file's existing style: list terms as single-quoted strings, `metric` only when present here, javascript `value` as a `>-` block (or `|-` if it contains newlines). String values here are exact, including any leading or trailing spaces.",
+    "In a replaced block, keep existing YAML comments whose neighboring item still exists; drop the rest.",
+    "`reviewed` and `notes` are review-tracking fields. Do not write them into the YAML. If `notes` asks for something specific (for example a YAML comment), do it.",
+    "Do not change `description` or `vars`. Cases not listed here are unchanged."
+  ],
+  "summary": {
+    "total_cases": 50,
+    "reviewed": 11,
+    "assert_changed": 10
+  },
+  "cases": [
+    {
+      "case_id": "1977.7",
+      "description": "Raft Cup",
+      "position": 1,
+      "reviewed": true,
+      "assert_changed": false
+    },
+    {
+      "case_id": "1938.431",
+      "description": "Plaque",
+      "position": 2,
+      "reviewed": true,
+      "assert_changed": true,
+      "assert": [
+        {
+          "type": "icontains-all",
+          "value": [
+            "gold"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "face",
+            "mask"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "fang",
+            "teeth",
+            "tooth"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "serpent",
+            "snake"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "javascript",
+          "value": "Array.from(output.trim()).length <= 200",
+          "metric": "maximum-200-characters"
+        }
+      ]
+    },
+    {
+      "case_id": "1967.127",
+      "description": "Battle of the Nudes",
+      "position": 3,
+      "reviewed": true,
+      "assert_changed": true,
+      "assert": [
+        {
+          "type": "icontains-all",
+          "value": [
+            "nude",
+            "OPUS",
+            "ANTONII-POLLA",
+            "IOU",
+            "FLORENT",
+            "TINI"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "engraving",
+            "etching"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "men",
+            "male"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "fight",
+            "battle",
+            "combat",
+            "melee"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "javascript",
+          "value": "output.toLowerCase().includes('weapons') || ['sword', 'axes', 'bow', 'arrows', 'daggers'].filter(\n  term => output.toLowerCase().includes(term)\n).length >= 2",
+          "metric": "required-weapons"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "sign",
+            "plaque"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "javascript",
+          "value": "Array.from(output.trim()).length <= 200",
+          "metric": "maximum-200-characters"
+        }
+      ]
+    },
+    {
+      "case_id": "1926.533",
+      "description": "Royal Carpet with Silk and Metal Thread",
+      "position": 4,
+      "reviewed": true,
+      "assert_changed": true,
+      "assert": [
+        {
+          "type": "icontains-all",
+          "value": [
+            "carpet",
+            "fringe",
+            "orange"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "floral pattern",
+            "floral motif",
+            "floral design"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "blue",
+            "green",
+            "brown"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "javascript",
+          "value": "Array.from(output.trim()).length <= 200",
+          "metric": "maximum-200-characters"
+        }
+      ]
+    },
+    {
+      "case_id": "2007.193",
+      "description": "Sacrificer Container",
+      "position": 5,
+      "reviewed": true,
+      "assert_changed": true,
+      "assert": [
+        {
+          "type": "icontains-all",
+          "value": [
+            "wood"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "figure",
+            "statue",
+            "carving"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "geometric",
+            "pattern",
+            "symbols"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "fang",
+            "teeth",
+            "tooth"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "feline",
+            "cat"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "javascript",
+          "value": "Array.from(output.trim()).length <= 200",
+          "metric": "maximum-200-characters"
+        }
+      ]
+    },
+    {
+      "case_id": "1925.1293",
+      "description": "Ivory Plaque with Enthroned Mother of God (\"The Stroganoff Ivory\")",
+      "position": 6,
+      "reviewed": true,
+      "assert_changed": true,
+      "assert": [
+        {
+          "type": "icontains-all",
+          "value": [
+            "ivory",
+            "child",
+            "angel",
+            "relief"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "chair",
+            "throne"
+          ]
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "greek",
+            "letters",
+            "inscription",
+            "writ"
+          ]
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "woman",
+            "figure"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "javascript",
+          "value": "Array.from(output.trim()).length <= 200",
+          "metric": "maximum-200-characters"
+        }
+      ]
+    },
+    {
+      "case_id": "2012.43",
+      "description": "Desk and Bookcase",
+      "position": 7,
+      "reviewed": true,
+      "assert_changed": true,
+      "assert": [
+        {
+          "type": "icontains-all",
+          "value": [
+            "wood",
+            "drawers",
+            "brass"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "brass",
+            "knob"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "red",
+            "brown"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "javascript",
+          "value": "Array.from(output.trim()).length <= 200",
+          "metric": "maximum-200-characters"
+        }
+      ]
+    },
+    {
+      "case_id": "2003.40",
+      "description": "Gamin",
+      "position": 8,
+      "reviewed": true,
+      "assert_changed": true,
+      "assert": [
+        {
+          "type": "icontains-all",
+          "value": [
+            "GAMIN",
+            "bronze"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "sculpt",
+            "bust",
+            "statue"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "boy",
+            "child",
+            "youth"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "black boy",
+            "black child",
+            "black youth",
+            "black male",
+            "african american",
+            "african-american"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "cap",
+            "hat"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "javascript",
+          "value": "Array.from(output.trim()).length <= 200",
+          "metric": "maximum-200-characters"
+        }
+      ]
+    },
+    {
+      "case_id": "1953.386",
+      "description": "Feast Ladle",
+      "position": 9,
+      "reviewed": true,
+      "assert_changed": true,
+      "assert": [
+        {
+          "type": "icontains-all",
+          "value": [
+            "ladle",
+            "brown"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "eagle",
+            "bird"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "circle",
+            "dot"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "javascript",
+          "value": "Array.from(output.trim()).length <= 200",
+          "metric": "maximum-200-characters"
+        }
+      ]
+    },
+    {
+      "case_id": "1961.31",
+      "description": "Head Fragment",
+      "position": 10,
+      "reviewed": true,
+      "assert_changed": true,
+      "assert": [
+        {
+          "type": "icontains-all",
+          "value": [
+            "earlobe",
+            "mouth",
+            "open"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "head",
+            "face"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "light",
+            "pale"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "broken",
+            "part",
+            "segment",
+            "lower",
+            "half"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "stone",
+            "jade"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "javascript",
+          "value": "Array.from(output.trim()).length <= 200",
+          "metric": "maximum-200-characters"
+        }
+      ]
+    },
+    {
+      "case_id": "1989.3",
+      "description": "Bell (Lai Zhong)",
+      "position": 11,
+      "reviewed": true,
+      "assert_changed": true,
+      "assert": [
+        {
+          "type": "icontains-all",
+          "value": [
+            "bronze",
+            "bell"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "design",
+            "motif"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "knob"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "three",
+            "six",
+            "nine",
+            "3",
+            "6",
+            "9",
+            "eighteen",
+            "18"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "green",
+            "patina"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "javascript",
+          "value": "Array.from(output.trim()).length <= 200",
+          "metric": "maximum-200-characters"
+        }
+      ]
+    }
+  ]
+}

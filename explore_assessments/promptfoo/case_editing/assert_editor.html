@@ -1,0 +1,1060 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Assert Editor</title>
+<style>
+:root {
+  --bg: #f6f5f2; --panel: #ffffff; --panel-2: #f0eee9; --border: #dcd8cf; --text: #1f1d1a; --muted: #6b665d;
+  --accent: #2f5f8f; --accent-text: #ffffff; --ok: #2e7d4f; --warn: #a15c00; --bad: #b3261e; --mod: #b7791f;
+  --img-bg: #e7e4dd; --chip: #e9eef4; --focus: #7aa7d6; --code-bg: #faf9f6;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #17181a; --panel: #1f2023; --panel-2: #26282c; --border: #3a3c41; --text: #e8e6e1; --muted: #9c988f;
+    --accent: #6fa3d8; --accent-text: #0e1620; --ok: #6cc28f; --warn: #e0a24a; --bad: #ef7b72; --mod: #e0b04a;
+    --img-bg: #0f1011; --chip: #2a3440; --focus: #6fa3d8; --code-bg: #1a1b1e;
+    color-scheme: dark;
+  }
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body { height: 100%; }
+body { margin: 0; background: var(--bg); color: var(--text); font: 14px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; display: flex; flex-direction: column; }
+button, input, select, textarea { font: inherit; color: inherit; }
+.code, textarea.code, input.term { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-size: 13px; }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 1px; }
+
+header { display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: var(--panel); border-bottom: 1px solid var(--border); flex-wrap: wrap; }
+header h1 { font-size: 15px; margin: 0 8px 0 0; font-weight: 650; }
+.spacer { flex: 1; }
+.status { color: var(--muted); font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 40vw; }
+.status.dirty { color: var(--mod); }
+.btn { display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border: 1px solid var(--border); border-radius: 6px; background: var(--panel-2); cursor: pointer; white-space: nowrap; }
+.btn:hover { border-color: var(--muted); }
+.btn.primary { background: var(--accent); color: var(--accent-text); border-color: var(--accent); }
+.btn.small { padding: 2px 8px; font-size: 12.5px; }
+.btn:disabled { opacity: .5; cursor: default; }
+.btn input[type=file] { display: none; }
+.icon { border: none; background: none; cursor: pointer; color: var(--muted); padding: 2px 6px; border-radius: 4px; font-size: 14px; line-height: 1; }
+.icon:hover { background: var(--panel-2); color: var(--text); }
+.icon:disabled { opacity: .3; cursor: default; }
+
+main { flex: 1; min-height: 0; display: grid; grid-template-columns: 250px minmax(280px, 1fr) minmax(440px, 42%); }
+main.no-side { grid-template-columns: 0 minmax(280px, 1fr) minmax(440px, 42%); }
+main.no-side aside { display: none; }
+
+aside { background: var(--panel); border-right: 1px solid var(--border); display: flex; flex-direction: column; min-height: 0; }
+.side-tools { padding: 8px; display: grid; gap: 6px; border-bottom: 1px solid var(--border); }
+.side-tools input, .side-tools select { width: 100%; padding: 4px 6px; border: 1px solid var(--border); border-radius: 5px; background: var(--bg); }
+.counts { font-size: 12px; color: var(--muted); }
+#caseList { overflow: auto; flex: 1; padding: 4px; }
+.case-item { display: grid; grid-template-columns: 16px 1fr auto; gap: 6px; align-items: center; width: 100%; text-align: left; padding: 5px 6px; border: none; border-radius: 5px; background: none; cursor: pointer; }
+.case-item:hover { background: var(--panel-2); }
+.case-item.current { background: var(--chip); }
+.case-item .t { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.case-item .id { font-size: 11px; color: var(--muted); }
+.mark-rev { color: var(--ok); font-weight: 700; }
+.flags { display: flex; gap: 4px; font-size: 11px; }
+.flag-mod { color: var(--mod); }
+.flag-note { color: var(--muted); }
+.flag-noimg { color: var(--bad); }
+.keys { font-size: 11.5px; color: var(--muted); padding: 8px; border-top: 1px solid var(--border); }
+kbd { font-family: inherit; font-size: 11px; border: 1px solid var(--border); border-bottom-width: 2px; border-radius: 3px; padding: 0 4px; background: var(--panel-2); }
+
+#imagePane { display: flex; flex-direction: column; min-height: 0; min-width: 0; background: var(--img-bg); }
+.img-tools { display: flex; align-items: center; gap: 6px; padding: 6px 8px; background: var(--panel); border-bottom: 1px solid var(--border); font-size: 12.5px; }
+.img-tools .fname { color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#viewport { flex: 1; min-height: 0; overflow: auto; position: relative; }
+#viewport.fit { overflow: hidden; }
+#viewport img { display: block; user-select: none; -webkit-user-drag: none; }
+#viewport.fit img { width: 100%; height: 100%; object-fit: contain; cursor: zoom-in; }
+#viewport.zoom img { max-width: none; cursor: grab; margin: auto; }
+#viewport.zoom.dragging img { cursor: grabbing; }
+.img-missing { position: absolute; inset: 0; display: grid; place-items: center; color: var(--muted); text-align: center; padding: 20px; }
+
+#editor { background: var(--panel); border-left: 1px solid var(--border); overflow: auto; min-width: 0; }
+.ed-inner { padding: 14px 16px 40px; display: grid; gap: 14px; }
+.case-head { display: flex; gap: 10px; align-items: flex-start; }
+.case-head h2 { font-size: 17px; margin: 0; line-height: 1.3; }
+.case-head .meta { color: var(--muted); font-size: 12.5px; margin-top: 2px; }
+.rev-toggle { margin-left: auto; }
+.rev-toggle[aria-pressed="true"] { background: var(--ok); border-color: var(--ok); color: #fff; }
+.ideal { background: var(--panel-2); border-radius: 8px; padding: 10px 12px; }
+.label { font-size: 11.5px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); font-weight: 600; }
+.ideal p { margin: 4px 0 0; }
+.section-head { display: flex; align-items: center; gap: 8px; }
+.section-head h3 { font-size: 14px; margin: 0; }
+.badge { font-size: 11.5px; padding: 1px 7px; border-radius: 10px; background: var(--panel-2); color: var(--muted); }
+.badge.mod { background: color-mix(in srgb, var(--mod) 20%, transparent); color: var(--mod); }
+
+#assertList { display: grid; gap: 10px; }
+.assert-card { border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px 10px; background: var(--bg); }
+.card-top { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+.card-top select, .card-top input.metric { padding: 3px 6px; border: 1px solid var(--border); border-radius: 5px; background: var(--panel); }
+.card-top select { font-weight: 600; }
+.card-top input.metric { flex: 1; min-width: 120px; color: var(--muted); }
+.card-top .moves { margin-left: auto; display: flex; }
+.hint { font-size: 12px; color: var(--muted); margin: 5px 0 6px; }
+.terms { display: grid; gap: 4px; }
+.term-row { display: flex; align-items: center; gap: 4px; }
+input.term { flex: 1; padding: 4px 8px; border: 1px solid var(--border); border-radius: 5px; background: var(--panel); white-space: pre; }
+input.term.add { border-style: dashed; background: transparent; }
+.ws-flag { font-size: 12px; color: var(--warn); cursor: help; }
+textarea.code { width: 100%; padding: 6px 8px; border: 1px solid var(--border); border-radius: 5px; background: var(--code-bg); resize: vertical; tab-size: 2; white-space: pre-wrap; overflow: auto; }
+input.single { width: 100%; padding: 4px 8px; border: 1px solid var(--border); border-radius: 5px; background: var(--panel); }
+.warn { color: var(--warn); font-size: 12px; margin-top: 5px; }
+.warn:empty { display: none; }
+.extra-keys { font-size: 12px; color: var(--muted); margin-top: 5px; }
+.add-row { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+.notes textarea { width: 100%; min-height: 56px; padding: 6px 8px; border: 1px solid var(--border); border-radius: 6px; background: var(--bg); resize: vertical; margin-top: 4px; }
+details.raw { border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; }
+details.raw summary { cursor: pointer; font-weight: 600; font-size: 13.5px; }
+details.raw .raw-body { display: grid; gap: 8px; margin-top: 8px; }
+details.raw pre { margin: 0; padding: 8px; background: var(--code-bg); border: 1px solid var(--border); border-radius: 5px; overflow: auto; font-size: 12.5px; max-height: 360px; }
+.err { color: var(--bad); font-size: 12.5px; white-space: pre-wrap; }
+.err:empty { display: none; }
+.bottom-actions { display: flex; gap: 8px; justify-content: flex-end; border-top: 1px solid var(--border); padding-top: 12px; }
+
+#empty { position: fixed; inset: 49px 0 0 0; display: grid; place-items: center; background: var(--bg); padding: 16px; overflow: auto; }
+#empty .card { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 20px 24px; max-width: 560px; }
+#empty h2 { margin: 0 0 8px; font-size: 18px; }
+#empty ol { padding-left: 20px; margin: 8px 0; }
+#empty li { margin: 6px 0; }
+#empty p { color: var(--muted); margin: 8px 0 0; font-size: 13px; }
+body.dragover::after { content: "Drop YAML, edits .json, or an images folder"; position: fixed; inset: 10px; border: 3px dashed var(--accent); border-radius: 12px; display: grid; place-items: center; font-size: 20px; background: color-mix(in srgb, var(--bg) 85%, transparent); z-index: 10; pointer-events: none; }
+#toast { position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%); background: var(--text); color: var(--bg); padding: 8px 14px; border-radius: 8px; font-size: 13px; opacity: 0; transition: opacity .2s; pointer-events: none; z-index: 20; max-width: 90vw; }
+#toast.show { opacity: .95; }
+
+@media (max-width: 1000px) {
+  main, main.no-side { grid-template-columns: 1fr; grid-template-rows: auto 55vh auto; overflow: auto; }
+  aside { max-height: 30vh; border-right: none; border-bottom: 1px solid var(--border); }
+  #editor { overflow: visible; border-left: none; }
+}
+</style>
+</head>
+<body>
+<header>
+  <button class="icon" id="toggleSide" title="Show/hide case list">☰</button>
+  <h1>Assert Editor</h1>
+  <label class="btn">Load YAML<input type="file" id="yamlInput" accept=".yaml,.yml"></label>
+  <label class="btn">Images folder<input type="file" id="imgInput" webkitdirectory multiple></label>
+  <button class="btn" id="openEdits">Open edits file</button>
+  <input type="file" id="editsInput" accept=".json" hidden>
+  <span class="status" id="loadStatus"></span>
+  <span class="spacer"></span>
+  <span class="status" id="saveStatus"></span>
+  <button class="btn" id="copyBtn" title="Copy the edits JSON to the clipboard">Copy</button>
+  <button class="btn primary" id="saveBtn" title="Ctrl/Cmd+S (Shift for Save as)">Save edits</button>
+</header>
+
+<main id="main">
+  <aside>
+    <div class="side-tools">
+      <input type="search" id="search" placeholder="Search title, id, ideal text">
+      <select id="filter">
+        <option value="all">All cases</option>
+        <option value="unreviewed">Not reviewed</option>
+        <option value="reviewed">Reviewed</option>
+        <option value="modified">Asserts changed</option>
+        <option value="notes">Has notes</option>
+      </select>
+      <div class="counts" id="counts"></div>
+    </div>
+    <div id="caseList"></div>
+    <div class="keys"><kbd>←</kbd><kbd>→</kbd> prev/next · <kbd>r</kbd> reviewed · <kbd>f</kbd> fit image · <kbd>Ctrl</kbd>+<kbd>S</kbd> save</div>
+  </aside>
+
+  <section id="imagePane">
+    <div class="img-tools">
+      <button class="btn small" id="zFit">Fit</button>
+      <button class="btn small" id="z100">100%</button>
+      <button class="icon" id="zOut" title="Zoom out">−</button>
+      <button class="icon" id="zIn" title="Zoom in">+</button>
+      <span id="zLabel" class="fname"></span>
+      <span class="spacer"></span>
+      <span id="imgName" class="fname"></span>
+    </div>
+    <div id="viewport" class="fit"></div>
+  </section>
+
+  <section id="editor"></section>
+</main>
+
+<div id="empty">
+  <div class="card">
+    <h2>Edit promptfoo asserts next to the image</h2>
+    <ol>
+      <li><b>Load YAML</b>: pick <code>curated_cases.yaml</code>.</li>
+      <li><b>Images folder</b>: pick the folder with the images (e.g. <code>curated_images</code>). Images are matched by <code>image_filename</code>.</li>
+      <li>Optional: <b>Open edits file</b> to pick up where you left off.</li>
+    </ol>
+    <p>You can also drag the YAML, an edits <code>.json</code>, or the images folder onto this page. Nothing is uploaded; everything stays in this browser tab. <b>Save edits</b> writes a JSON change file for Claude or Codex to apply to the YAML. Unsaved work is also kept in this browser's local storage as a backup.</p>
+  </div>
+</div>
+<div id="toast"></div>
+<datalist id="metricList"></datalist>
+
+<script>/*! js-yaml 4.1.0 | MIT */
+/*! js-yaml 4.1.0 https://github.com/nodeca/js-yaml @license MIT */
+!function(e,t){"object"==typeof exports&&"undefined"!=typeof module?t(exports):"function"==typeof define&&define.amd?define(["exports"],t):t((e="undefined"!=typeof globalThis?globalThis:e||self).jsyaml={})}(this,(function(e){"use strict";function t(e){return null==e}var n={isNothing:t,isObject:function(e){return"object"==typeof e&&null!==e},toArray:function(e){return Array.isArray(e)?e:t(e)?[]:[e]},repeat:function(e,t){var n,i="";for(n=0;n<t;n+=1)i+=e;return i},isNegativeZero:function(e){return 0===e&&Number.NEGATIVE_INFINITY===1/e},extend:function(e,t){var n,i,r,o;if(t)for(n=0,i=(o=Object.keys(t)).length;n<i;n+=1)e[r=o[n]]=t[r];return e}};function i(e,t){var n="",i=e.reason||"(unknown reason)";return e.mark?(e.mark.name&&(n+='in "'+e.mark.name+'" '),n+="("+(e.mark.line+1)+":"+(e.mark.column+1)+")",!t&&e.mark.snippet&&(n+="\n\n"+e.mark.snippet),i+" "+n):i}function r(e,t){Error.call(this),this.name="YAMLException",this.reason=e,this.mark=t,this.message=i(this,!1),Error.captureStackTrace?Error.captureStackTrace(this,this.constructor):this.stack=(new Error).stack||""}r.prototype=Object.create(Error.prototype),r.prototype.constructor=r,r.prototype.toString=function(e){return this.name+": "+i(this,e)};var o=r;function a(e,t,n,i,r){var o="",a="",l=Math.floor(r/2)-1;return i-t>l&&(t=i-l+(o=" ... ").length),n-i>l&&(n=i+l-(a=" ...").length),{str:o+e.slice(t,n).replace(/\t/g,"→")+a,pos:i-t+o.length}}function l(e,t){return n.repeat(" ",t-e.length)+e}var c=function(e,t){if(t=Object.create(t||null),!e.buffer)return null;t.maxLength||(t.maxLength=79),"number"!=typeof t.indent&&(t.indent=1),"number"!=typeof t.linesBefore&&(t.linesBefore=3),"number"!=typeof t.linesAfter&&(t.linesAfter=2);for(var i,r=/\r?\n|\r|\0/g,o=[0],c=[],s=-1;i=r.exec(e.buffer);)c.push(i.index),o.push(i.index+i[0].length),e.position<=i.index&&s<0&&(s=o.length-2);s<0&&(s=o.length-1);var u,p,f="",d=Math.min(e.line+t.linesAfter,c.length).toString().length,h=t.maxLength-(t.indent+d+3);for(u=1;u<=t.linesBefore&&!(s-u<0);u++)p=a(e.buffer,o[s-u],c[s-u],e.position-(o[s]-o[s-u]),h),f=n.repeat(" ",t.indent)+l((e.line-u+1).toString(),d)+" | "+p.str+"\n"+f;for(p=a(e.buffer,o[s],c[s],e.position,h),f+=n.repeat(" ",t.indent)+l((e.line+1).toString(),d)+" | "+p.str+"\n",f+=n.repeat("-",t.indent+d+3+p.pos)+"^\n",u=1;u<=t.linesAfter&&!(s+u>=c.length);u++)p=a(e.buffer,o[s+u],c[s+u],e.position-(o[s]-o[s+u]),h),f+=n.repeat(" ",t.indent)+l((e.line+u+1).toString(),d)+" | "+p.str+"\n";return f.replace(/\n$/,"")},s=["kind","multi","resolve","construct","instanceOf","predicate","represent","representName","defaultStyle","styleAliases"],u=["scalar","sequence","mapping"];var p=function(e,t){if(t=t||{},Object.keys(t).forEach((function(t){if(-1===s.indexOf(t))throw new o('Unknown option "'+t+'" is met in definition of "'+e+'" YAML type.')})),this.options=t,this.tag=e,this.kind=t.kind||null,this.resolve=t.resolve||function(){return!0},this.construct=t.construct||function(e){return e},this.instanceOf=t.instanceOf||null,this.predicate=t.predicate||null,this.represent=t.represent||null,this.representName=t.representName||null,this.defaultStyle=t.defaultStyle||null,this.multi=t.multi||!1,this.styleAliases=function(e){var t={};return null!==e&&Object.keys(e).forEach((function(n){e[n].forEach((function(e){t[String(e)]=n}))})),t}(t.styleAliases||null),-1===u.indexOf(this.kind))throw new o('Unknown kind "'+this.kind+'" is specified for "'+e+'" YAML type.')};function f(e,t){var n=[];return e[t].forEach((function(e){var t=n.length;n.forEach((function(n,i){n.tag===e.tag&&n.kind===e.kind&&n.multi===e.multi&&(t=i)})),n[t]=e})),n}function d(e){return this.extend(e)}d.prototype.extend=function(e){var t=[],n=[];if(e instanceof p)n.push(e);else if(Array.isArray(e))n=n.concat(e);else{if(!e||!Array.isArray(e.implicit)&&!Array.isArray(e.explicit))throw new o("Schema.extend argument should be a Type, [ Type ], or a schema definition ({ implicit: [...], explicit: [...] })");e.implicit&&(t=t.concat(e.implicit)),e.explicit&&(n=n.concat(e.explicit))}t.forEach((function(e){if(!(e instanceof p))throw new o("Specified list of YAML types (or a single Type object) contains a non-Type object.");if(e.loadKind&&"scalar"!==e.loadKind)throw new o("There is a non-scalar type in the implicit list of a schema. Implicit resolving of such types is not supported.");if(e.multi)throw new o("There is a multi type in the implicit list of a schema. Multi tags can only be listed as explicit.")})),n.forEach((function(e){if(!(e instanceof p))throw new o("Specified list of YAML types (or a single Type object) contains a non-Type object.")}));var i=Object.create(d.prototype);return i.implicit=(this.implicit||[]).concat(t),i.explicit=(this.explicit||[]).concat(n),i.compiledImplicit=f(i,"implicit"),i.compiledExplicit=f(i,"explicit"),i.compiledTypeMap=function(){var e,t,n={scalar:{},sequence:{},mapping:{},fallback:{},multi:{scalar:[],sequence:[],mapping:[],fallback:[]}};function i(e){e.multi?(n.multi[e.kind].push(e),n.multi.fallback.push(e)):n[e.kind][e.tag]=n.fallback[e.tag]=e}for(e=0,t=arguments.length;e<t;e+=1)arguments[e].forEach(i);return n}(i.compiledImplicit,i.compiledExplicit),i};var h=d,g=new p("tag:yaml.org,2002:str",{kind:"scalar",construct:function(e){return null!==e?e:""}}),m=new p("tag:yaml.org,2002:seq",{kind:"sequence",construct:function(e){return null!==e?e:[]}}),y=new p("tag:yaml.org,2002:map",{kind:"mapping",construct:function(e){return null!==e?e:{}}}),b=new h({explicit:[g,m,y]});var A=new p("tag:yaml.org,2002:null",{kind:"scalar",resolve:function(e){if(null===e)return!0;var t=e.length;return 1===t&&"~"===e||4===t&&("null"===e||"Null"===e||"NULL"===e)},construct:function(){return null},predicate:function(e){return null===e},represent:{canonical:function(){return"~"},lowercase:function(){return"null"},uppercase:function(){return"NULL"},camelcase:function(){return"Null"},empty:function(){return""}},defaultStyle:"lowercase"});var v=new p("tag:yaml.org,2002:bool",{kind:"scalar",resolve:function(e){if(null===e)return!1;var t=e.length;return 4===t&&("true"===e||"True"===e||"TRUE"===e)||5===t&&("false"===e||"False"===e||"FALSE"===e)},construct:function(e){return"true"===e||"True"===e||"TRUE"===e},predicate:function(e){return"[object Boolean]"===Object.prototype.toString.call(e)},represent:{lowercase:function(e){return e?"true":"false"},uppercase:function(e){return e?"TRUE":"FALSE"},camelcase:function(e){return e?"True":"False"}},defaultStyle:"lowercase"});function w(e){return 48<=e&&e<=55}function k(e){return 48<=e&&e<=57}var C=new p("tag:yaml.org,2002:int",{kind:"scalar",resolve:function(e){if(null===e)return!1;var t,n,i=e.length,r=0,o=!1;if(!i)return!1;if("-"!==(t=e[r])&&"+"!==t||(t=e[++r]),"0"===t){if(r+1===i)return!0;if("b"===(t=e[++r])){for(r++;r<i;r++)if("_"!==(t=e[r])){if("0"!==t&&"1"!==t)return!1;o=!0}return o&&"_"!==t}if("x"===t){for(r++;r<i;r++)if("_"!==(t=e[r])){if(!(48<=(n=e.charCodeAt(r))&&n<=57||65<=n&&n<=70||97<=n&&n<=102))return!1;o=!0}return o&&"_"!==t}if("o"===t){for(r++;r<i;r++)if("_"!==(t=e[r])){if(!w(e.charCodeAt(r)))return!1;o=!0}return o&&"_"!==t}}if("_"===t)return!1;for(;r<i;r++)if("_"!==(t=e[r])){if(!k(e.charCodeAt(r)))return!1;o=!0}return!(!o||"_"===t)},construct:function(e){var t,n=e,i=1;if(-1!==n.indexOf("_")&&(n=n.replace(/_/g,"")),"-"!==(t=n[0])&&"+"!==t||("-"===t&&(i=-1),t=(n=n.slice(1))[0]),"0"===n)return 0;if("0"===t){if("b"===n[1])return i*parseInt(n.slice(2),2);if("x"===n[1])return i*parseInt(n.slice(2),16);if("o"===n[1])return i*parseInt(n.slice(2),8)}return i*parseInt(n,10)},predicate:function(e){return"[object Number]"===Object.prototype.toString.call(e)&&e%1==0&&!n.isNegativeZero(e)},represent:{binary:function(e){return e>=0?"0b"+e.toString(2):"-0b"+e.toString(2).slice(1)},octal:function(e){return e>=0?"0o"+e.toString(8):"-0o"+e.toString(8).slice(1)},decimal:function(e){return e.toString(10)},hexadecimal:function(e){return e>=0?"0x"+e.toString(16).toUpperCase():"-0x"+e.toString(16).toUpperCase().slice(1)}},defaultStyle:"decimal",styleAliases:{binary:[2,"bin"],octal:[8,"oct"],decimal:[10,"dec"],hexadecimal:[16,"hex"]}}),x=new RegExp("^(?:[-+]?(?:[0-9][0-9_]*)(?:\\.[0-9_]*)?(?:[eE][-+]?[0-9]+)?|\\.[0-9_]+(?:[eE][-+]?[0-9]+)?|[-+]?\\.(?:inf|Inf|INF)|\\.(?:nan|NaN|NAN))$");var I=/^[-+]?[0-9]+e/;var S=new p("tag:yaml.org,2002:float",{kind:"scalar",resolve:function(e){return null!==e&&!(!x.test(e)||"_"===e[e.length-1])},construct:function(e){var t,n;return n="-"===(t=e.replace(/_/g,"").toLowerCase())[0]?-1:1,"+-".indexOf(t[0])>=0&&(t=t.slice(1)),".inf"===t?1===n?Number.POSITIVE_INFINITY:Number.NEGATIVE_INFINITY:".nan"===t?NaN:n*parseFloat(t,10)},predicate:function(e){return"[object Number]"===Object.prototype.toString.call(e)&&(e%1!=0||n.isNegativeZero(e))},represent:function(e,t){var i;if(isNaN(e))switch(t){case"lowercase":return".nan";case"uppercase":return".NAN";case"camelcase":return".NaN"}else if(Number.POSITIVE_INFINITY===e)switch(t){case"lowercase":return".inf";case"uppercase":return".INF";case"camelcase":return".Inf"}else if(Number.NEGATIVE_INFINITY===e)switch(t){case"lowercase":return"-.inf";case"uppercase":return"-.INF";case"camelcase":return"-.Inf"}else if(n.isNegativeZero(e))return"-0.0";return i=e.toString(10),I.test(i)?i.replace("e",".e"):i},defaultStyle:"lowercase"}),O=b.extend({implicit:[A,v,C,S]}),j=O,T=new RegExp("^([0-9][0-9][0-9][0-9])-([0-9][0-9])-([0-9][0-9])$"),N=new RegExp("^([0-9][0-9][0-9][0-9])-([0-9][0-9]?)-([0-9][0-9]?)(?:[Tt]|[ \\t]+)([0-9][0-9]?):([0-9][0-9]):([0-9][0-9])(?:\\.([0-9]*))?(?:[ \\t]*(Z|([-+])([0-9][0-9]?)(?::([0-9][0-9]))?))?$");var F=new p("tag:yaml.org,2002:timestamp",{kind:"scalar",resolve:function(e){return null!==e&&(null!==T.exec(e)||null!==N.exec(e))},construct:function(e){var t,n,i,r,o,a,l,c,s=0,u=null;if(null===(t=T.exec(e))&&(t=N.exec(e)),null===t)throw new Error("Date resolve error");if(n=+t[1],i=+t[2]-1,r=+t[3],!t[4])return new Date(Date.UTC(n,i,r));if(o=+t[4],a=+t[5],l=+t[6],t[7]){for(s=t[7].slice(0,3);s.length<3;)s+="0";s=+s}return t[9]&&(u=6e4*(60*+t[10]+ +(t[11]||0)),"-"===t[9]&&(u=-u)),c=new Date(Date.UTC(n,i,r,o,a,l,s)),u&&c.setTime(c.getTime()-u),c},instanceOf:Date,represent:function(e){return e.toISOString()}});var E=new p("tag:yaml.org,2002:merge",{kind:"scalar",resolve:function(e){return"<<"===e||null===e}}),M="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=\n\r";var L=new p("tag:yaml.org,2002:binary",{kind:"scalar",resolve:function(e){if(null===e)return!1;var t,n,i=0,r=e.length,o=M;for(n=0;n<r;n++)if(!((t=o.indexOf(e.charAt(n)))>64)){if(t<0)return!1;i+=6}return i%8==0},construct:function(e){var t,n,i=e.replace(/[\r\n=]/g,""),r=i.length,o=M,a=0,l=[];for(t=0;t<r;t++)t%4==0&&t&&(l.push(a>>16&255),l.push(a>>8&255),l.push(255&a)),a=a<<6|o.indexOf(i.charAt(t));return 0===(n=r%4*6)?(l.push(a>>16&255),l.push(a>>8&255),l.push(255&a)):18===n?(l.push(a>>10&255),l.push(a>>2&255)):12===n&&l.push(a>>4&255),new Uint8Array(l)},predicate:function(e){return"[object Uint8Array]"===Object.prototype.toString.call(e)},represent:function(e){var t,n,i="",r=0,o=e.length,a=M;for(t=0;t<o;t++)t%3==0&&t&&(i+=a[r>>18&63],i+=a[r>>12&63],i+=a[r>>6&63],i+=a[63&r]),r=(r<<8)+e[t];return 0===(n=o%3)?(i+=a[r>>18&63],i+=a[r>>12&63],i+=a[r>>6&63],i+=a[63&r]):2===n?(i+=a[r>>10&63],i+=a[r>>4&63],i+=a[r<<2&63],i+=a[64]):1===n&&(i+=a[r>>2&63],i+=a[r<<4&63],i+=a[64],i+=a[64]),i}}),_=Object.prototype.hasOwnProperty,D=Object.prototype.toString;var U=new p("tag:yaml.org,2002:omap",{kind:"sequence",resolve:function(e){if(null===e)return!0;var t,n,i,r,o,a=[],l=e;for(t=0,n=l.length;t<n;t+=1){if(i=l[t],o=!1,"[object Object]"!==D.call(i))return!1;for(r in i)if(_.call(i,r)){if(o)return!1;o=!0}if(!o)return!1;if(-1!==a.indexOf(r))return!1;a.push(r)}return!0},construct:function(e){return null!==e?e:[]}}),q=Object.prototype.toString;var Y=new p("tag:yaml.org,2002:pairs",{kind:"sequence",resolve:function(e){if(null===e)return!0;var t,n,i,r,o,a=e;for(o=new Array(a.length),t=0,n=a.length;t<n;t+=1){if(i=a[t],"[object Object]"!==q.call(i))return!1;if(1!==(r=Object.keys(i)).length)return!1;o[t]=[r[0],i[r[0]]]}return!0},construct:function(e){if(null===e)return[];var t,n,i,r,o,a=e;for(o=new Array(a.length),t=0,n=a.length;t<n;t+=1)i=a[t],r=Object.keys(i),o[t]=[r[0],i[r[0]]];return o}}),R=Object.prototype.hasOwnProperty;var B=new p("tag:yaml.org,2002:set",{kind:"mapping",resolve:function(e){if(null===e)return!0;var t,n=e;for(t in n)if(R.call(n,t)&&null!==n[t])return!1;return!0},construct:function(e){return null!==e?e:{}}}),K=j.extend({implicit:[F,E],explicit:[L,U,Y,B]}),P=Object.prototype.hasOwnProperty,W=/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F-\x84\x86-\x9F\uFFFE\uFFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?:[^\uD800-\uDBFF]|^)[\uDC00-\uDFFF]/,H=/[\x85\u2028\u2029]/,$=/[,\[\]\{\}]/,G=/^(?:!|!!|![a-z\-]+!)$/i,V=/^(?:!|[^,\[\]\{\}])(?:%[0-9a-f]{2}|[0-9a-z\-#;\/\?:@&=\+\$,_\.!~\*'\(\)\[\]])*$/i;function Z(e){return Object.prototype.toString.call(e)}function J(e){return 10===e||13===e}function Q(e){return 9===e||32===e}function z(e){return 9===e||32===e||10===e||13===e}function X(e){return 44===e||91===e||93===e||123===e||125===e}function ee(e){var t;return 48<=e&&e<=57?e-48:97<=(t=32|e)&&t<=102?t-97+10:-1}function te(e){return 48===e?"\0":97===e?"":98===e?"\b":116===e||9===e?"\t":110===e?"\n":118===e?"\v":102===e?"\f":114===e?"\r":101===e?"":32===e?" ":34===e?'"':47===e?"/":92===e?"\\":78===e?"":95===e?" ":76===e?"\u2028":80===e?"\u2029":""}function ne(e){return e<=65535?String.fromCharCode(e):String.fromCharCode(55296+(e-65536>>10),56320+(e-65536&1023))}for(var ie=new Array(256),re=new Array(256),oe=0;oe<256;oe++)ie[oe]=te(oe)?1:0,re[oe]=te(oe);function ae(e,t){this.input=e,this.filename=t.filename||null,this.schema=t.schema||K,this.onWarning=t.onWarning||null,this.legacy=t.legacy||!1,this.json=t.json||!1,this.listener=t.listener||null,this.implicitTypes=this.schema.compiledImplicit,this.typeMap=this.schema.compiledTypeMap,this.length=e.length,this.position=0,this.line=0,this.lineStart=0,this.lineIndent=0,this.firstTabInLine=-1,this.documents=[]}function le(e,t){var n={name:e.filename,buffer:e.input.slice(0,-1),position:e.position,line:e.line,column:e.position-e.lineStart};return n.snippet=c(n),new o(t,n)}function ce(e,t){throw le(e,t)}function se(e,t){e.onWarning&&e.onWarning.call(null,le(e,t))}var ue={YAML:function(e,t,n){var i,r,o;null!==e.version&&ce(e,"duplication of %YAML directive"),1!==n.length&&ce(e,"YAML directive accepts exactly one argument"),null===(i=/^([0-9]+)\.([0-9]+)$/.exec(n[0]))&&ce(e,"ill-formed argument of the YAML directive"),r=parseInt(i[1],10),o=parseInt(i[2],10),1!==r&&ce(e,"unacceptable YAML version of the document"),e.version=n[0],e.checkLineBreaks=o<2,1!==o&&2!==o&&se(e,"unsupported YAML version of the document")},TAG:function(e,t,n){var i,r;2!==n.length&&ce(e,"TAG directive accepts exactly two arguments"),i=n[0],r=n[1],G.test(i)||ce(e,"ill-formed tag handle (first argument) of the TAG directive"),P.call(e.tagMap,i)&&ce(e,'there is a previously declared suffix for "'+i+'" tag handle'),V.test(r)||ce(e,"ill-formed tag prefix (second argument) of the TAG directive");try{r=decodeURIComponent(r)}catch(t){ce(e,"tag prefix is malformed: "+r)}e.tagMap[i]=r}};function pe(e,t,n,i){var r,o,a,l;if(t<n){if(l=e.input.slice(t,n),i)for(r=0,o=l.length;r<o;r+=1)9===(a=l.charCodeAt(r))||32<=a&&a<=1114111||ce(e,"expected valid JSON character");else W.test(l)&&ce(e,"the stream contains non-printable characters");e.result+=l}}function fe(e,t,i,r){var o,a,l,c;for(n.isObject(i)||ce(e,"cannot merge mappings; the provided source object is unacceptable"),l=0,c=(o=Object.keys(i)).length;l<c;l+=1)a=o[l],P.call(t,a)||(t[a]=i[a],r[a]=!0)}function de(e,t,n,i,r,o,a,l,c){var s,u;if(Array.isArray(r))for(s=0,u=(r=Array.prototype.slice.call(r)).length;s<u;s+=1)Array.isArray(r[s])&&ce(e,"nested arrays are not supported inside keys"),"object"==typeof r&&"[object Object]"===Z(r[s])&&(r[s]="[object Object]");if("object"==typeof r&&"[object Object]"===Z(r)&&(r="[object Object]"),r=String(r),null===t&&(t={}),"tag:yaml.org,2002:merge"===i)if(Array.isArray(o))for(s=0,u=o.length;s<u;s+=1)fe(e,t,o[s],n);else fe(e,t,o,n);else e.json||P.call(n,r)||!P.call(t,r)||(e.line=a||e.line,e.lineStart=l||e.lineStart,e.position=c||e.position,ce(e,"duplicated mapping key")),"__proto__"===r?Object.defineProperty(t,r,{configurable:!0,enumerable:!0,writable:!0,value:o}):t[r]=o,delete n[r];return t}function he(e){var t;10===(t=e.input.charCodeAt(e.position))?e.position++:13===t?(e.position++,10===e.input.charCodeAt(e.position)&&e.position++):ce(e,"a line break is expected"),e.line+=1,e.lineStart=e.position,e.firstTabInLine=-1}function ge(e,t,n){for(var i=0,r=e.input.charCodeAt(e.position);0!==r;){for(;Q(r);)9===r&&-1===e.firstTabInLine&&(e.firstTabInLine=e.position),r=e.input.charCodeAt(++e.position);if(t&&35===r)do{r=e.input.charCodeAt(++e.position)}while(10!==r&&13!==r&&0!==r);if(!J(r))break;for(he(e),r=e.input.charCodeAt(e.position),i++,e.lineIndent=0;32===r;)e.lineIndent++,r=e.input.charCodeAt(++e.position)}return-1!==n&&0!==i&&e.lineIndent<n&&se(e,"deficient indentation"),i}function me(e){var t,n=e.position;return!(45!==(t=e.input.charCodeAt(n))&&46!==t||t!==e.input.charCodeAt(n+1)||t!==e.input.charCodeAt(n+2)||(n+=3,0!==(t=e.input.charCodeAt(n))&&!z(t)))}function ye(e,t){1===t?e.result+=" ":t>1&&(e.result+=n.repeat("\n",t-1))}function be(e,t){var n,i,r=e.tag,o=e.anchor,a=[],l=!1;if(-1!==e.firstTabInLine)return!1;for(null!==e.anchor&&(e.anchorMap[e.anchor]=a),i=e.input.charCodeAt(e.position);0!==i&&(-1!==e.firstTabInLine&&(e.position=e.firstTabInLine,ce(e,"tab characters must not be used in indentation")),45===i)&&z(e.input.charCodeAt(e.position+1));)if(l=!0,e.position++,ge(e,!0,-1)&&e.lineIndent<=t)a.push(null),i=e.input.charCodeAt(e.position);else if(n=e.line,we(e,t,3,!1,!0),a.push(e.result),ge(e,!0,-1),i=e.input.charCodeAt(e.position),(e.line===n||e.lineIndent>t)&&0!==i)ce(e,"bad indentation of a sequence entry");else if(e.lineIndent<t)break;return!!l&&(e.tag=r,e.anchor=o,e.kind="sequence",e.result=a,!0)}function Ae(e){var t,n,i,r,o=!1,a=!1;if(33!==(r=e.input.charCodeAt(e.position)))return!1;if(null!==e.tag&&ce(e,"duplication of a tag property"),60===(r=e.input.charCodeAt(++e.position))?(o=!0,r=e.input.charCodeAt(++e.position)):33===r?(a=!0,n="!!",r=e.input.charCodeAt(++e.position)):n="!",t=e.position,o){do{r=e.input.charCodeAt(++e.position)}while(0!==r&&62!==r);e.position<e.length?(i=e.input.slice(t,e.position),r=e.input.charCodeAt(++e.position)):ce(e,"unexpected end of the stream within a verbatim tag")}else{for(;0!==r&&!z(r);)33===r&&(a?ce(e,"tag suffix cannot contain exclamation marks"):(n=e.input.slice(t-1,e.position+1),G.test(n)||ce(e,"named tag handle cannot contain such characters"),a=!0,t=e.position+1)),r=e.input.charCodeAt(++e.position);i=e.input.slice(t,e.position),$.test(i)&&ce(e,"tag suffix cannot contain flow indicator characters")}i&&!V.test(i)&&ce(e,"tag name cannot contain such characters: "+i);try{i=decodeURIComponent(i)}catch(t){ce(e,"tag name is malformed: "+i)}return o?e.tag=i:P.call(e.tagMap,n)?e.tag=e.tagMap[n]+i:"!"===n?e.tag="!"+i:"!!"===n?e.tag="tag:yaml.org,2002:"+i:ce(e,'undeclared tag handle "'+n+'"'),!0}function ve(e){var t,n;if(38!==(n=e.input.charCodeAt(e.position)))return!1;for(null!==e.anchor&&ce(e,"duplication of an anchor property"),n=e.input.charCodeAt(++e.position),t=e.position;0!==n&&!z(n)&&!X(n);)n=e.input.charCodeAt(++e.position);return e.position===t&&ce(e,"name of an anchor node must contain at least one character"),e.anchor=e.input.slice(t,e.position),!0}function we(e,t,i,r,o){var a,l,c,s,u,p,f,d,h,g=1,m=!1,y=!1;if(null!==e.listener&&e.listener("open",e),e.tag=null,e.anchor=null,e.kind=null,e.result=null,a=l=c=4===i||3===i,r&&ge(e,!0,-1)&&(m=!0,e.lineIndent>t?g=1:e.lineIndent===t?g=0:e.lineIndent<t&&(g=-1)),1===g)for(;Ae(e)||ve(e);)ge(e,!0,-1)?(m=!0,c=a,e.lineIndent>t?g=1:e.lineIndent===t?g=0:e.lineIndent<t&&(g=-1)):c=!1;if(c&&(c=m||o),1!==g&&4!==i||(d=1===i||2===i?t:t+1,h=e.position-e.lineStart,1===g?c&&(be(e,h)||function(e,t,n){var i,r,o,a,l,c,s,u=e.tag,p=e.anchor,f={},d=Object.create(null),h=null,g=null,m=null,y=!1,b=!1;if(-1!==e.firstTabInLine)return!1;for(null!==e.anchor&&(e.anchorMap[e.anchor]=f),s=e.input.charCodeAt(e.position);0!==s;){if(y||-1===e.firstTabInLine||(e.position=e.firstTabInLine,ce(e,"tab characters must not be used in indentation")),i=e.input.charCodeAt(e.position+1),o=e.line,63!==s&&58!==s||!z(i)){if(a=e.line,l=e.lineStart,c=e.position,!we(e,n,2,!1,!0))break;if(e.line===o){for(s=e.input.charCodeAt(e.position);Q(s);)s=e.input.charCodeAt(++e.position);if(58===s)z(s=e.input.charCodeAt(++e.position))||ce(e,"a whitespace character is expected after the key-value separator within a block mapping"),y&&(de(e,f,d,h,g,null,a,l,c),h=g=m=null),b=!0,y=!1,r=!1,h=e.tag,g=e.result;else{if(!b)return e.tag=u,e.anchor=p,!0;ce(e,"can not read an implicit mapping pair; a colon is missed")}}else{if(!b)return e.tag=u,e.anchor=p,!0;ce(e,"can not read a block mapping entry; a multiline key may not be an implicit key")}}else 63===s?(y&&(de(e,f,d,h,g,null,a,l,c),h=g=m=null),b=!0,y=!0,r=!0):y?(y=!1,r=!0):ce(e,"incomplete explicit mapping pair; a key node is missed; or followed by a non-tabulated empty line"),e.position+=1,s=i;if((e.line===o||e.lineIndent>t)&&(y&&(a=e.line,l=e.lineStart,c=e.position),we(e,t,4,!0,r)&&(y?g=e.result:m=e.result),y||(de(e,f,d,h,g,m,a,l,c),h=g=m=null),ge(e,!0,-1),s=e.input.charCodeAt(e.position)),(e.line===o||e.lineIndent>t)&&0!==s)ce(e,"bad indentation of a mapping entry");else if(e.lineIndent<t)break}return y&&de(e,f,d,h,g,null,a,l,c),b&&(e.tag=u,e.anchor=p,e.kind="mapping",e.result=f),b}(e,h,d))||function(e,t){var n,i,r,o,a,l,c,s,u,p,f,d,h=!0,g=e.tag,m=e.anchor,y=Object.create(null);if(91===(d=e.input.charCodeAt(e.position)))a=93,s=!1,o=[];else{if(123!==d)return!1;a=125,s=!0,o={}}for(null!==e.anchor&&(e.anchorMap[e.anchor]=o),d=e.input.charCodeAt(++e.position);0!==d;){if(ge(e,!0,t),(d=e.input.charCodeAt(e.position))===a)return e.position++,e.tag=g,e.anchor=m,e.kind=s?"mapping":"sequence",e.result=o,!0;h?44===d&&ce(e,"expected the node content, but found ','"):ce(e,"missed comma between flow collection entries"),f=null,l=c=!1,63===d&&z(e.input.charCodeAt(e.position+1))&&(l=c=!0,e.position++,ge(e,!0,t)),n=e.line,i=e.lineStart,r=e.position,we(e,t,1,!1,!0),p=e.tag,u=e.result,ge(e,!0,t),d=e.input.charCodeAt(e.position),!c&&e.line!==n||58!==d||(l=!0,d=e.input.charCodeAt(++e.position),ge(e,!0,t),we(e,t,1,!1,!0),f=e.result),s?de(e,o,y,p,u,f,n,i,r):l?o.push(de(e,null,y,p,u,f,n,i,r)):o.push(u),ge(e,!0,t),44===(d=e.input.charCodeAt(e.position))?(h=!0,d=e.input.charCodeAt(++e.position)):h=!1}ce(e,"unexpected end of the stream within a flow collection")}(e,d)?y=!0:(l&&function(e,t){var i,r,o,a,l,c=1,s=!1,u=!1,p=t,f=0,d=!1;if(124===(a=e.input.charCodeAt(e.position)))r=!1;else{if(62!==a)return!1;r=!0}for(e.kind="scalar",e.result="";0!==a;)if(43===(a=e.input.charCodeAt(++e.position))||45===a)1===c?c=43===a?3:2:ce(e,"repeat of a chomping mode identifier");else{if(!((o=48<=(l=a)&&l<=57?l-48:-1)>=0))break;0===o?ce(e,"bad explicit indentation width of a block scalar; it cannot be less than one"):u?ce(e,"repeat of an indentation width identifier"):(p=t+o-1,u=!0)}if(Q(a)){do{a=e.input.charCodeAt(++e.position)}while(Q(a));if(35===a)do{a=e.input.charCodeAt(++e.position)}while(!J(a)&&0!==a)}for(;0!==a;){for(he(e),e.lineIndent=0,a=e.input.charCodeAt(e.position);(!u||e.lineIndent<p)&&32===a;)e.lineIndent++,a=e.input.charCodeAt(++e.position);if(!u&&e.lineIndent>p&&(p=e.lineIndent),J(a))f++;else{if(e.lineIndent<p){3===c?e.result+=n.repeat("\n",s?1+f:f):1===c&&s&&(e.result+="\n");break}for(r?Q(a)?(d=!0,e.result+=n.repeat("\n",s?1+f:f)):d?(d=!1,e.result+=n.repeat("\n",f+1)):0===f?s&&(e.result+=" "):e.result+=n.repeat("\n",f):e.result+=n.repeat("\n",s?1+f:f),s=!0,u=!0,f=0,i=e.position;!J(a)&&0!==a;)a=e.input.charCodeAt(++e.position);pe(e,i,e.position,!1)}}return!0}(e,d)||function(e,t){var n,i,r;if(39!==(n=e.input.charCodeAt(e.position)))return!1;for(e.kind="scalar",e.result="",e.position++,i=r=e.position;0!==(n=e.input.charCodeAt(e.position));)if(39===n){if(pe(e,i,e.position,!0),39!==(n=e.input.charCodeAt(++e.position)))return!0;i=e.position,e.position++,r=e.position}else J(n)?(pe(e,i,r,!0),ye(e,ge(e,!1,t)),i=r=e.position):e.position===e.lineStart&&me(e)?ce(e,"unexpected end of the document within a single quoted scalar"):(e.position++,r=e.position);ce(e,"unexpected end of the stream within a single quoted scalar")}(e,d)||function(e,t){var n,i,r,o,a,l,c;if(34!==(l=e.input.charCodeAt(e.position)))return!1;for(e.kind="scalar",e.result="",e.position++,n=i=e.position;0!==(l=e.input.charCodeAt(e.position));){if(34===l)return pe(e,n,e.position,!0),e.position++,!0;if(92===l){if(pe(e,n,e.position,!0),J(l=e.input.charCodeAt(++e.position)))ge(e,!1,t);else if(l<256&&ie[l])e.result+=re[l],e.position++;else if((a=120===(c=l)?2:117===c?4:85===c?8:0)>0){for(r=a,o=0;r>0;r--)(a=ee(l=e.input.charCodeAt(++e.position)))>=0?o=(o<<4)+a:ce(e,"expected hexadecimal character");e.result+=ne(o),e.position++}else ce(e,"unknown escape sequence");n=i=e.position}else J(l)?(pe(e,n,i,!0),ye(e,ge(e,!1,t)),n=i=e.position):e.position===e.lineStart&&me(e)?ce(e,"unexpected end of the document within a double quoted scalar"):(e.position++,i=e.position)}ce(e,"unexpected end of the stream within a double quoted scalar")}(e,d)?y=!0:!function(e){var t,n,i;if(42!==(i=e.input.charCodeAt(e.position)))return!1;for(i=e.input.charCodeAt(++e.position),t=e.position;0!==i&&!z(i)&&!X(i);)i=e.input.charCodeAt(++e.position);return e.position===t&&ce(e,"name of an alias node must contain at least one character"),n=e.input.slice(t,e.position),P.call(e.anchorMap,n)||ce(e,'unidentified alias "'+n+'"'),e.result=e.anchorMap[n],ge(e,!0,-1),!0}(e)?function(e,t,n){var i,r,o,a,l,c,s,u,p=e.kind,f=e.result;if(z(u=e.input.charCodeAt(e.position))||X(u)||35===u||38===u||42===u||33===u||124===u||62===u||39===u||34===u||37===u||64===u||96===u)return!1;if((63===u||45===u)&&(z(i=e.input.charCodeAt(e.position+1))||n&&X(i)))return!1;for(e.kind="scalar",e.result="",r=o=e.position,a=!1;0!==u;){if(58===u){if(z(i=e.input.charCodeAt(e.position+1))||n&&X(i))break}else if(35===u){if(z(e.input.charCodeAt(e.position-1)))break}else{if(e.position===e.lineStart&&me(e)||n&&X(u))break;if(J(u)){if(l=e.line,c=e.lineStart,s=e.lineIndent,ge(e,!1,-1),e.lineIndent>=t){a=!0,u=e.input.charCodeAt(e.position);continue}e.position=o,e.line=l,e.lineStart=c,e.lineIndent=s;break}}a&&(pe(e,r,o,!1),ye(e,e.line-l),r=o=e.position,a=!1),Q(u)||(o=e.position+1),u=e.input.charCodeAt(++e.position)}return pe(e,r,o,!1),!!e.result||(e.kind=p,e.result=f,!1)}(e,d,1===i)&&(y=!0,null===e.tag&&(e.tag="?")):(y=!0,null===e.tag&&null===e.anchor||ce(e,"alias node should not have any properties")),null!==e.anchor&&(e.anchorMap[e.anchor]=e.result)):0===g&&(y=c&&be(e,h))),null===e.tag)null!==e.anchor&&(e.anchorMap[e.anchor]=e.result);else if("?"===e.tag){for(null!==e.result&&"scalar"!==e.kind&&ce(e,'unacceptable node kind for !<?> tag; it should be "scalar", not "'+e.kind+'"'),s=0,u=e.implicitTypes.length;s<u;s+=1)if((f=e.implicitTypes[s]).resolve(e.result)){e.result=f.construct(e.result),e.tag=f.tag,null!==e.anchor&&(e.anchorMap[e.anchor]=e.result);break}}else if("!"!==e.tag){if(P.call(e.typeMap[e.kind||"fallback"],e.tag))f=e.typeMap[e.kind||"fallback"][e.tag];else for(f=null,s=0,u=(p=e.typeMap.multi[e.kind||"fallback"]).length;s<u;s+=1)if(e.tag.slice(0,p[s].tag.length)===p[s].tag){f=p[s];break}f||ce(e,"unknown tag !<"+e.tag+">"),null!==e.result&&f.kind!==e.kind&&ce(e,"unacceptable node kind for !<"+e.tag+'> tag; it should be "'+f.kind+'", not "'+e.kind+'"'),f.resolve(e.result,e.tag)?(e.result=f.construct(e.result,e.tag),null!==e.anchor&&(e.anchorMap[e.anchor]=e.result)):ce(e,"cannot resolve a node with !<"+e.tag+"> explicit tag")}return null!==e.listener&&e.listener("close",e),null!==e.tag||null!==e.anchor||y}function ke(e){var t,n,i,r,o=e.position,a=!1;for(e.version=null,e.checkLineBreaks=e.legacy,e.tagMap=Object.create(null),e.anchorMap=Object.create(null);0!==(r=e.input.charCodeAt(e.position))&&(ge(e,!0,-1),r=e.input.charCodeAt(e.position),!(e.lineIndent>0||37!==r));){for(a=!0,r=e.input.charCodeAt(++e.position),t=e.position;0!==r&&!z(r);)r=e.input.charCodeAt(++e.position);for(i=[],(n=e.input.slice(t,e.position)).length<1&&ce(e,"directive name must not be less than one character in length");0!==r;){for(;Q(r);)r=e.input.charCodeAt(++e.position);if(35===r){do{r=e.input.charCodeAt(++e.position)}while(0!==r&&!J(r));break}if(J(r))break;for(t=e.position;0!==r&&!z(r);)r=e.input.charCodeAt(++e.position);i.push(e.input.slice(t,e.position))}0!==r&&he(e),P.call(ue,n)?ue[n](e,n,i):se(e,'unknown document directive "'+n+'"')}ge(e,!0,-1),0===e.lineIndent&&45===e.input.charCodeAt(e.position)&&45===e.input.charCodeAt(e.position+1)&&45===e.input.charCodeAt(e.position+2)?(e.position+=3,ge(e,!0,-1)):a&&ce(e,"directives end mark is expected"),we(e,e.lineIndent-1,4,!1,!0),ge(e,!0,-1),e.checkLineBreaks&&H.test(e.input.slice(o,e.position))&&se(e,"non-ASCII line breaks are interpreted as content"),e.documents.push(e.result),e.position===e.lineStart&&me(e)?46===e.input.charCodeAt(e.position)&&(e.position+=3,ge(e,!0,-1)):e.position<e.length-1&&ce(e,"end of the stream or a document separator is expected")}function Ce(e,t){t=t||{},0!==(e=String(e)).length&&(10!==e.charCodeAt(e.length-1)&&13!==e.charCodeAt(e.length-1)&&(e+="\n"),65279===e.charCodeAt(0)&&(e=e.slice(1)));var n=new ae(e,t),i=e.indexOf("\0");for(-1!==i&&(n.position=i,ce(n,"null byte is not allowed in input")),n.input+="\0";32===n.input.charCodeAt(n.position);)n.lineIndent+=1,n.position+=1;for(;n.position<n.length-1;)ke(n);return n.documents}var xe={loadAll:function(e,t,n){null!==t&&"object"==typeof t&&void 0===n&&(n=t,t=null);var i=Ce(e,n);if("function"!=typeof t)return i;for(var r=0,o=i.length;r<o;r+=1)t(i[r])},load:function(e,t){var n=Ce(e,t);if(0!==n.length){if(1===n.length)return n[0];throw new o("expected a single document in the stream, but found more")}}},Ie=Object.prototype.toString,Se=Object.prototype.hasOwnProperty,Oe=65279,je={0:"\\0",7:"\\a",8:"\\b",9:"\\t",10:"\\n",11:"\\v",12:"\\f",13:"\\r",27:"\\e",34:'\\"',92:"\\\\",133:"\\N",160:"\\_",8232:"\\L",8233:"\\P"},Te=["y","Y","yes","Yes","YES","on","On","ON","n","N","no","No","NO","off","Off","OFF"],Ne=/^[-+]?[0-9_]+(?::[0-9_]+)+(?:\.[0-9_]*)?$/;function Fe(e){var t,i,r;if(t=e.toString(16).toUpperCase(),e<=255)i="x",r=2;else if(e<=65535)i="u",r=4;else{if(!(e<=4294967295))throw new o("code point within a string may not be greater than 0xFFFFFFFF");i="U",r=8}return"\\"+i+n.repeat("0",r-t.length)+t}function Ee(e){this.schema=e.schema||K,this.indent=Math.max(1,e.indent||2),this.noArrayIndent=e.noArrayIndent||!1,this.skipInvalid=e.skipInvalid||!1,this.flowLevel=n.isNothing(e.flowLevel)?-1:e.flowLevel,this.styleMap=function(e,t){var n,i,r,o,a,l,c;if(null===t)return{};for(n={},r=0,o=(i=Object.keys(t)).length;r<o;r+=1)a=i[r],l=String(t[a]),"!!"===a.slice(0,2)&&(a="tag:yaml.org,2002:"+a.slice(2)),(c=e.compiledTypeMap.fallback[a])&&Se.call(c.styleAliases,l)&&(l=c.styleAliases[l]),n[a]=l;return n}(this.schema,e.styles||null),this.sortKeys=e.sortKeys||!1,this.lineWidth=e.lineWidth||80,this.noRefs=e.noRefs||!1,this.noCompatMode=e.noCompatMode||!1,this.condenseFlow=e.condenseFlow||!1,this.quotingType='"'===e.quotingType?2:1,this.forceQuotes=e.forceQuotes||!1,this.replacer="function"==typeof e.replacer?e.replacer:null,this.implicitTypes=this.schema.compiledImplicit,this.explicitTypes=this.schema.compiledExplicit,this.tag=null,this.result="",this.duplicates=[],this.usedDuplicates=null}function Me(e,t){for(var i,r=n.repeat(" ",t),o=0,a=-1,l="",c=e.length;o<c;)-1===(a=e.indexOf("\n",o))?(i=e.slice(o),o=c):(i=e.slice(o,a+1),o=a+1),i.length&&"\n"!==i&&(l+=r),l+=i;return l}function Le(e,t){return"\n"+n.repeat(" ",e.indent*t)}function _e(e){return 32===e||9===e}function De(e){return 32<=e&&e<=126||161<=e&&e<=55295&&8232!==e&&8233!==e||57344<=e&&e<=65533&&e!==Oe||65536<=e&&e<=1114111}function Ue(e){return De(e)&&e!==Oe&&13!==e&&10!==e}function qe(e,t,n){var i=Ue(e),r=i&&!_e(e);return(n?i:i&&44!==e&&91!==e&&93!==e&&123!==e&&125!==e)&&35!==e&&!(58===t&&!r)||Ue(t)&&!_e(t)&&35===e||58===t&&r}function Ye(e,t){var n,i=e.charCodeAt(t);return i>=55296&&i<=56319&&t+1<e.length&&(n=e.charCodeAt(t+1))>=56320&&n<=57343?1024*(i-55296)+n-56320+65536:i}function Re(e){return/^\n* /.test(e)}function Be(e,t,n,i,r,o,a,l){var c,s,u=0,p=null,f=!1,d=!1,h=-1!==i,g=-1,m=De(s=Ye(e,0))&&s!==Oe&&!_e(s)&&45!==s&&63!==s&&58!==s&&44!==s&&91!==s&&93!==s&&123!==s&&125!==s&&35!==s&&38!==s&&42!==s&&33!==s&&124!==s&&61!==s&&62!==s&&39!==s&&34!==s&&37!==s&&64!==s&&96!==s&&function(e){return!_e(e)&&58!==e}(Ye(e,e.length-1));if(t||a)for(c=0;c<e.length;u>=65536?c+=2:c++){if(!De(u=Ye(e,c)))return 5;m=m&&qe(u,p,l),p=u}else{for(c=0;c<e.length;u>=65536?c+=2:c++){if(10===(u=Ye(e,c)))f=!0,h&&(d=d||c-g-1>i&&" "!==e[g+1],g=c);else if(!De(u))return 5;m=m&&qe(u,p,l),p=u}d=d||h&&c-g-1>i&&" "!==e[g+1]}return f||d?n>9&&Re(e)?5:a?2===o?5:2:d?4:3:!m||a||r(e)?2===o?5:2:1}function Ke(e,t,n,i,r){e.dump=function(){if(0===t.length)return 2===e.quotingType?'""':"''";if(!e.noCompatMode&&(-1!==Te.indexOf(t)||Ne.test(t)))return 2===e.quotingType?'"'+t+'"':"'"+t+"'";var a=e.indent*Math.max(1,n),l=-1===e.lineWidth?-1:Math.max(Math.min(e.lineWidth,40),e.lineWidth-a),c=i||e.flowLevel>-1&&n>=e.flowLevel;switch(Be(t,c,e.indent,l,(function(t){return function(e,t){var n,i;for(n=0,i=e.implicitTypes.length;n<i;n+=1)if(e.implicitTypes[n].resolve(t))return!0;return!1}(e,t)}),e.quotingType,e.forceQuotes&&!i,r)){case 1:return t;case 2:return"'"+t.replace(/'/g,"''")+"'";case 3:return"|"+Pe(t,e.indent)+We(Me(t,a));case 4:return">"+Pe(t,e.indent)+We(Me(function(e,t){var n,i,r=/(\n+)([^\n]*)/g,o=(l=e.indexOf("\n"),l=-1!==l?l:e.length,r.lastIndex=l,He(e.slice(0,l),t)),a="\n"===e[0]||" "===e[0];var l;for(;i=r.exec(e);){var c=i[1],s=i[2];n=" "===s[0],o+=c+(a||n||""===s?"":"\n")+He(s,t),a=n}return o}(t,l),a));case 5:return'"'+function(e){for(var t,n="",i=0,r=0;r<e.length;i>=65536?r+=2:r++)i=Ye(e,r),!(t=je[i])&&De(i)?(n+=e[r],i>=65536&&(n+=e[r+1])):n+=t||Fe(i);return n}(t)+'"';default:throw new o("impossible error: invalid scalar style")}}()}function Pe(e,t){var n=Re(e)?String(t):"",i="\n"===e[e.length-1];return n+(i&&("\n"===e[e.length-2]||"\n"===e)?"+":i?"":"-")+"\n"}function We(e){return"\n"===e[e.length-1]?e.slice(0,-1):e}function He(e,t){if(""===e||" "===e[0])return e;for(var n,i,r=/ [^ ]/g,o=0,a=0,l=0,c="";n=r.exec(e);)(l=n.index)-o>t&&(i=a>o?a:l,c+="\n"+e.slice(o,i),o=i+1),a=l;return c+="\n",e.length-o>t&&a>o?c+=e.slice(o,a)+"\n"+e.slice(a+1):c+=e.slice(o),c.slice(1)}function $e(e,t,n,i){var r,o,a,l="",c=e.tag;for(r=0,o=n.length;r<o;r+=1)a=n[r],e.replacer&&(a=e.replacer.call(n,String(r),a)),(Ve(e,t+1,a,!0,!0,!1,!0)||void 0===a&&Ve(e,t+1,null,!0,!0,!1,!0))&&(i&&""===l||(l+=Le(e,t)),e.dump&&10===e.dump.charCodeAt(0)?l+="-":l+="- ",l+=e.dump);e.tag=c,e.dump=l||"[]"}function Ge(e,t,n){var i,r,a,l,c,s;for(a=0,l=(r=n?e.explicitTypes:e.implicitTypes).length;a<l;a+=1)if(((c=r[a]).instanceOf||c.predicate)&&(!c.instanceOf||"object"==typeof t&&t instanceof c.instanceOf)&&(!c.predicate||c.predicate(t))){if(n?c.multi&&c.representName?e.tag=c.representName(t):e.tag=c.tag:e.tag="?",c.represent){if(s=e.styleMap[c.tag]||c.defaultStyle,"[object Function]"===Ie.call(c.represent))i=c.represent(t,s);else{if(!Se.call(c.represent,s))throw new o("!<"+c.tag+'> tag resolver accepts not "'+s+'" style');i=c.represent[s](t,s)}e.dump=i}return!0}return!1}function Ve(e,t,n,i,r,a,l){e.tag=null,e.dump=n,Ge(e,n,!1)||Ge(e,n,!0);var c,s=Ie.call(e.dump),u=i;i&&(i=e.flowLevel<0||e.flowLevel>t);var p,f,d="[object Object]"===s||"[object Array]"===s;if(d&&(f=-1!==(p=e.duplicates.indexOf(n))),(null!==e.tag&&"?"!==e.tag||f||2!==e.indent&&t>0)&&(r=!1),f&&e.usedDuplicates[p])e.dump="*ref_"+p;else{if(d&&f&&!e.usedDuplicates[p]&&(e.usedDuplicates[p]=!0),"[object Object]"===s)i&&0!==Object.keys(e.dump).length?(!function(e,t,n,i){var r,a,l,c,s,u,p="",f=e.tag,d=Object.keys(n);if(!0===e.sortKeys)d.sort();else if("function"==typeof e.sortKeys)d.sort(e.sortKeys);else if(e.sortKeys)throw new o("sortKeys must be a boolean or a function");for(r=0,a=d.length;r<a;r+=1)u="",i&&""===p||(u+=Le(e,t)),c=n[l=d[r]],e.replacer&&(c=e.replacer.call(n,l,c)),Ve(e,t+1,l,!0,!0,!0)&&((s=null!==e.tag&&"?"!==e.tag||e.dump&&e.dump.length>1024)&&(e.dump&&10===e.dump.charCodeAt(0)?u+="?":u+="? "),u+=e.dump,s&&(u+=Le(e,t)),Ve(e,t+1,c,!0,s)&&(e.dump&&10===e.dump.charCodeAt(0)?u+=":":u+=": ",p+=u+=e.dump));e.tag=f,e.dump=p||"{}"}(e,t,e.dump,r),f&&(e.dump="&ref_"+p+e.dump)):(!function(e,t,n){var i,r,o,a,l,c="",s=e.tag,u=Object.keys(n);for(i=0,r=u.length;i<r;i+=1)l="",""!==c&&(l+=", "),e.condenseFlow&&(l+='"'),a=n[o=u[i]],e.replacer&&(a=e.replacer.call(n,o,a)),Ve(e,t,o,!1,!1)&&(e.dump.length>1024&&(l+="? "),l+=e.dump+(e.condenseFlow?'"':"")+":"+(e.condenseFlow?"":" "),Ve(e,t,a,!1,!1)&&(c+=l+=e.dump));e.tag=s,e.dump="{"+c+"}"}(e,t,e.dump),f&&(e.dump="&ref_"+p+" "+e.dump));else if("[object Array]"===s)i&&0!==e.dump.length?(e.noArrayIndent&&!l&&t>0?$e(e,t-1,e.dump,r):$e(e,t,e.dump,r),f&&(e.dump="&ref_"+p+e.dump)):(!function(e,t,n){var i,r,o,a="",l=e.tag;for(i=0,r=n.length;i<r;i+=1)o=n[i],e.replacer&&(o=e.replacer.call(n,String(i),o)),(Ve(e,t,o,!1,!1)||void 0===o&&Ve(e,t,null,!1,!1))&&(""!==a&&(a+=","+(e.condenseFlow?"":" ")),a+=e.dump);e.tag=l,e.dump="["+a+"]"}(e,t,e.dump),f&&(e.dump="&ref_"+p+" "+e.dump));else{if("[object String]"!==s){if("[object Undefined]"===s)return!1;if(e.skipInvalid)return!1;throw new o("unacceptable kind of an object to dump "+s)}"?"!==e.tag&&Ke(e,e.dump,t,a,u)}null!==e.tag&&"?"!==e.tag&&(c=encodeURI("!"===e.tag[0]?e.tag.slice(1):e.tag).replace(/!/g,"%21"),c="!"===e.tag[0]?"!"+c:"tag:yaml.org,2002:"===c.slice(0,18)?"!!"+c.slice(18):"!<"+c+">",e.dump=c+" "+e.dump)}return!0}function Ze(e,t){var n,i,r=[],o=[];for(Je(e,r,o),n=0,i=o.length;n<i;n+=1)t.duplicates.push(r[o[n]]);t.usedDuplicates=new Array(i)}function Je(e,t,n){var i,r,o;if(null!==e&&"object"==typeof e)if(-1!==(r=t.indexOf(e)))-1===n.indexOf(r)&&n.push(r);else if(t.push(e),Array.isArray(e))for(r=0,o=e.length;r<o;r+=1)Je(e[r],t,n);else for(r=0,o=(i=Object.keys(e)).length;r<o;r+=1)Je(e[i[r]],t,n)}function Qe(e,t){return function(){throw new Error("Function yaml."+e+" is removed in js-yaml 4. Use yaml."+t+" instead, which is now safe by default.")}}var ze=p,Xe=h,et=b,tt=O,nt=j,it=K,rt=xe.load,ot=xe.loadAll,at={dump:function(e,t){var n=new Ee(t=t||{});n.noRefs||Ze(e,n);var i=e;return n.replacer&&(i=n.replacer.call({"":i},"",i)),Ve(n,0,i,!0,!0)?n.dump+"\n":""}}.dump,lt=o,ct={binary:L,float:S,map:y,null:A,pairs:Y,set:B,timestamp:F,bool:v,int:C,merge:E,omap:U,seq:m,str:g},st=Qe("safeLoad","load"),ut=Qe("safeLoadAll","loadAll"),pt=Qe("safeDump","dump"),ft={Type:ze,Schema:Xe,FAILSAFE_SCHEMA:et,JSON_SCHEMA:tt,CORE_SCHEMA:nt,DEFAULT_SCHEMA:it,load:rt,loadAll:ot,dump:at,YAMLException:lt,types:ct,safeLoad:st,safeLoadAll:ut,safeDump:pt};e.CORE_SCHEMA=nt,e.DEFAULT_SCHEMA=it,e.FAILSAFE_SCHEMA=et,e.JSON_SCHEMA=tt,e.Schema=Xe,e.Type=ze,e.YAMLException=lt,e.default=ft,e.dump=at,e.load=rt,e.loadAll=ot,e.safeDump=pt,e.safeLoad=st,e.safeLoadAll=ut,e.types=ct,Object.defineProperty(e,"__esModule",{value:!0})}));
+</script>
+<script>
+(() => {
+'use strict';
+
+// ---------- constants ----------
+const FORMAT = 'promptfoo-assert-edits';
+const LIST_TYPES = ['icontains-any', 'icontains-all', 'contains-any', 'contains-all', 'not-icontains-any', 'not-icontains-all', 'not-contains-any', 'not-contains-all'];
+const STRING_TYPES = ['icontains', 'contains', 'not-icontains', 'not-contains', 'starts-with', 'regex', 'not-regex', 'equals'];
+const CODE_TYPES = ['javascript', 'python'];
+const HOW_TO_APPLY = [
+  'Each entry in `cases` refers to one test case in `source_file`, matched by `vars.case_id`. Check that `description` matches too; if it does not, stop and report it.',
+  'If `assert_changed` is true, replace that case\'s entire `assert:` list with the `assert` list in this file, keeping the order. Do not merge with the old list.',
+  'If `assert_changed` is false, there is no `assert` key; leave that case\'s asserts unchanged.',
+  'Use the YAML file\'s existing style: list terms as single-quoted strings, `metric` only when present here, javascript `value` as a `>-` block (or `|-` if it contains newlines). String values here are exact, including any leading or trailing spaces.',
+  'In a replaced block, keep existing YAML comments whose neighboring item still exists; drop the rest.',
+  '`reviewed` and `notes` are review-tracking fields. Do not write them into the YAML. If `notes` asks for something specific (for example a YAML comment), do it.',
+  'Do not change `description` or `vars`. Cases not listed here are unchanged.'
+];
+
+// ---------- state ----------
+const S = {
+  sourceName: null,
+  cases: [],
+  images: new Map(),
+  cur: 0,
+  filter: 'all',
+  search: '',
+  dirty: false,
+  saveHandle: null,
+  rawOpen: false,
+  refreshRaw: null,
+  cardRefreshers: [],
+};
+
+// ---------- helpers ----------
+const $ = (s, r = document) => r.querySelector(s);
+function el(tag, attrs = {}, ...kids) {
+  const e = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) {
+    if (v == null || v === false) continue;
+    if (k === 'class') e.className = v;
+    else if (k === 'text') e.textContent = v;
+    else if (k === 'value') e.value = v;
+    else if (k.startsWith('on') && typeof v === 'function') e.addEventListener(k.slice(2), v);
+    else e.setAttribute(k, v === true ? '' : v);
+  }
+  for (const kid of kids.flat()) {
+    if (kid == null || kid === false) continue;
+    e.append(kid.nodeType ? kid : document.createTextNode(String(kid)));
+  }
+  return e;
+}
+const clone = v => JSON.parse(JSON.stringify(v ?? null));
+const basename = p => String(p || '').split(/[\\/]/).pop();
+function canon(v) {
+  if (Array.isArray(v)) return '[' + v.map(canon).join(',') + ']';
+  if (v && typeof v === 'object') return '{' + Object.keys(v).sort().filter(k => v[k] !== undefined).map(k => JSON.stringify(k) + ':' + canon(v[k])).join(',') + '}';
+  return JSON.stringify(v);
+}
+function toast(msg, ms = 2600) {
+  const t = $('#toast'); t.textContent = msg; t.classList.add('show');
+  clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.remove('show'), ms);
+}
+function kindOf(a) {
+  if (LIST_TYPES.includes(a.type)) return 'list';
+  if (STRING_TYPES.includes(a.type)) return 'string';
+  if (CODE_TYPES.includes(a.type)) return 'code';
+  if (Array.isArray(a.value) && a.value.every(x => typeof x === 'string')) return 'list';
+  if (a.value == null || typeof a.value === 'string') return 'text';
+  return 'yaml';
+}
+function cleanAsserts(list) {
+  return (list || []).map(a => {
+    const o = {};
+    for (const [k, v] of Object.entries(a)) {
+      if (v === undefined) continue;
+      if (k === 'metric' && v === '') continue;
+      o[k] = v;
+    }
+    if (Array.isArray(o.value) && kindOf(o) === 'list') o.value = o.value.filter(s => s !== '');
+    return o;
+  });
+}
+const isModified = c => canon(cleanAsserts(c.assert)) !== canon(cleanAsserts(c.origAssert));
+const imageUrl = c => S.images.get(c.image_filename) || S.images.get(basename(c.image_path));
+
+function hintFor(t) {
+  if (CODE_TYPES.includes(t)) return 'Passes if the code returns a truthy value. `output` is the model\'s text.';
+  if (t === 'regex') return 'Passes if the output matches this regular expression.';
+  if (t === 'not-regex') return 'Passes if the output does not match this regular expression.';
+  if (t === 'equals') return 'Passes if the output equals this exactly.';
+  if (t === 'starts-with') return 'Passes if the output starts with this.';
+  const neg = t.startsWith('not-');
+  const base = neg ? t.slice(4) : t;
+  if (!/^i?contains/.test(base)) return '';
+  const cs = base.startsWith('i') ? '(case-insensitive, substring match)' : '(case-sensitive, substring match)';
+  if (base.endsWith('-any')) return (neg ? 'Passes if the output contains none of these ' : 'Passes if the output contains at least one of these ') + cs;
+  if (base.endsWith('-all')) return (neg ? 'Passes unless the output contains all of these ' : 'Passes if the output contains every one of these ') + cs;
+  return (neg ? 'Passes if the output does not contain this ' : 'Passes if the output contains this ') + cs;
+}
+function jsError(code) {
+  if (!code.trim()) return 'Empty code.';
+  try { new Function('output', 'context', `return (${code}\n);`); return null; } catch (e1) {
+    try { new Function('output', 'context', code); return null; } catch (e2) { return 'Syntax error: ' + e2.message; }
+  }
+}
+
+// ---------- YAML emit (matches the file's style) ----------
+const yq = s => "'" + String(s).replace(/'/g, "''") + "'";
+const plainOk = s => /^[A-Za-z0-9_.\-\/]+$/.test(s);
+function assertsToYaml(list, base = '    ') {
+  if (!list.length) return base + '[]\n';
+  let out = '';
+  for (const a of list) {
+    const keys = ['type', 'value', 'metric', ...Object.keys(a).filter(k => !['type', 'value', 'metric'].includes(k))];
+    let first = true;
+    for (const k of keys) {
+      if (!(k in a) || a[k] === undefined) continue;
+      out += base + (first ? '- ' : '  ') + k + ':';
+      first = false;
+      const v = a[k];
+      const inner = base + '    ';
+      if ((k === 'type' || k === 'metric') && typeof v === 'string' && plainOk(v)) out += ' ' + v + '\n';
+      else if (Array.isArray(v) && v.every(x => typeof x === 'string')) out += v.length ? '\n' + v.map(x => inner + '- ' + yq(x)).join('\n') + '\n' : ' []\n';
+      else if (typeof v === 'string' && k === 'value' && CODE_TYPES.includes(a.type)) {
+        if (v.includes('\n')) out += ' |-\n' + v.split('\n').map(l => l ? inner + l : '').join('\n') + '\n';
+        else out += ' >-\n' + inner + v + '\n';
+      }
+      else if (typeof v === 'string') out += ' ' + yq(v) + '\n';
+      else if (v === null || typeof v !== 'object') out += ' ' + String(v) + '\n';
+      else out += '\n' + jsyaml.dump(v, { indent: 2, lineWidth: -1 }).replace(/\n$/, '').split('\n').map(l => inner + l).join('\n') + '\n';
+    }
+  }
+  return out;
+}
+
+// ---------- loading ----------
+function splitBlocks(text, n) {
+  const lines = text.split(/\r?\n/);
+  const starts = [];
+  lines.forEach((l, i) => { if (/^-(\s|$)/.test(l)) starts.push(i); });
+  if (starts.length !== n) return null;
+  return starts.map((s, k) => {
+    const seg = lines.slice(s, k + 1 < starts.length ? starts[k + 1] : lines.length);
+    while (seg.length && seg[seg.length - 1].trim() === '') seg.pop();
+    return seg.join('\n');
+  });
+}
+
+async function loadYaml(file) {
+  const text = await file.text();
+  let data;
+  try { data = jsyaml.load(text); } catch (e) { alert('Could not parse YAML:\n' + e.message); return; }
+  if (!Array.isArray(data)) { alert('Expected the YAML to be a top-level list of test cases.'); return; }
+  if (S.dirty && !confirm('You have unsaved edits. Load a new YAML and discard them?')) return;
+  const blocks = splitBlocks(text, data.length);
+  S.cases = data.map((d, i) => {
+    const v = (d && d.vars) || {};
+    const orig = Array.isArray(d && d.assert) ? d.assert : [];
+    return {
+      pos: i + 1,
+      description: d && d.description != null ? String(d.description) : '',
+      case_id: v.case_id != null ? String(v.case_id) : '#' + (i + 1),
+      image_filename: v.image_filename || basename(v.image_path),
+      image_path: v.image_path || '',
+      ideal: v.ideal_alt_text || '',
+      origAssert: clone(orig),
+      assert: clone(orig),
+      reviewed: false,
+      notes: '',
+      raw: blocks ? blocks[i] : null,
+    };
+  });
+  S.sourceName = file.name;
+  S.cur = 0; S.saveHandle = null; S.dirty = false;
+  const metrics = new Set();
+  S.cases.forEach(c => c.assert.forEach(a => a.metric && metrics.add(a.metric)));
+  metrics.add('required-content');
+  $('#metricList').replaceChildren(...[...metrics].map(m => el('option', { value: m })));
+  $('#empty').hidden = true;
+  offerRestore();
+  renderAll();
+  updateLoadStatus();
+  updateSaveStatus();
+}
+
+function loadImageFiles(files) {
+  let n = 0;
+  for (const f of files) {
+    if (!/\.(jpe?g|png|gif|webp|avif|bmp|tiff?)$/i.test(f.name)) continue;
+    const old = S.images.get(f.name);
+    if (old) URL.revokeObjectURL(old);
+    S.images.set(f.name, URL.createObjectURL(f));
+    n++;
+  }
+  toast(`${n} image${n === 1 ? '' : 's'} loaded`);
+  updateLoadStatus();
+  renderSidebar();
+  showImage();
+}
+
+function updateLoadStatus() {
+  const parts = [];
+  if (S.sourceName) parts.push(`${S.sourceName} · ${S.cases.length} cases`);
+  if (S.images.size) {
+    const missing = S.cases.filter(c => !imageUrl(c)).length;
+    parts.push(`${S.images.size} images` + (S.cases.length && missing ? ` (${missing} case${missing === 1 ? '' : 's'} without a matching image)` : ''));
+  }
+  $('#loadStatus').textContent = parts.join(' · ');
+}
+
+// ---------- edits file ----------
+function editEntries() {
+  return S.cases.filter(c => isModified(c) || c.reviewed || c.notes.trim()).map(c => {
+    const changed = isModified(c);
+    const o = { case_id: c.case_id, description: c.description, position: c.pos, reviewed: c.reviewed, assert_changed: changed };
+    if (c.notes.trim()) o.notes = c.notes.trim();
+    if (changed) o.assert = cleanAsserts(c.assert);
+    return o;
+  });
+}
+function buildEditsFile() {
+  const cases = editEntries();
+  return {
+    format: FORMAT,
+    format_version: 1,
+    source_file: S.sourceName,
+    saved_at: new Date().toISOString(),
+    how_to_apply: HOW_TO_APPLY,
+    summary: {
+      total_cases: S.cases.length,
+      reviewed: S.cases.filter(c => c.reviewed).length,
+      assert_changed: cases.filter(c => c.assert_changed).length,
+    },
+    cases,
+  };
+}
+function applyEntries(list) {
+  const byId = new Map(S.cases.map(c => [c.case_id, c]));
+  let applied = 0; const missing = [], mismatched = [];
+  for (const e of list || []) {
+    const c = byId.get(String(e.case_id));
+    if (!c) { missing.push(e.case_id); continue; }
+    if (e.description && e.description !== c.description) mismatched.push(e.case_id);
+    c.reviewed = !!e.reviewed;
+    c.notes = e.notes || '';
+    if (e.assert_changed && Array.isArray(e.assert)) c.assert = clone(e.assert);
+    applied++;
+  }
+  return { applied, missing, mismatched };
+}
+function reportApply(r, label) {
+  let msg = `${label}: ${r.applied} case${r.applied === 1 ? '' : 's'}`;
+  if (r.missing.length) msg += `. Not found in YAML: ${r.missing.join(', ')}`;
+  if (r.mismatched.length) msg += `. Title differs for: ${r.mismatched.join(', ')}`;
+  if (r.missing.length || r.mismatched.length) alert(msg); else toast(msg);
+}
+async function loadEditsText(text, name) {
+  if (!S.cases.length) { alert('Load the YAML first, then the edits file.'); return false; }
+  let d;
+  try { d = JSON.parse(text); } catch (e) { alert('Not valid JSON:\n' + e.message); return false; }
+  if (d.format !== FORMAT && !confirm('This does not look like an edits file from this tool. Try to load it anyway?')) return false;
+  if (d.source_file && d.source_file !== S.sourceName && !confirm(`This edits file was made for "${d.source_file}", but "${S.sourceName}" is loaded. Continue?`)) return false;
+  reportApply(applyEntries(d.cases), `Loaded ${name}`);
+  S.dirty = false;
+  renderAll();
+  updateSaveStatus();
+  return true;
+}
+async function openEdits() {
+  if (!S.cases.length) { alert('Load the YAML first, then the edits file.'); return; }
+  if (window.showOpenFilePicker) {
+    try {
+      const [h] = await window.showOpenFilePicker({ types: [{ description: 'Edits JSON', accept: { 'application/json': ['.json'] } }] });
+      const f = await h.getFile();
+      if (await loadEditsText(await f.text(), f.name)) { S.saveHandle = h; updateSaveStatus(`Linked to ${h.name}`); }
+      return;
+    } catch (e) { if (e.name === 'AbortError') return; }
+  }
+  $('#editsInput').click();
+}
+function download(name, text) {
+  const a = el('a', { href: URL.createObjectURL(new Blob([text], { type: 'application/json' })), download: name });
+  document.body.append(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+}
+async function save(pickNew = false) {
+  if (!S.cases.length) return;
+  const json = JSON.stringify(buildEditsFile(), null, 2) + '\n';
+  const name = S.sourceName.replace(/\.ya?ml$/i, '') + '.edits.json';
+  if (window.showSaveFilePicker) {
+    try {
+      if (!S.saveHandle || pickNew) {
+        S.saveHandle = await window.showSaveFilePicker({ suggestedName: name, types: [{ description: 'Edits JSON', accept: { 'application/json': ['.json'] } }] });
+      }
+      const w = await S.saveHandle.createWritable();
+      await w.write(json); await w.close();
+      markSaved(`Saved to ${S.saveHandle.name}`);
+      return;
+    } catch (e) {
+      if (e.name === 'AbortError') return;
+      console.warn('File System Access save failed, downloading instead:', e);
+      S.saveHandle = null;
+    }
+  }
+  download(name, json);
+  markSaved(`Downloaded ${name}`);
+}
+function markSaved(msg) {
+  S.dirty = false;
+  const t = new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+  updateSaveStatus(`${msg} at ${t}`);
+  try { localStorage.removeItem(backupKey()); } catch (e) {}
+  toast(msg);
+}
+async function copyEdits() {
+  if (!S.cases.length) return;
+  const json = JSON.stringify(buildEditsFile(), null, 2);
+  try { await navigator.clipboard.writeText(json); }
+  catch (e) {
+    const ta = el('textarea', { value: json }); document.body.append(ta); ta.select();
+    document.execCommand('copy'); ta.remove();
+  }
+  toast('Edits JSON copied to clipboard');
+}
+let lastSaveMsg = '';
+function updateSaveStatus(msg) {
+  if (msg) lastSaveMsg = msg;
+  const s = $('#saveStatus');
+  if (!S.cases.length) { s.textContent = ''; return; }
+  s.classList.toggle('dirty', S.dirty);
+  s.textContent = S.dirty ? 'Unsaved changes' : (lastSaveMsg || 'No changes yet');
+}
+
+// ---------- local backup ----------
+const backupKey = () => 'assert-editor-backup:' + S.sourceName;
+let backupTimer;
+function scheduleBackup() {
+  clearTimeout(backupTimer);
+  backupTimer = setTimeout(() => {
+    try { localStorage.setItem(backupKey(), JSON.stringify({ saved_at: new Date().toISOString(), cases: editEntries() })); } catch (e) {}
+  }, 600);
+}
+function offerRestore() {
+  let b;
+  try { b = JSON.parse(localStorage.getItem(backupKey()) || 'null'); } catch (e) { b = null; }
+  if (!b || !Array.isArray(b.cases) || !b.cases.length) return;
+  const when = new Date(b.saved_at).toLocaleString();
+  if (confirm(`Found unsaved work for ${S.sourceName} from ${when} (${b.cases.length} cases). Restore it?`)) {
+    reportApply(applyEntries(b.cases), 'Restored backup');
+    S.dirty = true;
+  } else {
+    try { localStorage.removeItem(backupKey()); } catch (e) {}
+  }
+}
+
+// ---------- change handling ----------
+function onChange() {
+  S.dirty = true;
+  renderSidebar();
+  updateCaseBadges();
+  S.cardRefreshers.forEach(f => f());
+  if (S.refreshRaw) S.refreshRaw(false);
+  scheduleBackup();
+  updateSaveStatus();
+}
+
+// ---------- sidebar ----------
+function visibleIdx() {
+  const q = S.search.trim().toLowerCase();
+  const out = [];
+  S.cases.forEach((c, i) => {
+    if (S.filter === 'unreviewed' && c.reviewed) return;
+    if (S.filter === 'reviewed' && !c.reviewed) return;
+    if (S.filter === 'modified' && !isModified(c)) return;
+    if (S.filter === 'notes' && !c.notes.trim()) return;
+    if (q && !(c.description + ' ' + c.case_id + ' ' + c.ideal).toLowerCase().includes(q)) return;
+    out.push(i);
+  });
+  return out;
+}
+function renderSidebar() {
+  const list = $('#caseList');
+  const top = list.scrollTop;
+  const items = visibleIdx().map(i => {
+    const c = S.cases[i];
+    const flags = el('span', { class: 'flags' },
+      isModified(c) ? el('span', { class: 'flag-mod', title: 'Asserts changed' }, '●') : null,
+      c.notes.trim() ? el('span', { class: 'flag-note', title: 'Has notes' }, '✎') : null,
+      S.images.size && !imageUrl(c) ? el('span', { class: 'flag-noimg', title: 'No matching image' }, '⊘') : null);
+    return el('button', { class: 'case-item' + (i === S.cur ? ' current' : ''), onclick: () => goTo(i), title: c.description },
+      el('span', { class: 'mark-rev' }, c.reviewed ? '✓' : ''),
+      el('span', { class: 't' }, c.description || '(untitled)', el('div', { class: 'id' }, c.case_id)),
+      flags);
+  });
+  list.replaceChildren(...items);
+  if (!items.length) list.append(el('div', { class: 'counts', style: 'padding:8px' }, 'No cases match.'));
+  list.scrollTop = top;
+  const rev = S.cases.filter(c => c.reviewed).length;
+  const mod = S.cases.filter(isModified).length;
+  $('#counts').textContent = `${rev}/${S.cases.length} reviewed · ${mod} changed`;
+}
+function scrollCurrentIntoView() {
+  const cur = $('#caseList .current');
+  if (cur) cur.scrollIntoView({ block: 'nearest' });
+}
+
+// ---------- navigation ----------
+function goTo(i) {
+  if (i < 0 || i >= S.cases.length) return;
+  S.cur = i;
+  renderAll();
+  scrollCurrentIntoView();
+}
+function go(d) {
+  const vis = visibleIdx();
+  if (!vis.length) return;
+  let target;
+  if (d > 0) target = vis.find(i => i > S.cur);
+  else target = [...vis].reverse().find(i => i < S.cur);
+  if (target == null) { toast(d > 0 ? 'Last case in this list' : 'First case in this list'); return; }
+  goTo(target);
+}
+function toggleReviewed() {
+  const c = S.cases[S.cur]; if (!c) return;
+  c.reviewed = !c.reviewed;
+  onChange();
+}
+
+// ---------- image viewer ----------
+const view = { mode: 'fit', scale: 1 };
+function showImage() {
+  const vp = $('#viewport');
+  const c = S.cases[S.cur];
+  view.mode = 'fit'; vp.className = 'fit';
+  vp.replaceChildren();
+  $('#imgName').textContent = c ? c.image_filename : '';
+  $('#zLabel').textContent = '';
+  if (!c) return;
+  const url = imageUrl(c);
+  if (!url) {
+    vp.append(el('div', { class: 'img-missing' }, S.images.size ? `No image named ${c.image_filename} in the loaded folder.` : 'Choose the images folder to see the image.'));
+    return;
+  }
+  const img = el('img', { src: url, alt: c.ideal, draggable: 'false' });
+  img.addEventListener('load', () => { $('#imgName').textContent = `${c.image_filename} · ${img.naturalWidth}×${img.naturalHeight}`; updateZoomLabel(); });
+  vp.append(img);
+}
+function setZoom(scale, anchor) {
+  const vp = $('#viewport'), img = vp.querySelector('img');
+  if (!img || !img.naturalWidth) return;
+  const prevW = img.getBoundingClientRect().width, prevH = img.getBoundingClientRect().height;
+  let fx = 0.5, fy = 0.5;
+  if (anchor) {
+    const r = img.getBoundingClientRect();
+    if (view.mode === 'fit') {
+      const s = Math.min(r.width / img.naturalWidth, r.height / img.naturalHeight);
+      const dw = img.naturalWidth * s, dh = img.naturalHeight * s;
+      fx = (anchor.x - r.left - (r.width - dw) / 2) / dw; fy = (anchor.y - r.top - (r.height - dh) / 2) / dh;
+    } else { fx = (anchor.x - r.left) / prevW; fy = (anchor.y - r.top) / prevH; }
+    fx = Math.min(1, Math.max(0, fx)); fy = Math.min(1, Math.max(0, fy));
+  } else if (view.mode === 'zoom') {
+    fx = (vp.scrollLeft + vp.clientWidth / 2) / prevW; fy = (vp.scrollTop + vp.clientHeight / 2) / prevH;
+  }
+  view.mode = 'zoom';
+  view.scale = Math.min(8, Math.max(0.05, scale));
+  vp.className = 'zoom';
+  const w = img.naturalWidth * view.scale, h = img.naturalHeight * view.scale;
+  img.style.width = w + 'px'; img.style.height = h + 'px';
+  const ax = anchor ? anchor.x - vp.getBoundingClientRect().left : vp.clientWidth / 2;
+  const ay = anchor ? anchor.y - vp.getBoundingClientRect().top : vp.clientHeight / 2;
+  vp.scrollLeft = fx * w - ax; vp.scrollTop = fy * h - ay;
+  updateZoomLabel();
+}
+function setFit() {
+  const vp = $('#viewport'), img = vp.querySelector('img');
+  view.mode = 'fit'; vp.className = 'fit';
+  if (img) { img.style.width = ''; img.style.height = ''; }
+  updateZoomLabel();
+}
+function currentScale() {
+  const vp = $('#viewport'), img = vp.querySelector('img');
+  if (!img || !img.naturalWidth) return 1;
+  if (view.mode === 'zoom') return view.scale;
+  return Math.min(vp.clientWidth / img.naturalWidth, vp.clientHeight / img.naturalHeight);
+}
+function updateZoomLabel() {
+  const img = $('#viewport img');
+  $('#zLabel').textContent = img && img.naturalWidth ? `${view.mode === 'fit' ? 'Fit · ' : ''}${Math.round(currentScale() * 100)}%` : '';
+}
+(function wireViewer() {
+  const vp = $('#viewport');
+  let drag = null;
+  vp.addEventListener('pointerdown', e => {
+    if (!vp.querySelector('img') || e.button !== 0) return;
+    drag = { x: e.clientX, y: e.clientY, sl: vp.scrollLeft, st: vp.scrollTop, moved: false };
+    vp.setPointerCapture(e.pointerId);
+  });
+  vp.addEventListener('pointermove', e => {
+    if (!drag) return;
+    const dx = e.clientX - drag.x, dy = e.clientY - drag.y;
+    if (Math.abs(dx) + Math.abs(dy) > 4) drag.moved = true;
+    if (drag.moved && view.mode === 'zoom') { vp.classList.add('dragging'); vp.scrollLeft = drag.sl - dx; vp.scrollTop = drag.st - dy; }
+  });
+  vp.addEventListener('pointerup', e => {
+    if (!drag) return;
+    const wasClick = !drag.moved; drag = null; vp.classList.remove('dragging');
+    if (!wasClick || !vp.querySelector('img')) return;
+    if (view.mode === 'fit') setZoom(Math.max(1, currentScale() * 2), { x: e.clientX, y: e.clientY });
+    else setFit();
+  });
+  vp.addEventListener('wheel', e => {
+    if (!(e.ctrlKey || e.metaKey) || !vp.querySelector('img')) return;
+    e.preventDefault();
+    setZoom(currentScale() * (e.deltaY < 0 ? 1.15 : 1 / 1.15), { x: e.clientX, y: e.clientY });
+  }, { passive: false });
+  $('#zFit').onclick = setFit;
+  $('#z100').onclick = () => setZoom(1);
+  $('#zIn').onclick = () => setZoom(currentScale() * 1.25);
+  $('#zOut').onclick = () => setZoom(currentScale() / 1.25);
+  window.addEventListener('resize', updateZoomLabel);
+})();
+
+// ---------- editor ----------
+function renderAll() {
+  renderSidebar();
+  showImage();
+  renderEditor();
+}
+
+function updateCaseBadges() {
+  const c = S.cases[S.cur]; if (!c) return;
+  const mod = isModified(c);
+  const b = $('#modBadge'); if (b) { b.textContent = mod ? 'changed' : 'unchanged'; b.className = 'badge' + (mod ? ' mod' : ''); }
+  const r = $('#revertBtn'); if (r) r.disabled = !mod;
+  const t = $('#revToggle'); if (t) { t.setAttribute('aria-pressed', String(c.reviewed)); t.textContent = c.reviewed ? '✓ Reviewed' : 'Mark reviewed'; }
+}
+
+function renderEditor() {
+  const ed = $('#editor');
+  const top = ed.scrollTop;
+  const c = S.cases[S.cur];
+  S.cardRefreshers = []; S.refreshRaw = null;
+  if (!c) { ed.replaceChildren(); return; }
+
+  const head = el('div', { class: 'case-head' },
+    el('div', {},
+      el('h2', {}, c.description || '(untitled)'),
+      el('div', { class: 'meta' }, `case_id ${c.case_id} · ${c.pos} of ${S.cases.length}`)),
+    el('button', { class: 'btn rev-toggle', id: 'revToggle', 'aria-pressed': 'false', onclick: toggleReviewed }, ''));
+
+  const ideal = el('div', { class: 'ideal' },
+    el('div', { class: 'label' }, `ideal_alt_text · ${Array.from(c.ideal.trim()).length} chars`),
+    el('p', {}, c.ideal));
+
+  const listWrap = el('div', { id: 'assertList' });
+  const assertsHead = el('div', { class: 'section-head' },
+    el('h3', {}, 'Asserts'),
+    el('span', { id: 'modBadge', class: 'badge' }),
+    el('span', { class: 'spacer' }),
+    el('button', { class: 'btn small', id: 'revertBtn', onclick: () => {
+      if (!confirm('Revert this case\'s asserts to what is in the YAML file?')) return;
+      c.assert = clone(c.origAssert); renderAssertList(c, listWrap); onChange();
+    } }, 'Revert to file'));
+
+  const addTypeSel = el('select', { class: 'btn small', title: 'Add another assert type' },
+    el('option', { value: '' }, '+ other type…'),
+    ...[...LIST_TYPES, ...STRING_TYPES, ...CODE_TYPES].map(t => el('option', { value: t }, t)));
+  addTypeSel.onchange = () => { if (addTypeSel.value) addAssert(c, listWrap, addTypeSel.value); addTypeSel.value = ''; };
+  const addRow = el('div', { class: 'add-row' },
+    el('button', { class: 'btn small', onclick: () => addAssert(c, listWrap, 'icontains-any') }, '+ icontains-any'),
+    el('button', { class: 'btn small', onclick: () => addAssert(c, listWrap, 'icontains-all') }, '+ icontains-all'),
+    el('button', { class: 'btn small', onclick: () => addAssert(c, listWrap, 'javascript') }, '+ javascript'),
+    addTypeSel);
+
+  const notesTa = el('textarea', { placeholder: 'Optional: context or instructions for whoever applies these edits', value: c.notes });
+  notesTa.addEventListener('input', () => { c.notes = notesTa.value; onChange(); });
+  const notes = el('div', { class: 'notes' }, el('div', { class: 'label' }, 'Notes'), notesTa);
+
+  const bottom = el('div', { class: 'bottom-actions' },
+    el('button', { class: 'btn', onclick: () => go(-1) }, '← Prev'),
+    el('button', { class: 'btn', onclick: () => go(1) }, 'Next →'),
+    el('button', { class: 'btn primary', onclick: () => { if (!c.reviewed) { c.reviewed = true; onChange(); } go(1); } }, 'Mark reviewed & next'));
+
+  ed.replaceChildren(el('div', { class: 'ed-inner' }, head, ideal, assertsHead, listWrap, addRow, notes, rawSection(c), bottom));
+  renderAssertList(c, listWrap);
+  updateCaseBadges();
+  ed.scrollTop = top;
+}
+
+function addAssert(c, listWrap, type) {
+  const a = { type, value: LIST_TYPES.includes(type) ? [] : '' };
+  if (LIST_TYPES.includes(type) || STRING_TYPES.includes(type)) a.metric = 'required-content';
+  // Insert before a trailing length check, if there is one.
+  let at = c.assert.length;
+  const last = c.assert[at - 1];
+  if (last && last.type === 'javascript' && /maximum-\d+-characters/.test(last.metric || '')) at--;
+  c.assert.splice(at, 0, a);
+  renderAssertList(c, listWrap);
+  onChange();
+  const card = listWrap.children[at];
+  const f = card && card.querySelector('input.term.add, input.single, textarea.code');
+  if (f) { f.focus(); card.scrollIntoView({ block: 'nearest' }); }
+}
+
+function renderAssertList(c, listWrap) {
+  S.cardRefreshers = [];
+  listWrap.replaceChildren(...c.assert.map((a, i) => assertCard(c, a, i, listWrap)));
+  if (!c.assert.length) listWrap.append(el('div', { class: 'hint' }, 'No asserts.'));
+}
+
+function typeSelect(current) {
+  const s = el('select', {},
+    el('optgroup', { label: 'Term lists' }, ...LIST_TYPES.map(t => el('option', { value: t }, t))),
+    el('optgroup', { label: 'Single value' }, ...STRING_TYPES.map(t => el('option', { value: t }, t))),
+    el('optgroup', { label: 'Code' }, ...CODE_TYPES.map(t => el('option', { value: t }, t))));
+  if (![...LIST_TYPES, ...STRING_TYPES, ...CODE_TYPES].includes(current)) s.prepend(el('option', { value: current }, current));
+  s.value = current;
+  return s;
+}
+
+function assertCard(c, a, i, listWrap) {
+  const kind = kindOf(a);
+  const card = el('div', { class: 'assert-card' });
+  const rerender = () => { renderAssertList(c, listWrap); onChange(); };
+
+  const sel = typeSelect(a.type);
+  sel.onchange = () => changeType(c, a, sel.value, listWrap, sel);
+
+  const metric = el('input', { class: 'metric', list: 'metricList', placeholder: 'metric (optional)', value: a.metric ?? '', spellcheck: 'false' });
+  metric.addEventListener('input', () => { if (metric.value === '') delete a.metric; else a.metric = metric.value; onChange(); });
+
+  const moves = el('span', { class: 'moves' },
+    el('button', { class: 'icon', title: 'Move up', disabled: i === 0, onclick: () => { c.assert.splice(i - 1, 0, c.assert.splice(i, 1)[0]); rerender(); } }, '↑'),
+    el('button', { class: 'icon', title: 'Move down', disabled: i === c.assert.length - 1, onclick: () => { c.assert.splice(i + 1, 0, c.assert.splice(i, 1)[0]); rerender(); } }, '↓'),
+    el('button', { class: 'icon', title: 'Duplicate', onclick: () => { c.assert.splice(i + 1, 0, clone(a)); rerender(); } }, '⧉'),
+    el('button', { class: 'icon', title: 'Delete assert', onclick: () => { c.assert.splice(i, 1); rerender(); } }, '✕'));
+
+  card.append(el('div', { class: 'card-top' }, sel, metric, moves), el('div', { class: 'hint' }, hintFor(a.type)));
+
+  const warn = el('div', { class: 'warn' });
+  let refresh = () => {};
+
+  if (kind === 'list') {
+    card.append(termList(a));
+    refresh = () => {
+      const n = a.value.filter(s => s !== '').length;
+      warn.textContent = n ? '' : 'No terms yet.';
+    };
+  } else if (kind === 'code') {
+    const ta = el('textarea', { class: 'code', spellcheck: 'false', value: a.value ?? '' });
+    const size = () => { ta.rows = Math.min(14, Math.max(2, ta.value.split('\n').length + Math.floor(ta.value.length / 70))); };
+    ta.addEventListener('input', () => { a.value = ta.value; size(); onChange(); });
+    size();
+    card.append(ta);
+    refresh = () => { warn.textContent = a.type === 'javascript' ? (jsError(String(a.value ?? '')) || '') : ''; };
+  } else if (kind === 'string' || kind === 'text') {
+    const long = kind === 'text' && String(a.value ?? '').length > 60;
+    const inp = long ? el('textarea', { class: 'code', rows: 3, value: a.value ?? '' }) : el('input', { class: 'single code', spellcheck: 'false', value: a.value ?? '' });
+    inp.addEventListener('input', () => { a.value = inp.value; onChange(); });
+    card.append(inp);
+    refresh = () => {
+      if (a.type === 'regex' || a.type === 'not-regex') { try { new RegExp(a.value); warn.textContent = ''; } catch (e) { warn.textContent = e.message; } }
+      else warn.textContent = a.value === '' ? 'Empty value.' : '';
+    };
+  } else {
+    const ta = el('textarea', { class: 'code', rows: 4, spellcheck: 'false', value: jsyaml.dump(a.value, { lineWidth: -1 }) });
+    ta.addEventListener('input', () => {
+      try { a.value = jsyaml.load(ta.value); warn.textContent = ''; onChange(); } catch (e) { warn.textContent = 'YAML: ' + e.message; }
+    });
+    card.append(ta);
+  }
+
+  const extra = Object.keys(a).filter(k => !['type', 'value', 'metric'].includes(k));
+  if (extra.length) card.append(el('div', { class: 'extra-keys' }, `Also has: ${extra.join(', ')} (edit in Raw YAML)`));
+  card.append(warn);
+  refresh();
+  S.cardRefreshers.push(refresh);
+  return card;
+}
+
+function termList(a) {
+  if (!Array.isArray(a.value)) a.value = [];
+  const wrap = el('div', { class: 'terms' });
+  const addInput = el('input', { class: 'term add', placeholder: '+ add term, Enter to add (paste a list to add several)', spellcheck: 'false' });
+  const focusTerm = j => { const ins = wrap.querySelectorAll('input.term:not(.add)'); (ins[j] || addInput).focus(); };
+  const splitPaste = txt => txt.split(/\r?\n/).map(s => s.replace(/^\s*-\s+/, '').replace(/^(['"])(.*)\1\s*$/, '$2')).filter(s => s.trim() !== '');
+
+  function rows() {
+    wrap.replaceChildren(...a.value.map((_, j) => termRow(j)), addInput);
+  }
+  function termRow(j) {
+    const inp = el('input', { class: 'term', spellcheck: 'false', value: a.value[j] });
+    const ws = el('span', { class: 'ws-flag', title: 'Leading or trailing space. It is matched literally.' }, '␣');
+    const upd = () => { ws.hidden = a.value[j] === a.value[j].trim(); };
+    inp.addEventListener('input', () => { a.value[j] = inp.value; upd(); onChange(); });
+    inp.addEventListener('keydown', e => {
+      if (e.key === 'Enter') { e.preventDefault(); a.value.splice(j + 1, 0, ''); rows(); focusTerm(j + 1); }
+      else if (e.key === 'Backspace' && inp.value === '') { e.preventDefault(); a.value.splice(j, 1); rows(); onChange(); focusTerm(Math.max(0, j - 1)); }
+    });
+    inp.addEventListener('paste', e => {
+      const txt = e.clipboardData.getData('text');
+      if (!/\n/.test(txt.trim())) return;
+      e.preventDefault();
+      const parts = splitPaste(txt);
+      a.value.splice(j, 1, ...(inp.value ? [inp.value] : []), ...parts);
+      rows(); onChange();
+    });
+    inp.addEventListener('blur', () => {
+      // Drop empty rows once focus leaves them.
+      setTimeout(() => { if (a.value[j] === '' && wrap.contains(inp) && !wrap.contains(document.activeElement)) { a.value.splice(j, 1); rows(); onChange(); } }, 0);
+    });
+    upd();
+    return el('div', { class: 'term-row' }, inp, ws,
+      el('button', { class: 'icon', title: 'Remove term', tabindex: '-1', onclick: () => { a.value.splice(j, 1); rows(); onChange(); } }, '×'));
+  }
+  addInput.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && addInput.value !== '') { e.preventDefault(); a.value.push(addInput.value); addInput.value = ''; rows(); onChange(); addInput.focus(); }
+  });
+  addInput.addEventListener('paste', e => {
+    const txt = e.clipboardData.getData('text');
+    if (!/\n/.test(txt.trim())) return;
+    e.preventDefault();
+    a.value.push(...splitPaste(txt)); rows(); onChange(); addInput.focus();
+  });
+  rows();
+  return wrap;
+}
+
+function changeType(c, a, t, listWrap, sel) {
+  const from = kindOf(a);
+  const to = LIST_TYPES.includes(t) ? 'list' : STRING_TYPES.includes(t) ? 'string' : CODE_TYPES.includes(t) ? 'code' : kindOf({ type: t, value: a.value });
+  if (from === 'list' && to !== 'list') {
+    const terms = (a.value || []).filter(s => s !== '');
+    if (terms.length > 1 && !confirm(`${t} takes a single value, so only the first term ("${terms[0]}") will be kept. Continue?`)) { sel.value = a.type; return; }
+    a.value = terms[0] ?? '';
+  } else if (from !== 'list' && to === 'list') {
+    a.value = typeof a.value === 'string' && a.value !== '' ? [a.value] : [];
+  } else if (typeof a.value !== 'string' && to !== 'list') {
+    a.value = '';
+  }
+  a.type = t;
+  renderAssertList(c, listWrap);
+  onChange();
+}
+
+function rawSection(c) {
+  const det = el('details', { class: 'raw' });
+  det.open = S.rawOpen;
+  const ta = el('textarea', { class: 'code', spellcheck: 'false' });
+  const err = el('div', { class: 'err' });
+  let taDirty = false;
+  const applyBtn = el('button', { class: 'btn small primary', disabled: true }, 'Apply to form');
+  const discardBtn = el('button', { class: 'btn small', disabled: true }, 'Discard raw edits');
+  const size = () => { ta.rows = Math.min(30, Math.max(6, ta.value.split('\n').length + 1)); };
+
+  S.refreshRaw = force => {
+    if (!det.open) return;
+    if (!force && (taDirty || document.activeElement === ta)) return;
+    ta.value = 'assert:\n' + assertsToYaml(c.assert);
+    taDirty = false; applyBtn.disabled = true; discardBtn.disabled = true; err.textContent = '';
+    size();
+  };
+  ta.addEventListener('input', () => { taDirty = true; applyBtn.disabled = false; discardBtn.disabled = false; err.textContent = ''; size(); });
+  ta.addEventListener('keydown', e => {
+    if (e.key === 'Tab' && !e.shiftKey) { e.preventDefault(); document.execCommand('insertText', false, '  '); }
+    if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) { e.preventDefault(); applyBtn.click(); }
+  });
+  applyBtn.onclick = () => {
+    try {
+      let v = jsyaml.load(ta.value);
+      if (v && !Array.isArray(v) && typeof v === 'object' && 'assert' in v) v = v.assert;
+      if (v == null) v = [];
+      if (!Array.isArray(v)) throw new Error('Expected an `assert:` list.');
+      v.forEach((x, k) => { if (!x || typeof x !== 'object' || typeof x.type !== 'string') throw new Error(`Item ${k + 1} needs a "type".`); });
+      c.assert = v;
+      taDirty = false;
+      renderAssertList(c, $('#assertList'));
+      onChange();
+      S.refreshRaw(true);
+      toast('Raw YAML applied');
+    } catch (e) { err.textContent = e.message; }
+  };
+  discardBtn.onclick = () => S.refreshRaw(true);
+  det.addEventListener('toggle', () => { S.rawOpen = det.open; if (det.open && !taDirty) S.refreshRaw(true); });
+
+  const body = el('div', { class: 'raw-body' },
+    el('div', { class: 'hint' }, 'Current asserts for this case, in the file\'s style. Edit and apply to update the form (Ctrl/Cmd+Enter). Comments here are not kept.'),
+    ta, err,
+    el('div', { class: 'add-row' }, applyBtn, discardBtn));
+  if (c.raw != null) {
+    body.append(el('div', { class: 'label', style: 'margin-top:6px' }, 'Original entry in the YAML file (read-only, with comments)'), el('pre', { class: 'code' }, c.raw));
+  }
+  det.append(el('summary', {}, 'Raw YAML'), body);
+  if (det.open) queueMicrotask(() => S.refreshRaw(true));
+  return det;
+}
+
+// ---------- wiring ----------
+$('#yamlInput').addEventListener('change', e => { const f = e.target.files[0]; if (f) loadYaml(f); e.target.value = ''; });
+$('#imgInput').addEventListener('change', e => { loadImageFiles(e.target.files); e.target.value = ''; });
+$('#editsInput').addEventListener('change', async e => { const f = e.target.files[0]; if (f) await loadEditsText(await f.text(), f.name); e.target.value = ''; });
+$('#openEdits').onclick = openEdits;
+$('#saveBtn').onclick = e => save(e.shiftKey);
+$('#copyBtn').onclick = copyEdits;
+$('#toggleSide').onclick = () => $('#main').classList.toggle('no-side');
+$('#search').addEventListener('input', e => { S.search = e.target.value; renderSidebar(); });
+$('#filter').addEventListener('change', e => { S.filter = e.target.value; renderSidebar(); scrollCurrentIntoView(); });
+
+document.addEventListener('keydown', e => {
+  if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') { e.preventDefault(); save(e.shiftKey); return; }
+  if (e.target.closest && e.target.closest('input, textarea, select, [contenteditable]')) return;
+  if (e.altKey || e.ctrlKey || e.metaKey || !S.cases.length) return;
+  if (e.key === 'ArrowRight' || e.key === 'j') { e.preventDefault(); go(1); }
+  else if (e.key === 'ArrowLeft' || e.key === 'k') { e.preventDefault(); go(-1); }
+  else if (e.key === 'r') toggleReviewed();
+  else if (e.key === 'f') setFit();
+});
+window.addEventListener('beforeunload', e => { if (S.dirty) { e.preventDefault(); e.returnValue = ''; } });
+
+// Drag and drop: YAML, edits JSON, image files, or a folder of images.
+async function entryFiles(entry) {
+  if (entry.isFile) return [await new Promise((res, rej) => entry.file(res, rej))];
+  if (!entry.isDirectory) return [];
+  const reader = entry.createReader();
+  const all = [];
+  for (;;) {
+    const batch = await new Promise((res, rej) => reader.readEntries(res, rej));
+    if (!batch.length) break;
+    for (const en of batch) all.push(...await entryFiles(en));
+  }
+  return all;
+}
+let dragDepth = 0;
+document.addEventListener('dragenter', e => { if (e.dataTransfer && [...e.dataTransfer.types].includes('Files')) { dragDepth++; document.body.classList.add('dragover'); } });
+document.addEventListener('dragleave', () => { if (--dragDepth <= 0) { dragDepth = 0; document.body.classList.remove('dragover'); } });
+document.addEventListener('dragover', e => e.preventDefault());
+document.addEventListener('drop', async e => {
+  e.preventDefault(); dragDepth = 0; document.body.classList.remove('dragover');
+  const items = [...(e.dataTransfer.items || [])].map(it => it.webkitGetAsEntry && it.webkitGetAsEntry()).filter(Boolean);
+  let files = [];
+  if (items.length) for (const en of items) files.push(...await entryFiles(en));
+  else files = [...e.dataTransfer.files];
+  const yaml = files.find(f => /\.ya?ml$/i.test(f.name));
+  const json = files.find(f => /\.json$/i.test(f.name));
+  const imgs = files.filter(f => /\.(jpe?g|png|gif|webp|avif|bmp|tiff?)$/i.test(f.name));
+  if (yaml) await loadYaml(yaml);
+  if (imgs.length) loadImageFiles(imgs);
+  if (json) await loadEditsText(await json.text(), json.name);
+});
+
+// Expose for debugging in the console.
+window.assertEditor = { state: S, buildEditsFile, assertsToYaml };
+})();
+</script>
+</body>
+</html>
