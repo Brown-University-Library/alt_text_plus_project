@@ -2,7 +2,7 @@
   "format": "promptfoo-assert-edits",
   "format_version": 1,
   "source_file": "curated_cases.yaml",
-  "saved_at": "2026-09-16T15:59:33.459Z",
+  "saved_at": "2026-09-17T14:04:20.198Z",
   "how_to_apply": [
     "Each entry in `cases` refers to one test case in `source_file`, matched by `vars.case_id`. Check that `description` matches too; if it does not, stop and report it.",
     "If `assert_changed` is true, replace that case's entire `assert:` list with the `assert` list in this file, keeping the order. Do not merge with the old list.",
@@ -14,8 +14,8 @@
   ],
   "summary": {
     "total_cases": 50,
-    "reviewed": 11,
-    "assert_changed": 10
+    "reviewed": 17,
+    "assert_changed": 16
   },
   "cases": [
     {
@@ -525,6 +525,257 @@
           "value": [
             "green",
             "patina"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "javascript",
+          "value": "Array.from(output.trim()).length <= 200",
+          "metric": "maximum-200-characters"
+        }
+      ]
+    },
+    {
+      "case_id": "1965.470",
+      "description": "Arm of Eve",
+      "position": 12,
+      "reviewed": true,
+      "assert_changed": true,
+      "assert": [
+        {
+          "type": "icontains-all",
+          "value": [
+            "arm",
+            "1507"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "draw",
+            "sketch",
+            "illustrat"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "spher",
+            "round",
+            "ball"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "javascript",
+          "value": "Array.from(output.trim()).length <= 200",
+          "metric": "maximum-200-characters"
+        }
+      ]
+    },
+    {
+      "case_id": "2002.45",
+      "description": "Sand Dunes, Carson Desert, Nevada",
+      "position": 13,
+      "reviewed": true,
+      "assert_changed": true,
+      "assert": [
+        {
+          "type": "icontains-all",
+          "value": [
+            "photograph",
+            "sand",
+            "horse"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "wagon",
+            "cart"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "black and white",
+            "grayscale",
+            "sepia",
+            "monochrom"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "dune",
+            "hill",
+            "slope"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "javascript",
+          "value": "Array.from(output.trim()).length <= 200",
+          "metric": "maximum-200-characters"
+        }
+      ]
+    },
+    {
+      "case_id": "1963.513",
+      "description": "Cosmetics Box with Chrysanthemums",
+      "position": 14,
+      "reviewed": true,
+      "assert_changed": true,
+      "assert": [
+        {
+          "type": "icontains-all",
+          "value": [
+            "black",
+            "gold"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "flower",
+            "floral"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "knob",
+            "handle"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "box",
+            "container"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "javascript",
+          "value": "Array.from(output.trim()).length <= 200",
+          "metric": "maximum-200-characters"
+        }
+      ]
+    },
+    {
+      "case_id": "1958.21",
+      "description": "Mount Sainte-Victoire",
+      "position": 15,
+      "reviewed": true,
+      "assert_changed": true,
+      "assert": [
+        {
+          "type": "icontains-all",
+          "value": [
+            "oil",
+            "landscape",
+            "tree",
+            "mountain",
+            "paint",
+            "smok",
+            "sky"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "javascript",
+          "value": "Array.from(output.trim()).length <= 200",
+          "metric": "maximum-200-characters"
+        }
+      ]
+    },
+    {
+      "case_id": "1991.1",
+      "description": "Red-Figure Calyx-Krater (Mixing Vessel): Medea in Chariot (A); Telephos with Baby Orestes (B)",
+      "position": 16,
+      "reviewed": true,
+      "assert_changed": true,
+      "assert": [
+        {
+          "type": "icontains-all",
+          "value": [
+            "black",
+            "handle"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "scene",
+            "depict"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "vessel",
+            "vase",
+            "container"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "snake",
+            "serpent"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "figure",
+            "person",
+            "people",
+            "human"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "javascript",
+          "value": "Array.from(output.trim()).length <= 200",
+          "metric": "maximum-200-characters"
+        }
+      ]
+    },
+    {
+      "case_id": "1966.118",
+      "description": "Selections from the New Collection of Japanese Poems from Ancient and Modern Times (Shinkokin wakashū) with Printed Designs of Chinese Lions and Crab Finger Grass",
+      "position": 17,
+      "reviewed": true,
+      "assert_changed": true,
+      "assert": [
+        {
+          "type": "icontains-all",
+          "value": [
+            "scroll",
+            "grass"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "calligraph",
+            "character",
+            "writ"
           ],
           "metric": "required-content"
         },
