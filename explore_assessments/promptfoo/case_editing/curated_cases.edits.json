@@ -2,7 +2,7 @@
   "format": "promptfoo-assert-edits",
   "format_version": 1,
   "source_file": "curated_cases.yaml",
-  "saved_at": "2026-09-17T14:04:20.198Z",
+  "saved_at": "2026-10-02T20:50:17.441Z",
   "how_to_apply": [
     "Each entry in `cases` refers to one test case in `source_file`, matched by `vars.case_id`. Check that `description` matches too; if it does not, stop and report it.",
     "If `assert_changed` is true, replace that case's entire `assert:` list with the `assert` list in this file, keeping the order. Do not merge with the old list.",
@@ -14,8 +14,8 @@
   ],
   "summary": {
     "total_cases": 50,
-    "reviewed": 17,
-    "assert_changed": 16
+    "reviewed": 50,
+    "assert_changed": 47
   },
   "cases": [
     {
@@ -776,6 +776,1568 @@
             "calligraph",
             "character",
             "writ"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "javascript",
+          "value": "Array.from(output.trim()).length <= 200",
+          "metric": "maximum-200-characters"
+        }
+      ]
+    },
+    {
+      "case_id": "2009.271",
+      "description": "Julius Caesar",
+      "position": 18,
+      "reviewed": true,
+      "assert_changed": true,
+      "assert": [
+        {
+          "type": "icontains-all",
+          "value": [
+            "marble",
+            "profile",
+            "relief",
+            "IV",
+            "CE"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "garland",
+            "leaves",
+            "fruit",
+            "wreath",
+            "grape"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "javascript",
+          "value": "Array.from(output.trim()).length <= 200",
+          "metric": "maximum-200-characters"
+        }
+      ]
+    },
+    {
+      "case_id": "1985.112",
+      "description": "Basin with Inscribed Figures and Calligraphy",
+      "position": 19,
+      "reviewed": true,
+      "assert_changed": true,
+      "assert": [
+        {
+          "type": "icontains-all",
+          "value": [
+            "handles"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "script",
+            "design",
+            "character",
+            "writing"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "bronze",
+            "brown"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "bowl",
+            "vessel"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "javascript",
+          "value": "Array.from(output.trim()).length <= 200",
+          "metric": "maximum-200-characters"
+        }
+      ]
+    },
+    {
+      "case_id": "1961.205",
+      "description": "Nome Gods Bearing Offerings",
+      "position": 20,
+      "reviewed": true,
+      "assert_changed": true,
+      "assert": [
+        {
+          "type": "icontains-all",
+          "value": [
+            "figure",
+            "tray",
+            "hieroglyph",
+            "egypt"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "green",
+            "blue"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "red",
+            "maroon"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "three",
+            "3"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "animal",
+            "gazelle",
+            "emu"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "section",
+            "panel"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "javascript",
+          "value": "Array.from(output.trim()).length <= 200",
+          "metric": "maximum-200-characters"
+        }
+      ]
+    },
+    {
+      "case_id": "2004.87",
+      "description": "Self-Portrait",
+      "position": 21,
+      "reviewed": true,
+      "assert_changed": true,
+      "assert": [
+        {
+          "type": "icontains-all",
+          "value": [
+            "man",
+            "hat",
+            "degas"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "print",
+            "draw",
+            "illustrat"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "beard"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "coat",
+            "shirt"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "dark",
+            "black"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "grayscale",
+            "monochrom"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "javascript",
+          "value": "Array.from(output.trim()).length <= 200",
+          "metric": "maximum-200-characters"
+        }
+      ]
+    },
+    {
+      "case_id": "1947.183",
+      "description": "Set of Four Armchairs and Settee",
+      "position": 22,
+      "reviewed": true,
+      "assert_changed": true,
+      "assert": [
+        {
+          "type": "icontains-any",
+          "value": [
+            "chair",
+            "seat",
+            "sofa",
+            "couch"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "floral"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "raven",
+            "coyote",
+            "animal"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-all",
+          "value": [
+            "wood",
+            "leg",
+            "carv"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "javascript",
+          "value": "Array.from(output.trim()).length <= 200",
+          "metric": "maximum-200-characters"
+        }
+      ]
+    },
+    {
+      "case_id": "1958.42",
+      "description": "Morning Glory with Black",
+      "position": 23,
+      "reviewed": true,
+      "assert_changed": true,
+      "assert": [
+        {
+          "type": "icontains-all",
+          "value": [
+            "paint",
+            "white",
+            "flower",
+            "black"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "javascript",
+          "value": "Array.from(output.trim()).length <= 200",
+          "metric": "maximum-200-characters"
+        }
+      ]
+    },
+    {
+      "case_id": "1956.718",
+      "description": "Claire Campbell",
+      "position": 24,
+      "reviewed": true,
+      "assert_changed": true,
+      "assert": [
+        {
+          "type": "icontains-all",
+          "value": [
+            "portrait",
+            "woman",
+            "brown hair"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "profile",
+            "side",
+            "left"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "javascript",
+          "value": "Array.from(output.trim()).length <= 200",
+          "metric": "maximum-200-characters"
+        }
+      ]
+    },
+    {
+      "case_id": "1983.28",
+      "description": "Jar",
+      "position": 25,
+      "reviewed": true,
+      "assert_changed": true,
+      "assert": [
+        {
+          "type": "icontains-any",
+          "value": [
+            "porcelain",
+            "clay"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "spher",
+            "round",
+            "glob"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "gray-white",
+            "light green",
+            "beige"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "sheen",
+            "gloss",
+            "glar",
+            "specular"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "jar",
+            "vessel",
+            "vase"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "javascript",
+          "value": "Array.from(output.trim()).length <= 200",
+          "metric": "maximum-200-characters"
+        }
+      ]
+    },
+    {
+      "case_id": "1924.859",
+      "description": "Table Fountain",
+      "position": 26,
+      "reviewed": true,
+      "assert_changed": true,
+      "assert": [
+        {
+          "type": "icontains-all",
+          "value": [
+            "gold",
+            "fountain",
+            "bells",
+            "column"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "tier",
+            "level"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "wheel",
+            "circ",
+            "disc"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [],
+          "metric": "required-content"
+        },
+        {
+          "type": "javascript",
+          "value": "Array.from(output.trim()).length <= 200",
+          "metric": "maximum-200-characters"
+        }
+      ]
+    },
+    {
+      "case_id": "1958.39",
+      "description": "The Red Kerchief",
+      "position": 27,
+      "reviewed": true,
+      "assert_changed": true,
+      "assert": [
+        {
+          "type": "icontains-all",
+          "value": [
+            "paint",
+            "woman",
+            "red",
+            "snow",
+            "door",
+            "curtain",
+            "glass"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "kerchief",
+            "shawl",
+            "scarf"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "javascript",
+          "value": "Array.from(output.trim()).length <= 200",
+          "metric": "maximum-200-characters"
+        }
+      ]
+    },
+    {
+      "case_id": "2018.257",
+      "description": "Sleeping Christ Child",
+      "position": 28,
+      "reviewed": true,
+      "assert_changed": true,
+      "assert": [
+        {
+          "type": "icontains-all",
+          "value": [
+            "marble",
+            "nude"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "sculpt",
+            "statue"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "child",
+            "young"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "ray",
+            "beam"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "sleep",
+            "lying",
+            "laying",
+            "reclin"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "cloth",
+            "bed",
+            "blanket"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "javascript",
+          "value": "Array.from(output.trim()).length <= 200",
+          "metric": "maximum-200-characters"
+        }
+      ]
+    },
+    {
+      "case_id": "1948.141",
+      "description": "Torso of Amenpayom",
+      "position": 29,
+      "reviewed": true,
+      "assert_changed": true,
+      "assert": [
+        {
+          "type": "icontains-all",
+          "value": [],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "black",
+            "dark"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "sculpt",
+            "statue"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "torso",
+            "figure"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "brok",
+            "damag",
+            "missing"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "kilt",
+            "cloth",
+            "skirt",
+            "wrap",
+            "garment"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "javascript",
+          "value": "Array.from(output.trim()).length <= 200",
+          "metric": "maximum-200-characters"
+        }
+      ]
+    },
+    {
+      "case_id": "1957.40",
+      "description": "Brush Washer",
+      "position": 30,
+      "reviewed": true,
+      "assert_changed": true,
+      "assert": [
+        {
+          "type": "icontains-all",
+          "value": [
+            "bowl",
+            "glaze",
+            "crack"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "light blue",
+            "turquoise",
+            "light green",
+            "pale blue",
+            "pale green",
+            "teal"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "wide",
+            "shallow"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "javascript",
+          "value": "Array.from(output.trim()).length <= 200",
+          "metric": "maximum-200-characters"
+        }
+      ]
+    },
+    {
+      "case_id": "1916.1043",
+      "description": "Dancers",
+      "position": 31,
+      "reviewed": true,
+      "assert_changed": false
+    },
+    {
+      "case_id": "1928.856",
+      "description": "Sarcophagus",
+      "position": 32,
+      "reviewed": true,
+      "assert_changed": true,
+      "assert": [
+        {
+          "type": "icontains-all",
+          "value": [
+            "marble",
+            "figures",
+            "sword"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "panorama",
+            "scene"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "relief",
+            "carv"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "javascript",
+          "value": "Array.from(output.trim()).length <= 200",
+          "metric": "maximum-200-characters"
+        }
+      ]
+    },
+    {
+      "case_id": "1973.18",
+      "description": "Storage Jar",
+      "position": 33,
+      "reviewed": true,
+      "assert_changed": true,
+      "assert": [
+        {
+          "type": "icontains-all",
+          "value": [],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "jar",
+            "vessel",
+            "container",
+            "pot"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "brown",
+            "earth",
+            "orang",
+            "beige",
+            "umber"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "chipped",
+            "damage",
+            "broken"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "design",
+            "pattern"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "javascript",
+          "value": "Array.from(output.trim()).length <= 200",
+          "metric": "maximum-200-characters"
+        }
+      ]
+    },
+    {
+      "case_id": "2015.510",
+      "description": "Grapevine",
+      "position": 34,
+      "reviewed": true,
+      "assert_changed": true,
+      "notes": "Should we require some way of describing it as Asian?",
+      "assert": [
+        {
+          "type": "icontains-any",
+          "value": [
+            "vine",
+            "foliage",
+            "grape",
+            "branch",
+            "leaves"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "panel",
+            "section"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "eight",
+            "8"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "parchment",
+            "beige",
+            "yellow",
+            "brown",
+            "mute"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "javascript",
+          "value": "Array.from(output.trim()).length <= 200",
+          "metric": "maximum-200-characters"
+        }
+      ]
+    },
+    {
+      "case_id": "1946.217",
+      "description": "Dead Blue Roller",
+      "position": 35,
+      "reviewed": true,
+      "assert_changed": true,
+      "assert": [
+        {
+          "type": "icontains-all",
+          "value": [
+            "bird",
+            "blue",
+            "brown"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "watercolor",
+            "paint"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "javascript",
+          "value": "Array.from(output.trim()).length <= 200",
+          "metric": "maximum-200-characters"
+        }
+      ]
+    },
+    {
+      "case_id": "1984.37",
+      "description": "Figure of a Warrior",
+      "position": 36,
+      "reviewed": true,
+      "assert_changed": true,
+      "assert": [
+        {
+          "type": "icontains-all",
+          "value": [
+            "gold",
+            "jewelry"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "sculpt",
+            "statue"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "weapon",
+            "shield",
+            "item",
+            "object"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "javascript",
+          "value": "Array.from(output.trim()).length <= 200",
+          "metric": "maximum-200-characters"
+        }
+      ]
+    },
+    {
+      "case_id": "1963.251",
+      "description": "Satyress and Child",
+      "position": 37,
+      "reviewed": true,
+      "assert_changed": true,
+      "assert": [
+        {
+          "type": "icontains-all",
+          "value": [
+            "woman"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "relief",
+            "carv"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "baby",
+            "child",
+            "young",
+            "youth"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "satyr",
+            "legs",
+            "lower-body",
+            "lower body",
+            "goat",
+            "hoov",
+            "hoof"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "grape",
+            "vine",
+            "plant",
+            "leaves",
+            "fruit"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "javascript",
+          "value": "Array.from(output.trim()).length <= 200",
+          "metric": "maximum-200-characters"
+        }
+      ]
+    },
+    {
+      "case_id": "1957.61",
+      "description": "Wine Cup with Children at Play",
+      "position": 38,
+      "reviewed": true,
+      "assert_changed": true,
+      "assert": [
+        {
+          "type": "icontains-all",
+          "value": [
+            "porcelain",
+            "cup"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "young",
+            "child",
+            "figure"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "sit",
+            "seated"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "natur",
+            "tree",
+            "plant",
+            "outdoor"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "javascript",
+          "value": "Array.from(output.trim()).length <= 200",
+          "metric": "maximum-200-characters"
+        }
+      ]
+    },
+    {
+      "case_id": "1953.16",
+      "description": "Mandala of the Three Shrines at Kumano",
+      "position": 39,
+      "reviewed": true,
+      "assert_changed": true,
+      "assert": [
+        {
+          "type": "icontains-all",
+          "value": [
+            "building",
+            "courtyard",
+            "compound",
+            "figure"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "three",
+            "3"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "nature",
+            "water",
+            "mountain",
+            "tree"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "hanging scroll",
+            "vertical"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "javascript",
+          "value": "Array.from(output.trim()).length <= 200",
+          "metric": "maximum-200-characters"
+        }
+      ]
+    },
+    {
+      "case_id": "1945.13",
+      "description": "Sleep and Death Cista Handle",
+      "position": 40,
+      "reviewed": true,
+      "assert_changed": true,
+      "assert": [
+        {
+          "type": "icontains-all",
+          "value": [
+            "bronze",
+            "wing",
+            "body"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "sculpt",
+            "statue"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "warrior",
+            "armor"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "lifeless",
+            "dead",
+            "limp",
+            "incapacitated"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "javascript",
+          "value": "Array.from(output.trim()).length <= 200",
+          "metric": "maximum-200-characters"
+        }
+      ]
+    },
+    {
+      "case_id": "1965.237",
+      "description": "Jonah Swallowed",
+      "position": 41,
+      "reviewed": true,
+      "assert_changed": true,
+      "assert": [
+        {
+          "type": "icontains-all",
+          "value": [
+            "sea monster",
+            "legs",
+            "head"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "man",
+            "figure"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "serpent",
+            "fish"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "swallow",
+            "mouth",
+            "eat",
+            "jaws"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "statue",
+            "sculpt"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "javascript",
+          "value": "Array.from(output.trim()).length <= 200",
+          "metric": "maximum-200-characters"
+        }
+      ]
+    },
+    {
+      "case_id": "1986.69",
+      "description": "Jar with Dragon and Clouds Design",
+      "position": 42,
+      "reviewed": true,
+      "assert_changed": true,
+      "assert": [
+        {
+          "type": "icontains-all",
+          "value": [
+            "brown"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "porcelain",
+            "ceramic",
+            "pottery",
+            "stoneware"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "jar",
+            "vase",
+            "vessel",
+            "container"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "white",
+            "light"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "dragon",
+            "fish-like",
+            "serpent-like",
+            "creature",
+            "beast"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "javascript",
+          "value": "Array.from(output.trim()).length <= 200",
+          "metric": "maximum-200-characters"
+        }
+      ]
+    },
+    {
+      "case_id": "2000.2",
+      "description": "Funeral for Marie-Thérèse of Spain, Dauphine of France, in the Church of Nôtre Dame, Paris, on November 24, 1746",
+      "position": 43,
+      "reviewed": true,
+      "assert_changed": true,
+      "assert": [
+        {
+          "type": "icontains-any",
+          "value": [
+            "ornate",
+            "elaborat",
+            "decorat",
+            "ornament",
+            "lavish",
+            "grand"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "drawing",
+            "illustrat"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "monochrom",
+            "sepia",
+            "grisaille"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "crowd",
+            "people",
+            "gather",
+            "congregat",
+            "audience"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "church",
+            "cathedral",
+            "chapel",
+            "nave",
+            "vault",
+            "gothic",
+            "hall",
+            "interior"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "not-icontains-any",
+          "value": [
+            "coronat",
+            "wedding",
+            "engraving",
+            "etching",
+            "photo"
+          ],
+          "metric": "subject-accuracy"
+        },
+        {
+          "type": "javascript",
+          "value": "Array.from(output.trim()).length <= 200",
+          "metric": "maximum-200-characters"
+        }
+      ]
+    },
+    {
+      "case_id": "1952.286",
+      "description": "Swift Bull from the Ten Swift Bulls",
+      "position": 44,
+      "reviewed": true,
+      "assert_changed": true,
+      "assert": [
+        {
+          "type": "icontains-all",
+          "value": [
+            "hanging scroll",
+            "bull",
+            "black",
+            "strap",
+            "left"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "paint",
+            "ink"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "javascript",
+          "value": "Array.from(output.trim()).length <= 200",
+          "metric": "maximum-200-characters"
+        }
+      ]
+    },
+    {
+      "case_id": "1949.439",
+      "description": "Head of a Tahitian Woman",
+      "position": 45,
+      "reviewed": true,
+      "assert_changed": true,
+      "assert": [
+        {
+          "type": "icontains-all",
+          "value": [
+            "dark hair",
+            "portrait"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "woman",
+            "figure",
+            "person",
+            "human"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "graphite",
+            "pencil",
+            "drawing",
+            "illustration",
+            "sketch"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "not-icontains-any",
+          "value": [
+            "colored pencil",
+            "coloured pencil",
+            "ink",
+            "charcoal"
+          ],
+          "metric": "subject-accuracy"
+        },
+        {
+          "type": "javascript",
+          "value": "Array.from(output.trim()).length <= 200",
+          "metric": "maximum-200-characters"
+        }
+      ]
+    },
+    {
+      "case_id": "1921.631",
+      "description": "Water Ewer for Rituals (Kundika) with Incised Parrot Design",
+      "position": 46,
+      "reviewed": true,
+      "assert_changed": true,
+      "assert": [
+        {
+          "type": "icontains-all",
+          "value": [
+            "neck",
+            "spout"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "green",
+            "celadon",
+            "jade-colored",
+            "jade-coloured",
+            "sage"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "jug",
+            "ewer",
+            "bottle",
+            "vessel",
+            "vase",
+            "flask",
+            "pitcher"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "phoenix",
+            "bird",
+            "avian",
+            "wing"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "not-icontains-any",
+          "value": [
+            "painted",
+            "teapot"
+          ],
+          "metric": "subject-accuracy"
+        },
+        {
+          "type": "javascript",
+          "value": "Array.from(output.trim()).length <= 200",
+          "metric": "maximum-200-characters"
+        }
+      ]
+    },
+    {
+      "case_id": "1953.125",
+      "description": "Torso of a Kouros",
+      "position": 47,
+      "reviewed": true,
+      "assert_changed": true,
+      "assert": [
+        {
+          "type": "icontains-all",
+          "value": [
+            "marble",
+            "torso"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "sculpt",
+            "statue"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "nude",
+            "naked"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "man",
+            "male"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "thigh",
+            "leg",
+            "lower"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "broken",
+            "damage"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "javascript",
+          "value": "Array.from(output.trim()).length <= 200",
+          "metric": "maximum-200-characters"
+        }
+      ]
+    },
+    {
+      "case_id": "1940.129",
+      "description": "Mourner from the Tomb of John the Fearless and Margaret of Bavaria",
+      "position": 48,
+      "reviewed": true,
+      "assert_changed": true,
+      "assert": [
+        {
+          "type": "icontains-all",
+          "value": [
+            "monk",
+            "book",
+            "robe"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "sculpt",
+            "statue"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "hold",
+            "hand"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "icontains-any",
+          "value": [
+            "beige",
+            "light brown",
+            "light-brown",
+            "off-white"
+          ],
+          "metric": "required-content"
+        },
+        {
+          "type": "javascript",
+          "value": "Array.from(output.trim()).length <= 200",
+          "metric": "maximum-200-characters"
+        }
+      ]
+    },
+    {
+      "case_id": "1956.87",
+      "description": "The Illustrated Miraculous Origins of the Yūzū Nenbutsu School",
+      "position": 49,
+      "reviewed": true,
+      "assert_changed": false,
+      "notes": "We should remove this from the test. It is too low resolution to be seen in any level of detail."
+    },
+    {
+      "case_id": "1958.30",
+      "description": "Landscape with Wheelbarrow",
+      "position": 50,
+      "reviewed": true,
+      "assert_changed": true,
+      "assert": [
+        {
+          "type": "icontains-all",
+          "value": [
+            "watercolor",
+            "green",
+            "sky",
+            "wheelbarrow",
+            "right"
           ],
           "metric": "required-content"
         },
