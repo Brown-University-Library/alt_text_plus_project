@@ -1,0 +1,1883 @@
+# Curated image cases extracted from ../good_alt_text.md.
+# Required-content terms are deterministic starting points; calibrate and revise them
+# when a visually correct description uses reasonable alternate wording.
+
+- description: 'Raft Cup'
+  vars:
+    case_id: '1977.7'
+    image_filename: '1977.7_web.jpg'
+    image_path: '../curated_images/1977.7_web.jpg'
+    mime_type: image/jpeg
+    ideal_alt_text: >-
+      A silver cup is shaped like a man riding down a river. The man has a naked torso and
+      sits at the lip of the cup, his head tilted back. The waves envelop each side of the cup
+      and its upturned tip.
+  assert:
+    - type: icontains-any
+      value:
+        - 'silver sculpture'
+        - 'silver cup'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'man'
+        - 'person'
+        - 'figure'
+      metric: required-content
+    - type: javascript
+      value: Array.from(output.trim()).length <= 200
+      metric: maximum-200-characters
+
+- description: 'Plaque'
+  vars:
+    case_id: '1938.431'
+    image_filename: '1938.431_web.jpg'
+    image_path: '../curated_images/1938.431_web.jpg'
+    mime_type: image/jpeg
+    ideal_alt_text: >-
+      A small gold plaque depicts a face with fangs, framed by many serpent heads. The plaque
+      is flat with raised designs.
+  assert:
+    - type: icontains-all
+      value:
+        - 'gold'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'face'
+        - 'mask'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'fang'
+        - 'teeth'
+        - 'tooth'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'serpent'
+        - 'snake'
+      metric: required-content
+    - type: javascript
+      value: >-
+        Array.from(output.trim()).length <= 200
+      metric: maximum-200-characters
+
+- description: 'Battle of the Nudes'
+  vars:
+    case_id: '1967.127'
+    image_filename: '1967.127_web.jpg'
+    image_path: '../curated_images/1967.127_web.jpg'
+    mime_type: image/jpeg
+    ideal_alt_text: >-
+      A horizontally oriented engraving depicts many muscular nude men violently fighting,
+      some with swords, daggers, and other various weapons. In the background, there is
+      foliage.
+  assert:
+    - type: icontains-all
+      value:
+        - 'nude'
+        - 'OPUS'
+        - 'ANTONII-POLLA'
+        - 'IOU'
+        - 'FLORENT'
+        - 'TINI'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'engraving'
+        - 'etching'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'men'
+        - 'male'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'fight'
+        - 'battle'
+        - 'combat'
+        - 'melee'
+      metric: required-content
+    - type: javascript
+      # Require "weapons" or at least two distinct named weapon types.
+      value: |-
+        output.toLowerCase().includes('weapons') || ['sword', 'axes', 'bow', 'arrows', 'daggers'].filter(
+          term => output.toLowerCase().includes(term)
+        ).length >= 2
+      metric: required-weapons
+    - type: icontains-any
+      value:
+        - 'sign'
+        - 'plaque'
+      metric: required-content
+    - type: javascript
+      value: >-
+        Array.from(output.trim()).length <= 200
+      metric: maximum-200-characters
+
+- description: 'Royal Carpet with Silk and Metal Thread'
+  vars:
+    case_id: '1926.533'
+    image_filename: '1926.533_web.jpg'
+    image_path: '../curated_images/1926.533_web.jpg'
+    mime_type: image/jpeg
+    ideal_alt_text: >-
+      A large, vertically long carpet features elaborate floral patterns in shades of orange,
+      blue, green, and brown. It is trimmed with fringe on the two shortest sides.
+  assert:
+    - type: icontains-all
+      value:
+        - 'carpet'
+        - 'fringe'
+        - 'orange'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'floral pattern'
+        - 'floral motif'
+        - 'floral design'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'blue'
+        - 'green'
+        - 'brown'
+      metric: required-content
+    - type: javascript
+      value: >-
+        Array.from(output.trim()).length <= 200
+      metric: maximum-200-characters
+
+- description: 'Sacrificer Container'
+  vars:
+    case_id: '2007.193'
+    image_filename: '2007.193_web.jpg'
+    image_path: '../curated_images/2007.193_web.jpg'
+    mime_type: image/jpeg
+    ideal_alt_text: >-
+      A small wood figure with the face of a feline bares its teeth. It draws a knife across
+      the throat of a human in its lap. The entire surface of the figure has been carved with
+      geometric patterns.
+  assert:
+    - type: icontains-all
+      value:
+        - 'wood'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'figure'
+        - 'statue'
+        - 'carving'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'geometric'
+        - 'pattern'
+        - 'symbols'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'fang'
+        - 'teeth'
+        - 'tooth'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'feline'
+        - 'cat'
+      metric: required-content
+    - type: javascript
+      value: >-
+        Array.from(output.trim()).length <= 200
+      metric: maximum-200-characters
+
+- description: 'Ivory Plaque with Enthroned Mother of God ("The Stroganoff Ivory")'
+  vars:
+    case_id: '1925.1293'
+    image_filename: '1925.1293_web.jpg'
+    image_path: '../curated_images/1925.1293_web.jpg'
+    mime_type: image/jpeg
+    ideal_alt_text: >-
+      A vertically oriented carved ivory relief depicts a woman seated in the center holding a
+      child in her lap. Two angels hover above, one in each upper corner. There are letters
+      carved beneath.
+  assert:
+    - type: icontains-all
+      value:
+        - 'ivory'
+        - 'child'
+        - 'angel'
+        - 'relief'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'chair'
+        - 'throne'
+    - type: icontains-any
+      value:
+        - 'greek'
+        - 'letters'
+        - 'inscription'
+        - 'writ'
+    - type: icontains-any
+      value:
+        - 'woman'
+        - 'figure'
+      metric: required-content
+    - type: javascript
+      value: >-
+        Array.from(output.trim()).length <= 200
+      metric: maximum-200-characters
+
+- description: 'Desk and Bookcase'
+  vars:
+    case_id: '2012.43'
+    image_filename: '2012.43_web.jpg'
+    image_path: '../curated_images/2012.43_web.jpg'
+    mime_type: image/jpeg
+    ideal_alt_text: >-
+      A tall reddish-brown wood bookcase features many drawers and components. It is detailed
+      with simple but refined designs and shiny brass knobs and handles.
+  assert:
+    - type: icontains-all
+      value:
+        - 'wood'
+        - 'drawers'
+        - 'brass'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'brass'
+        - 'knob'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'red'
+        - 'brown'
+      metric: required-content
+    - type: javascript
+      value: >-
+        Array.from(output.trim()).length <= 200
+      metric: maximum-200-characters
+
+- description: 'Gamin'
+  vars:
+    case_id: '2003.40'
+    image_filename: '2003.40_web.jpg'
+    image_path: '../curated_images/2003.40_web.jpg'
+    mime_type: image/jpeg
+    ideal_alt_text: >-
+      A realistic, hand-painted plaster sculpture depicts a Black boy's head and top half of
+      his torso. The sculpture looks like bronze and the subject wears a flat cap and looks
+      slightly to our left.
+  assert:
+    - type: icontains-all
+      value:
+        - 'GAMIN'
+        - 'bronze'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'sculpt'
+        - 'bust'
+        - 'statue'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'boy'
+        - 'child'
+        - 'youth'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'black boy'
+        - 'black child'
+        - 'black youth'
+        - 'black male'
+        - 'african american'
+        - 'african-american'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'cap'
+        - 'hat'
+      metric: required-content
+    - type: javascript
+      value: >-
+        Array.from(output.trim()).length <= 200
+      metric: maximum-200-characters
+
+- description: 'Feast Ladle'
+  vars:
+    case_id: '1953.386'
+    image_filename: '1953.386_web.jpg'
+    image_path: '../curated_images/1953.386_web.jpg'
+    mime_type: image/jpeg
+    ideal_alt_text: >-
+      A ladle features a large light brown spoon and a long dark brown handle. The top of the
+      ladle's handle is an eagle head. The bottom of the spoon has been carved to resemble a
+      bear's face.
+  assert:
+    - type: icontains-all
+      value:
+        - 'ladle'
+        - 'brown'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'eagle'
+        - 'bird'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'circle'
+        - 'dot'
+      metric: required-content
+    - type: javascript
+      value: >-
+        Array.from(output.trim()).length <= 200
+      metric: maximum-200-characters
+
+- description: 'Head Fragment'
+  vars:
+    case_id: '1961.31'
+    image_filename: '1961.31_web.jpg'
+    image_path: '../curated_images/1961.31_web.jpg'
+    mime_type: image/jpeg
+    ideal_alt_text: >-
+      A small light green segment of a head features the face of a figure from below the eyes
+      to the top of the neck. There is a hole in each earlobe and the figure's mouth is
+      slightly open.
+  assert:
+    - type: icontains-all
+      value:
+        - 'earlobe'
+        - 'mouth'
+        - 'open'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'head'
+        - 'face'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'light'
+        - 'pale'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'broken'
+        - 'part'
+        - 'segment'
+        - 'lower'
+        - 'half'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'stone'
+        - 'jade'
+      metric: required-content
+    - type: javascript
+      value: >-
+        Array.from(output.trim()).length <= 200
+      metric: maximum-200-characters
+
+- description: 'Bell (Lai Zhong)'
+  vars:
+    case_id: '1989.3'
+    image_filename: '1989.3_web.jpg'
+    image_path: '../curated_images/1989.3_web.jpg'
+    mime_type: image/jpeg
+    ideal_alt_text: >-
+      A bronze bell features a green surface, engraved with designs and inscriptions. Three
+      rows of six small knobs protrude from each side of the bell.
+  assert:
+    - type: icontains-all
+      value:
+        - 'bronze'
+        - 'bell'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'design'
+        - 'motif'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'knob'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'three'
+        - 'six'
+        - 'nine'
+        - '3'
+        - '6'
+        - '9'
+        - 'eighteen'
+        - '18'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'green'
+        - 'patina'
+      metric: required-content
+    - type: javascript
+      value: >-
+        Array.from(output.trim()).length <= 200
+      metric: maximum-200-characters
+
+- description: 'Arm of Eve'
+  vars:
+    case_id: '1965.470'
+    image_filename: '1965.470_web.jpg'
+    image_path: '../curated_images/1965.470_web.jpg'
+    mime_type: image/jpeg
+    ideal_alt_text: >-
+      A vertically oriented drawing with gray tones of an arm, bent at the elbow, holds up a
+      spherical object.
+  assert:
+    - type: icontains-all
+      value:
+        - 'arm'
+        - '1507'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'draw'
+        - 'sketch'
+        - 'illustrat'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'spher'
+        - 'round'
+        - 'ball'
+      metric: required-content
+    - type: javascript
+      value: >-
+        Array.from(output.trim()).length <= 200
+      metric: maximum-200-characters
+
+- description: 'Sand Dunes, Carson Desert, Nevada'
+  vars:
+    case_id: '2002.45'
+    image_filename: '2002.45_web.jpg'
+    image_path: '../curated_images/2002.45_web.jpg'
+    mime_type: image/jpeg
+    ideal_alt_text: >-
+      A horizontally oriented photograph depicts vast sand dunes with footprints. On our left,
+      a wagon in the distance is pulled by a team of four horses.
+  assert:
+    - type: icontains-all
+      value:
+        - 'photograph'
+        - 'sand'
+        - 'horse'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'wagon'
+        - 'cart'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'black and white'
+        - 'grayscale'
+        - 'sepia'
+        - 'monochrom'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'dune'
+        - 'hill'
+        - 'slope'
+      metric: required-content
+    - type: javascript
+      value: >-
+        Array.from(output.trim()).length <= 200
+      metric: maximum-200-characters
+
+- description: 'Cosmetics Box with Chrysanthemums'
+  vars:
+    case_id: '1963.513'
+    image_filename: '1963.513_web.jpg'
+    image_path: '../curated_images/1963.513_web.jpg'
+    mime_type: image/jpeg
+    ideal_alt_text: >-
+      A black box is painted with small, simple clusters of golden flowers all around. The
+      knob of the box is in the shape of a small gold flower.
+  assert:
+    - type: icontains-all
+      value:
+        - 'black'
+        - 'gold'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'flower'
+        - 'floral'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'knob'
+        - 'handle'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'box'
+        - 'container'
+      metric: required-content
+    - type: javascript
+      value: >-
+        Array.from(output.trim()).length <= 200
+      metric: maximum-200-characters
+
+- description: 'Mount Sainte-Victoire'
+  vars:
+    case_id: '1958.21'
+    image_filename: '1958.21_web.jpg'
+    image_path: '../curated_images/1958.21_web.jpg'
+    mime_type: image/jpeg
+    ideal_alt_text: >-
+      A colorful oil painting depicts a landscape with green trees and a mountain, all under a
+      blue sky.
+  assert:
+    - type: icontains-all
+      value:
+        - 'oil'
+        - 'landscape'
+        - 'tree'
+        - 'mountain'
+        - 'paint'
+        - 'smok'
+        - 'sky'
+      metric: required-content
+    - type: javascript
+      value: >-
+        Array.from(output.trim()).length <= 200
+      metric: maximum-200-characters
+
+- description: 'Red-Figure Calyx-Krater (Mixing Vessel): Medea in Chariot (A); Telephos with Baby Orestes (B)'
+  vars:
+    case_id: '1991.1'
+    image_filename: '1991.1_web.jpg'
+    image_path: '../curated_images/1991.1_web.jpg'
+    mime_type: image/jpeg
+    ideal_alt_text: >-
+      A large black ceramic vessel features handles that curve up. Around the vessel are two
+      scenes in brown ceramic of tragedies dealing with children.
+  assert:
+    - type: icontains-all
+      value:
+        - 'black'
+        - 'handle'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'scene'
+        - 'depict'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'vessel'
+        - 'vase'
+        - 'container'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'snake'
+        - 'serpent'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'figure'
+        - 'person'
+        - 'people'
+        - 'human'
+      metric: required-content
+    - type: javascript
+      value: >-
+        Array.from(output.trim()).length <= 200
+      metric: maximum-200-characters
+
+- description: 'Selections from the New Collection of Japanese Poems from Ancient and Modern Times (Shinkokin wakashū) with Printed Designs of Chinese Lions and Crab Finger Grass'
+  vars:
+    case_id: '1966.118'
+    image_filename: '1966.118_web.jpg'
+    image_path: '../curated_images/1966.118_web.jpg'
+    mime_type: image/jpeg
+    ideal_alt_text: >-
+      A handscroll is filled with Japanese calligraphy on top of paintings of tall grass with
+      lions leaping about.
+  assert:
+    - type: icontains-all
+      value:
+        - 'scroll'
+        - 'grass'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'calligraph'
+        - 'character'
+        - 'writ'
+      metric: required-content
+    - type: javascript
+      value: >-
+        Array.from(output.trim()).length <= 200
+      metric: maximum-200-characters
+
+- description: 'Julius Caesar'
+  vars:
+    case_id: '2009.271'
+    image_filename: '2009.271_web.jpg'
+    image_path: '../curated_images/2009.271_web.jpg'
+    mime_type: image/jpeg
+    ideal_alt_text: >-
+      A marble relief depicts the side profile of Julius Caesar, facing our left, surrounded
+      by a circular garland.
+  assert:
+    - type: icontains-all
+      value:
+        - 'marble'
+        - 'profile'
+        - 'relief'
+        - 'IV'
+        - 'CE'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'garland'
+        - 'leaves'
+        - 'fruit'
+        - 'wreath'
+        - 'grape'
+      metric: required-content
+    - type: javascript
+      value: >-
+        Array.from(output.trim()).length <= 200
+      metric: maximum-200-characters
+
+- description: 'Basin with Inscribed Figures and Calligraphy'
+  vars:
+    case_id: '1985.112'
+    image_filename: '1985.112_web.jpg'
+    image_path: '../curated_images/1985.112_web.jpg'
+    mime_type: image/jpeg
+    ideal_alt_text: >-
+      A shiny round bronze bowl features two small handles. Across the surface of the bowl are
+      silver inlay script and depictions of a child.
+  assert:
+    - type: icontains-all
+      value:
+        - 'handles'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'script'
+        - 'design'
+        - 'character'
+        - 'writing'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'bronze'
+        - 'brown'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'bowl'
+        - 'vessel'
+      metric: required-content
+    - type: javascript
+      value: >-
+        Array.from(output.trim()).length <= 200
+      metric: maximum-200-characters
+
+- description: 'Nome Gods Bearing Offerings'
+  vars:
+    case_id: '1961.205'
+    image_filename: '1961.205_web.jpg'
+    image_path: '../curated_images/1961.205_web.jpg'
+    mime_type: image/jpeg
+    ideal_alt_text: >-
+      A painted limestone block features three figures, in profile facing our right, each
+      carrying a tray of many objects and having an animal by their side. The figures are
+      separated by many hieroglyphics.
+  assert:
+    - type: icontains-all
+      value:
+        - 'figure'
+        - 'tray'
+        - 'hieroglyph'
+        - 'egypt'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'green'
+        - 'blue'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'red'
+        - 'maroon'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'three'
+        - '3'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'animal'
+        - 'gazelle'
+        - 'emu'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'section'
+        - 'panel'
+      metric: required-content
+    - type: javascript
+      value: >-
+        Array.from(output.trim()).length <= 200
+      metric: maximum-200-characters
+
+- description: 'Self-Portrait'
+  vars:
+    case_id: '2004.87'
+    image_filename: '2004.87_web.jpg'
+    image_path: '../curated_images/2004.87_web.jpg'
+    mime_type: image/jpeg
+    ideal_alt_text: >-
+      A vertically oriented print depicts a man wearing a hat and coat, looking at us. Depth
+      and shadows are emphasized through the dark shade of the man's clothes and the smudged
+      background.
+  assert:
+    - type: icontains-all
+      value:
+        - 'man'
+        - 'hat'
+        - 'degas'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'print'
+        - 'draw'
+        - 'illustrat'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'beard'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'coat'
+        - 'shirt'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'dark'
+        - 'black'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'grayscale'
+        - 'monochrom'
+      metric: required-content
+    - type: javascript
+      value: >-
+        Array.from(output.trim()).length <= 200
+      metric: maximum-200-characters
+
+- description: 'Set of Four Armchairs and Settee'
+  vars:
+    case_id: '1947.183'
+    image_filename: '1947.183_web.jpg'
+    image_path: '../curated_images/1947.183_web.jpg'
+    mime_type: image/jpeg
+    ideal_alt_text: >-
+      An armchair features a light-colored floral tapestry with a central image of a raven
+      peering down at a coyote. The wood legs of the armchair are intricately carved.
+  assert:
+    - type: icontains-any
+      value:
+        - 'chair'
+        - 'seat'
+        - 'sofa'
+        - 'couch'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'floral'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'raven'
+        - 'coyote'
+        - 'animal'
+      metric: required-content
+    - type: icontains-all
+      value:
+        - 'wood'
+        - 'leg'
+        - 'carv'
+      metric: required-content
+    - type: javascript
+      value: >-
+        Array.from(output.trim()).length <= 200
+      metric: maximum-200-characters
+
+- description: 'Morning Glory with Black'
+  vars:
+    case_id: '1958.42'
+    image_filename: '1958.42_web.jpg'
+    image_path: '../curated_images/1958.42_web.jpg'
+    mime_type: image/jpeg
+    ideal_alt_text: >-
+      A vertically oriented oil painting depicts a close-up of the center of a white flower.
+      In the lower right-hand side of the painting, soft slopes of black petals fill the
+      corner.
+  assert:
+    - type: icontains-all
+      value:
+        - 'paint'
+        - 'white'
+        - 'flower'
+        - 'black'
+      metric: required-content
+    - type: javascript
+      value: >-
+        Array.from(output.trim()).length <= 200
+      metric: maximum-200-characters
+
+- description: 'Claire Campbell'
+  vars:
+    case_id: '1956.718'
+    image_filename: '1956.718_web.jpg'
+    image_path: '../curated_images/1956.718_web.jpg'
+    mime_type: image/jpeg
+    ideal_alt_text: >-
+      A pastel and oil portrait depicts the side profile of a woman facing our left. The
+      subject has pink-tinged light skin and dark brown hair.
+  assert:
+    - type: icontains-all
+      value:
+        - 'portrait'
+        - 'woman'
+        - 'brown hair'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'profile'
+        - 'side'
+        - 'left'
+      metric: required-content
+    - type: javascript
+      value: >-
+        Array.from(output.trim()).length <= 200
+      metric: maximum-200-characters
+
+- description: 'Jar'
+  vars:
+    case_id: '1983.28'
+    image_filename: '1983.28_web.jpg'
+    image_path: '../curated_images/1983.28_web.jpg'
+    mime_type: image/jpeg
+    ideal_alt_text: >-
+      A gray-white glazed spherical porcelain jar features narrow, circular rims at the base
+      and mouth. Faint, horizontal lines striate the jar with fine cracks webbing the surface.
+  assert:
+    - type: icontains-any
+      value:
+        - 'porcelain'
+        - 'clay'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'spher'
+        - 'round'
+        - 'glob'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'gray-white'
+        - 'light green'
+        - 'beige'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'sheen'
+        - 'gloss'
+        - 'glar'
+        - 'specular'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'jar'
+        - 'vessel'
+        - 'vase'
+      metric: required-content
+    - type: javascript
+      value: >-
+        Array.from(output.trim()).length <= 200
+      metric: maximum-200-characters
+
+- description: 'Table Fountain'
+  vars:
+    case_id: '1924.859'
+    image_filename: '1924.859_web.jpg'
+    image_path: '../curated_images/1924.859_web.jpg'
+    mime_type: image/jpeg
+    ideal_alt_text: >-
+      An elaborate golden fountain has three tiers. There are plaques with colorful images of
+      figures on the middle and bottom tiers. Attached to these tiers are waterwheels and
+      bells.
+  assert:
+    - type: icontains-all
+      value:
+        - 'gold'
+        - 'fountain'
+        - 'bells'
+        - 'column'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'tier'
+        - 'level'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'wheel'
+        - 'circ'
+        - 'disc'
+      metric: required-content
+    - type: icontains-any
+      value: []
+      metric: required-content
+    - type: javascript
+      value: >-
+        Array.from(output.trim()).length <= 200
+      metric: maximum-200-characters
+
+- description: 'The Red Kerchief'
+  vars:
+    case_id: '1958.39'
+    image_filename: '1958.39_web.jpg'
+    image_path: '../curated_images/1958.39_web.jpg'
+    mime_type: image/jpeg
+    ideal_alt_text: >-
+      A vertically oriented oil painting depicts a woman wearing a red kerchief, standing in
+      the snow, and looking at us through glass doors.
+  assert:
+    - type: icontains-all
+      value:
+        - 'paint'
+        - 'woman'
+        - 'red'
+        - 'snow'
+        - 'door'
+        - 'curtain'
+        - 'glass'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'kerchief'
+        - 'shawl'
+        - 'scarf'
+      metric: required-content
+    - type: javascript
+      value: >-
+        Array.from(output.trim()).length <= 200
+      metric: maximum-200-characters
+
+- description: 'Sleeping Christ Child'
+  vars:
+    case_id: '2018.257'
+    image_filename: '2018.257_web.jpg'
+    image_path: '../curated_images/2018.257_web.jpg'
+    mime_type: image/jpeg
+    ideal_alt_text: >-
+      A marble sculpture depicts a sleeping nude young child sprawled on a bed of
+      cloth-covered straw. He faces upward and there are rays emanating from his head.
+  assert:
+    - type: icontains-all
+      value:
+        - 'marble'
+        - 'nude'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'sculpt'
+        - 'statue'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'child'
+        - 'young'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'ray'
+        - 'beam'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'sleep'
+        - 'lying'
+        - 'laying'
+        - 'reclin'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'cloth'
+        - 'bed'
+        - 'blanket'
+      metric: required-content
+    - type: javascript
+      value: >-
+        Array.from(output.trim()).length <= 200
+      metric: maximum-200-characters
+
+- description: 'Torso of Amenpayom'
+  vars:
+    case_id: '1948.141'
+    image_filename: '1948.141_web.jpg'
+    image_path: '../curated_images/1948.141_web.jpg'
+    mime_type: image/jpeg
+    ideal_alt_text: >-
+      A black rock sculpture depicts the naked torso of a man wearing a kilt. The head, arms,
+      and legs of the sculpture have been broken off. The band of the kilt features carvings
+      of symbols.
+  assert:
+    - type: icontains-all
+      value: []
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'black'
+        - 'dark'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'sculpt'
+        - 'statue'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'torso'
+        - 'figure'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'brok'
+        - 'damag'
+        - 'missing'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'kilt'
+        - 'cloth'
+        - 'skirt'
+        - 'wrap'
+        - 'garment'
+      metric: required-content
+    - type: javascript
+      value: >-
+        Array.from(output.trim()).length <= 200
+      metric: maximum-200-characters
+
+- description: 'Brush Washer'
+  vars:
+    case_id: '1957.40'
+    image_filename: '1957.40_web.jpg'
+    image_path: '../curated_images/1957.40_web.jpg'
+    mime_type: image/jpeg
+    ideal_alt_text: >-
+      A wide squat light blue glazed porcelaneous stoneware bowl features a cracked pattern in
+      the glaze.
+  assert:
+    - type: icontains-all
+      value:
+        - 'bowl'
+        - 'glaze'
+        - 'crack'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'light blue'
+        - 'turquoise'
+        - 'light green'
+        - 'pale blue'
+        - 'pale green'
+        - 'teal'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'wide'
+        - 'shallow'
+      metric: required-content
+    - type: javascript
+      value: >-
+        Array.from(output.trim()).length <= 200
+      metric: maximum-200-characters
+
+- description: 'Dancers'
+  vars:
+    case_id: '1916.1043'
+    image_filename: '1916.1043_web.jpg'
+    image_path: '../curated_images/1916.1043_web.jpg'
+    mime_type: image/jpeg
+    ideal_alt_text: >-
+      A vertically oriented pastel drawing with bright, blended colors depicts three dancers.
+      They all wear identical yellow dresses and are standing and stretching together.
+  assert:
+    - type: icontains-all
+      # value:
+      #   - 'pastel drawing'
+      #   - 'three dancers'
+      #   - 'yellow dresses'
+      value:
+        - 'three'
+        - 'dancers'
+        - 'dresses'
+        - 'pastel'
+        - 'standing'
+      metric: required-content
+
+    - type: icontains-any
+      value: 
+        - 'yellow'
+        - 'green'
+
+    - type: javascript
+      value: Array.from(output.trim()).length <= 200
+      metric: maximum-200-characters
+
+- description: 'Sarcophagus'
+  vars:
+    case_id: '1928.856'
+    image_filename: '1928.856_web.jpg'
+    image_path: '../curated_images/1928.856_web.jpg'
+    mime_type: image/jpeg
+    ideal_alt_text: >-
+      A large rectangular marble coffin depicts many figures depicting various scenes,
+      including many with the same man holding a short sword, carved in a relief all around
+      the coffin.
+  assert:
+    - type: icontains-all
+      value:
+        - 'marble'
+        - 'figures'
+        - 'sword'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'panorama'
+        - 'scene'
+      metric: required-content
+    - type: icontains-any
+      value: []
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'relief'
+        - 'carv'
+      metric: required-content
+    - type: javascript
+      value: >-
+        Array.from(output.trim()).length <= 200
+      metric: maximum-200-characters
+
+- description: 'Storage Jar'
+  vars:
+    case_id: '1973.18'
+    image_filename: '1973.18_web.jpg'
+    image_path: '../curated_images/1973.18_web.jpg'
+    mime_type: image/jpeg
+    ideal_alt_text: >-
+      A large textured round stoneware jar features a golden-brown glaze. There is a thin
+      design incised around the collar of the jar. The lip of the jar is flared and part of it
+      is chipped off.
+  assert:
+    - type: icontains-all
+      value: []
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'jar'
+        - 'vessel'
+        - 'container'
+        - 'pot'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'brown'
+        - 'earth'
+        - 'orang'
+        - 'beige'
+        - 'umber'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'chipped'
+        - 'damage'
+        - 'broken'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'design'
+        - 'pattern'
+      metric: required-content
+    - type: javascript
+      value: >-
+        Array.from(output.trim()).length <= 200
+      metric: maximum-200-characters
+
+- description: 'Grapevine'
+  vars:
+    case_id: '2015.510'
+    image_filename: '2015.510_web.jpg'
+    image_path: '../curated_images/2015.510_web.jpg'
+    mime_type: image/jpeg
+    ideal_alt_text: >-
+      Eight panels horizontally combine to display a painting of a grapevine in muted colors.
+      The grapevine swirls across the panels with dense foliage and hanging bunches of grapes.
+  assert:
+    - type: icontains-any
+      value:
+        - 'vine'
+        - 'foliage'
+        - 'grape'
+        - 'branch'
+        - 'leaves'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'panel'
+        - 'section'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'eight'
+        - '8'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'parchment'
+        - 'beige'
+        - 'yellow'
+        - 'brown'
+        - 'mute'
+      metric: required-content
+    - type: javascript
+      value: >-
+        Array.from(output.trim()).length <= 200
+      metric: maximum-200-characters
+
+- description: 'Dead Blue Roller'
+  vars:
+    case_id: '1946.217'
+    image_filename: '1946.217_web.jpg'
+    image_path: '../curated_images/1946.217_web.jpg'
+    mime_type: image/jpeg
+    ideal_alt_text: >-
+      A hyperrealistic, vertically oriented watercolor painting depicts a dead bird on the
+      ground. The bird has blue and brown feathers.
+  assert:
+    - type: icontains-all
+      value:
+        - 'bird'
+        - 'blue'
+        - 'brown'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'watercolor'
+        - 'paint'
+      metric: required-content
+    - type: javascript
+      value: >-
+        Array.from(output.trim()).length <= 200
+      metric: maximum-200-characters
+
+- description: 'Figure of a Warrior'
+  vars:
+    case_id: '1984.37'
+    image_filename: '1984.37_web.jpg'
+    image_path: '../curated_images/1984.37_web.jpg'
+    mime_type: image/jpeg
+    ideal_alt_text: >-
+      A small golden sculpture depicts a standing figure holding weapons in their right hand
+      and a shield in their left hand. The figure wears jewelry and the front of their chest
+      is carved out.
+  assert:
+    - type: icontains-all
+      value:
+        - 'gold'
+        - 'jewelry'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'sculpt'
+        - 'statue'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'weapon'
+        - 'shield'
+        - 'item'
+        - 'object'
+      metric: required-content
+    - type: javascript
+      value: >-
+        Array.from(output.trim()).length <= 200
+      metric: maximum-200-characters
+
+- description: 'Satyress and Child'
+  vars:
+    case_id: '1963.251'
+    image_filename: '1963.251_web.jpg'
+    image_path: '../curated_images/1963.251_web.jpg'
+    mime_type: image/jpeg
+    ideal_alt_text: >-
+      A circular terracotta relief depicts a nude woman with horse legs and hooves holding a
+      baby with horse legs and hooves. On our right side of the circular disc is a carving of
+      a grapevine.
+  assert:
+    - type: icontains-all
+      value:
+        - 'woman'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'relief'
+        - 'carv'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'baby'
+        - 'child'
+        - 'young'
+        - 'youth'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'satyr'
+        - 'legs'
+        - 'lower-body'
+        - 'lower body'
+        - 'goat'
+        - 'hoov'
+        - 'hoof'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'grape'
+        - 'vine'
+        - 'plant'
+        - 'leaves'
+        - 'fruit'
+      metric: required-content
+    - type: javascript
+      value: >-
+        Array.from(output.trim()).length <= 200
+      metric: maximum-200-characters
+
+- description: 'Wine Cup with Children at Play'
+  vars:
+    case_id: '1957.61'
+    image_filename: '1957.61_web.jpg'
+    image_path: '../curated_images/1957.61_web.jpg'
+    mime_type: image/jpeg
+    ideal_alt_text: >-
+      A white porcelain cup features faded colorful paintings of scenes of children playing in
+      nature.
+  assert:
+    - type: icontains-all
+      value:
+        - 'porcelain'
+        - 'cup'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'young'
+        - 'child'
+        - 'figure'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'sit'
+        - 'seated'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'natur'
+        - 'tree'
+        - 'plant'
+        - 'outdoor'
+      metric: required-content
+    - type: javascript
+      value: >-
+        Array.from(output.trim()).length <= 200
+      metric: maximum-200-characters
+
+- description: 'Mandala of the Three Shrines at Kumano'
+  vars:
+    case_id: '1953.16'
+    image_filename: '1953.16_web.jpg'
+    image_path: '../curated_images/1953.16_web.jpg'
+    mime_type: image/jpeg
+    ideal_alt_text: >-
+      A hanging scroll depicts three compounds with brown-roofed buildings in a stacked
+      composition. Each compound, placed in a mountainous setting, is laid out in a rectangle
+      around a large courtyard.
+  assert:
+    - type: icontains-all
+      value:
+        - 'building'
+        - 'courtyard'
+        - 'compound'
+        - 'figure'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'three'
+        - '3'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'nature'
+        - 'water'
+        - 'mountain'
+        - 'tree'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'hanging scroll'
+        - 'vertical'
+      metric: required-content
+    - type: javascript
+      value: >-
+        Array.from(output.trim()).length <= 200
+      metric: maximum-200-characters
+
+- description: 'Sleep and Death Cista Handle'
+  vars:
+    case_id: '1945.13'
+    image_filename: '1945.13_web.jpg'
+    image_path: '../curated_images/1945.13_web.jpg'
+    mime_type: image/jpeg
+    ideal_alt_text: >-
+      A small bronze sculpture depicts two winged deities dressed like warriors carrying a
+      lifeless naked body sideways between them.
+  assert:
+    - type: icontains-all
+      value:
+        - 'bronze'
+        - 'wing'
+        - 'body'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'sculpt'
+        - 'statue'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'warrior'
+        - 'armor'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'lifeless'
+        - 'dead'
+        - 'limp'
+        - 'incapacitated'
+      metric: required-content
+    - type: javascript
+      value: >-
+        Array.from(output.trim()).length <= 200
+      metric: maximum-200-characters
+
+- description: 'Jonah Swallowed'
+  vars:
+    case_id: '1965.237'
+    image_filename: '1965.237_web.jpg'
+    image_path: '../curated_images/1965.237_web.jpg'
+    mime_type: image/jpeg
+    ideal_alt_text: >-
+      A marble sculpture depicts a sea monster swallowing a man headfirst. The sea monster has
+      a canine head and serpent body. Its mouth is open with just the man's legs outside the
+      mouth.
+  assert:
+    - type: icontains-all
+      value:
+        - 'sea monster'
+        - 'legs'
+        - 'head'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'man'
+        - 'figure'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'serpent'
+        - 'fish'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'swallow'
+        - 'mouth'
+        - 'eat'
+        - 'jaws'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'statue'
+        - 'sculpt'
+      metric: required-content
+    - type: javascript
+      value: >-
+        Array.from(output.trim()).length <= 200
+      metric: maximum-200-characters
+
+- description: 'Jar with Dragon and Clouds Design'
+  vars:
+    case_id: '1986.69'
+    image_filename: '1986.69_web.jpg'
+    image_path: '../curated_images/1986.69_web.jpg'
+    mime_type: image/jpeg
+    ideal_alt_text: >-
+      A spherical white porcelain jar features a loosely painted dark brown dragon that wraps
+      around it. Surrounding the dragon are squiggle line drawings.
+  assert:
+    - type: icontains-all
+      value:
+        - 'brown'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'porcelain'
+        - 'ceramic'
+        - 'pottery'
+        - 'stoneware'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'jar'
+        - 'vase'
+        - 'vessel'
+        - 'container'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'white'
+        - 'light'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'dragon'
+        - 'fish-like'
+        - 'serpent-like'
+        - 'creature'
+        - 'beast'
+      metric: required-content
+    - type: javascript
+      value: >-
+        Array.from(output.trim()).length <= 200
+      metric: maximum-200-characters
+
+- description: 'Funeral for Marie-Thérèse of Spain, Dauphine of France, in the Church of Nôtre Dame, Paris, on November 24, 1746'
+  vars:
+    case_id: '2000.2'
+    image_filename: '2000.2_web.jpg'
+    image_path: '../curated_images/2000.2_web.jpg'
+    mime_type: image/jpeg
+    ideal_alt_text: >-
+      An elaborate, vertically oriented drawing depicts a funeral scene in a Gothic cathedral.
+      There are many people gathered around an ornate arched structure containing a coffin.
+  assert:
+    - type: icontains-any
+      value:
+        - 'ornate'
+        - 'elaborat'
+        - 'decorat'
+        - 'ornament'
+        - 'lavish'
+        - 'grand'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'drawing'
+        - 'illustrat'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'monochrom'
+        - 'sepia'
+        - 'grisaille'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'crowd'
+        - 'people'
+        - 'gather'
+        - 'congregat'
+        - 'audience'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'church'
+        - 'cathedral'
+        - 'chapel'
+        - 'nave'
+        - 'vault'
+        - 'gothic'
+        - 'hall'
+        - 'interior'
+      metric: required-content
+    - type: not-icontains-any
+      value:
+        - 'coronat'
+        - 'wedding'
+        - 'engraving'
+        - 'etching'
+        - 'photo'
+      metric: subject-accuracy
+    - type: javascript
+      value: >-
+        Array.from(output.trim()).length <= 200
+      metric: maximum-200-characters
+
+- description: 'Swift Bull from the Ten Swift Bulls'
+  vars:
+    case_id: '1952.286'
+    image_filename: '1952.286_web.jpg'
+    image_path: '../curated_images/1952.286_web.jpg'
+    mime_type: image/jpeg
+    ideal_alt_text: >-
+      A hanging scroll features two vertical straps at the top and a painting in the center.
+      The painting is of a bull, painted with black ink, facing our left.
+  assert:
+    - type: icontains-all
+      value:
+        - 'hanging scroll'
+        - 'bull'
+        - 'black'
+        - 'strap'
+        - 'left'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'paint'
+        - 'ink'
+      metric: required-content
+    - type: javascript
+      value: >-
+        Array.from(output.trim()).length <= 200
+      metric: maximum-200-characters
+
+- description: 'Head of a Tahitian Woman'
+  vars:
+    case_id: '1949.439'
+    image_filename: '1949.439_web.jpg'
+    image_path: '../curated_images/1949.439_web.jpg'
+    mime_type: image/jpeg
+    ideal_alt_text: >-
+      A graphite portrait depicts a woman's head with a light outline of her upper torso. She
+      has long dark hair, with one side tucked behind her ear.
+  assert:
+    - type: icontains-all
+      value:
+        - 'dark hair'
+        - 'portrait'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'woman'
+        - 'figure'
+        - 'person'
+        - 'human'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'graphite'
+        - 'pencil'
+        - 'drawing'
+        - 'illustration'
+        - 'sketch'
+      metric: required-content
+    - type: not-icontains-any
+      value:
+        - 'colored pencil'
+        - 'coloured pencil'
+        - 'ink'
+        - 'charcoal'
+      metric: subject-accuracy
+    - type: javascript
+      value: >-
+        Array.from(output.trim()).length <= 200
+      metric: maximum-200-characters
+
+- description: 'Water Ewer for Rituals (Kundika) with Incised Parrot Design'
+  vars:
+    case_id: '1921.631'
+    image_filename: '1921.631_web.jpg'
+    image_path: '../curated_images/1921.631_web.jpg'
+    mime_type: image/jpeg
+    ideal_alt_text: >-
+      A celadon, a gray-green glaze, jug features a long, narrow neck and a short, capped
+      spout. On the body is a carved image of a flying phoenix.
+  assert:
+    - type: icontains-all
+      value:
+        - 'neck'
+        - 'spout'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'green'
+        - 'celadon'
+        - 'jade-colored'
+        - 'jade-coloured'
+        - 'sage'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'jug'
+        - 'ewer'
+        - 'bottle'
+        - 'vessel'
+        - 'vase'
+        - 'flask'
+        - 'pitcher'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'phoenix'
+        - 'bird'
+        - 'avian'
+        - 'wing'
+      metric: required-content
+    - type: not-icontains-any
+      value:
+        - 'painted'
+        - 'teapot'
+      metric: subject-accuracy
+    - type: javascript
+      value: >-
+        Array.from(output.trim()).length <= 200
+      metric: maximum-200-characters
+
+- description: 'Torso of a Kouros'
+  vars:
+    case_id: '1953.125'
+    image_filename: '1953.125_web.jpg'
+    image_path: '../curated_images/1953.125_web.jpg'
+    mime_type: image/jpeg
+    ideal_alt_text: >-
+      A life-size marble sculpture with lightly chipped areas depicts a nude man's torso and
+      top parts of the thighs. The head, arms, and rest of the legs are broken off.
+  assert:
+    - type: icontains-all
+      value:
+        - 'marble'
+        - 'torso'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'sculpt'
+        - 'statue'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'nude'
+        - 'naked'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'man'
+        - 'male'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'thigh'
+        - 'leg'
+        - 'lower'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'broken'
+        - 'damage'
+      metric: required-content
+    - type: javascript
+      value: >-
+        Array.from(output.trim()).length <= 200
+      metric: maximum-200-characters
+
+- description: 'Mourner from the Tomb of John the Fearless and Margaret of Bavaria'
+  vars:
+    case_id: '1940.129'
+    image_filename: '1940.129_web.jpg'
+    image_path: '../curated_images/1940.129_web.jpg'
+    mime_type: image/jpeg
+    ideal_alt_text: >-
+      A small beige sculpture depicts a man dressed in a monk's robe, looking up to our right.
+      His right hand holds a slightly open book while his left hand is empty.
+  assert:
+    - type: icontains-all
+      value:
+        - 'monk'
+        - 'book'
+        - 'robe'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'sculpt'
+        - 'statue'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'hold'
+        - 'hand'
+      metric: required-content
+    - type: icontains-any
+      value:
+        - 'beige'
+        - 'light brown'
+        - 'light-brown'
+        - 'off-white'
+      metric: required-content
+    - type: javascript
+      value: >-
+        Array.from(output.trim()).length <= 200
+      metric: maximum-200-characters
+
+- description: 'Landscape with Wheelbarrow'
+  vars:
+    case_id: '1958.30'
+    image_filename: '1958.30_web.jpg'
+    image_path: '../curated_images/1958.30_web.jpg'
+    mime_type: image/jpeg
+    ideal_alt_text: >-
+      A horizontally oriented watercolor depicts a field of greenery under a gray sky with a
+      wheelbarrow to our right.
+  assert:
+    - type: icontains-all
+      value:
+        - 'watercolor'
+        - 'green'
+        - 'sky'
+        - 'wheelbarrow'
+        - 'right'
+      metric: required-content
+    - type: javascript
+      value: >-
+        Array.from(output.trim()).length <= 200
+      metric: maximum-200-characters
